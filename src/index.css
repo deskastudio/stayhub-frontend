@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.slick-dots li.slick-active div {
+    @apply w-4 h-4 bg-primary; /* Membesarkan ukuran dot yang aktif */
+  }
+  
+  .slick-dots li div {
+    @apply w-2.5 h-2.5 bg-gray-300; /* Ukuran dan warna default dot */
+  }
+  

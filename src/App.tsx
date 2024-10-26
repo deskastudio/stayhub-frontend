@@ -1,10 +1,12 @@
-function App() {
+import React from 'react';
+import LoginPage from './components/Pages/LoginPage';
 
+const App: React.FC = () => {
   return (
-    <>
-      <h1>HELLO WORLD!!</h1>
-    </>
-  )
-}
+    <div>
+      <LoginPage />
+    </div>
+  );
+};
 
-export default App
+export default App;
