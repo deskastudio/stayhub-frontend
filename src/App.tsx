@@ -1,26 +1,22 @@
-import About from "./components/Layouts/About"
-import Hero from "./components/Layouts/Hero"
-import Navbar from "./components/Layouts/Navbar"
-import Facilities from "./components/Layouts/Facilities"
-import FAQList from "./components/Layouts/FAQList"
-import Room from "./components/Layouts/Room"
-import Testimonial from "./components/Layouts/Testimonial"
-import Footer from "./components/Layouts/Footer"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import RoomSilver from "./pages/RoomSilver";
+import RoomGold from "./pages/RoomGold";
+import RoomPlatinum from "./pages/RoomPlatinum";
+import ScrollToTop from "./components/ScrollToTop";
 
-const App:React.FC = () => {
-
+const App: React.FC = () => {
   return (
-    <>
-      <Navbar />
-      <Hero />
-      <About />
-      <Facilities/>
-      <FAQList />
-      <Room/>
-      <Testimonial/>
-      <Footer/>
-    </>
-  )
-}
+    <Router>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/silver" element={<RoomSilver />} />
+        <Route path="/gold" element={<RoomGold />} />
+        <Route path="/platinum" element={<RoomPlatinum />} />
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;

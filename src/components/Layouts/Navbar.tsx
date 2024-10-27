@@ -10,17 +10,17 @@ const NavbarMenu = [
   {
     id: 2,
     title: "Tentang Kami",
-    link: "#",
+    link: "#about",
   },
   {
     id: 3,
     title: "Booking",
-    link: "#",
+    link: "#booking",
   },
   {
     id: 4,
     title: "Kontak",
-    link: "#",
+    link: "#contact",
   },
 ];
 

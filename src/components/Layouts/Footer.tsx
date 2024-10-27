@@ -15,24 +15,24 @@ const ListMenu = [
   {
     id: 2,
     title: "Tentang Kami",
-    link: "#",
+    link: "#about",
   },
   {
     id: 3,
     title: "Booking",
-    link: "#",
+    link: "#booking",
   },
   {
     id: 4,
     title: "Kontak",
-    link: "#",
+    link: "#contact",
   },
 ];
 
 const Footer = () => {
   return (
     <>
-      <div className="container py-24">
+      <div id="contact" className="container py-24">
         <div className="flex justify-between gap-12 border-t-2 py-10">
           <div className="">
             <img
@@ -51,7 +51,7 @@ const Footer = () => {
             <h3 className="text-secondary font-bold mb-4 font-main text-lg">
               Stayhub
             </h3>
-            <ul className="text-gray-700 font-medium">
+            <ul className="text-gray-700 font-medium space-y-3">
             {ListMenu.map((item) => {
               return (
                 <li key={item.id}>

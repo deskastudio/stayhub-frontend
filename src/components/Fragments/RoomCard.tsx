@@ -1,9 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface RoomCardProps {
   image: string;
   type: string;
   remaining: string;
+  destination: string;
   features: { icon: React.ReactNode; text: string }[];
   price: string;
 }
@@ -12,6 +14,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
   image,
   type,
   remaining,
+  destination,
   features,
   price,
 }) => {
@@ -46,9 +49,11 @@ const RoomCard: React.FC<RoomCardProps> = ({
             </div>
           </div>
           <div>
-            <button className="py-2.5 px-2.5 border font-main font-bold text-sm border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition duration-300">
-              Lihat Detail
-            </button>
+            <Link to={destination}>
+              <button className="py-2.5 px-2.5 border font-main font-bold text-sm border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition duration-300">
+                Lihat Detail
+              </button>
+            </Link>
           </div>
         </div>
       </div>

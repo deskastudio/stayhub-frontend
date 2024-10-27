@@ -22,11 +22,13 @@ const FAQItem: React.FC<FAQItemProps> = ({
         {question}
         <span>{isOpen ? "▲" : "▼"}</span>
       </button>
-      {isOpen && (
-        <div className="w-full max-w-[1012px] bg-default p-4 rounded-b-lg shadow-md">
-          <p className="text-primary font-medium">{answer}</p>
-        </div>
-      )}
+      <div
+        className={`w-full max-w-[1012px] bg-default overflow-hidden rounded-b-lg shadow-md transition-all duration-300 ease-in-out ${
+          isOpen ? "max-h-[500px] opacity-100 p-4" : "max-h-0 opacity-0 p-0"
+        }`}
+      >
+        <p className="text-primary font-medium">{answer}</p>
+      </div>
     </div>
   );
 };

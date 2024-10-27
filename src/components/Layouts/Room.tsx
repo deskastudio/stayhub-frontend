@@ -9,7 +9,7 @@ import { TbAirConditioning } from "react-icons/tb";
 const Room = () => {
   return (
     <>
-      <div className="container pb-24">
+      <div id="booking" className="container pb-24">
         <h1 className="text-5xl font-bold font-main text-center text-primary mb-12">
           Pilih Type Kamar
         </h1>
@@ -18,6 +18,7 @@ const Room = () => {
             image="/silver.png"
             type="Type Silver"
             remaining="5"
+            destination="/silver"
             features={[
               { icon: <IoBedOutline />, text: "1 Kasur" },
               { icon: <MdOutlineKitchen />, text: "Dapur bersama" },
@@ -31,6 +32,7 @@ const Room = () => {
             image="/gold.png"
             type="Type Gold"
             remaining="12"
+            destination="/gold"
             features={[
               { icon: <IoBedOutline />, text: "1 Kasur" },
               { icon: <MdOutlineKitchen />, text: "Dapur bersama" },
@@ -44,6 +46,7 @@ const Room = () => {
             image="/platinum.png"
             type="Type Platinum"
             remaining="20"
+            destination="/platinum"
             features={[
               { icon: <IoBedOutline />, text: "1 Kasur" },
               { icon: <MdOutlineKitchen />, text: "Dapur bersama" },
