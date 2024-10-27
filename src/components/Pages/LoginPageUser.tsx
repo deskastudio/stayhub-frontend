@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthLayout from '../Layouts/AuthLayout';
-import LoginForm from '../Fragments/LoginForm';
+import LoginForm from '../Fragments/LoginFormUser';
 import ImageCarousel from '../Fragments/ImageCarousel';
 
 const LoginPage: React.FC = () => {
