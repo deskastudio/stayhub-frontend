@@ -12,7 +12,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, href, iconSrc }) => (
         to={href}
         className={({ isActive }) =>
             `flex items-center p-3 rounded-lg transition-colors ${
-                isActive ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-100'
+                isActive ? 'bg-primary-dark text-white' : 'text-gray-700 hover:bg-gray-100'
             }`
         }
     >
