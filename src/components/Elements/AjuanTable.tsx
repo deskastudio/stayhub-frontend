@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AjuanResponseModal from "../Fragments/AjuanResponseModal";
-import DetailAjuanModal from "../Fragments/DetailAjuanModal"; 
+import DetailAjuanModal from "../Fragments/DetailAjuanModal";
+import HapusAjuanModal from "../Fragments/HapusAjuanModal"; // Pastikan untuk mengimpor modal hapus
 
 // Mendefinisikan interface untuk item Ajuan
 export interface AjuanItem {
@@ -23,6 +24,7 @@ interface AjuanTableProps {
 const AjuanTable: React.FC<AjuanTableProps> = ({ data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // State untuk modal detail
+  const [isHapusModalOpen, setIsHapusModalOpen] = useState(false); // State untuk modal hapus
   const [selectedAjuan, setSelectedAjuan] = useState<AjuanItem | null>(null);
 
   const handleOpenModal = (ajuan: AjuanItem) => {
@@ -35,6 +37,11 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ data }) => {
     setIsDetailModalOpen(true); // Buka modal detail
   };
 
+  const handleOpenHapusModal = (ajuan: AjuanItem) => {
+    setSelectedAjuan(ajuan);
+    setIsHapusModalOpen(true); // Buka modal hapus
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedAjuan(null);
@@ -43,6 +50,17 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ data }) => {
   const handleCloseDetailModal = () => {
     setIsDetailModalOpen(false);
     setSelectedAjuan(null);
+  };
+
+  const handleCloseHapusModal = () => {
+    setIsHapusModalOpen(false);
+    setSelectedAjuan(null);
+  };
+
+  const handleConfirmHapus = () => {
+    // Tambahkan logika untuk menghapus ajuan dari data di sini
+    console.log(`Menghapus ajuan dari ${selectedAjuan?.nama}`);
+    handleCloseHapusModal(); // Tutup modal setelah konfirmasi
   };
 
   return (
@@ -80,13 +98,17 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ data }) => {
                 <button
                   onClick={() => {
                     handleOpenModal(item);
-                  
                   }}
                   className="bg-primary text-white p-2 rounded"
                 >
                   Balas
                 </button>
-                <button className="bg-red-700 text-white p-2 rounded">Hapus</button>
+                <button
+                  onClick={() => handleOpenHapusModal(item)} // Panggil fungsi untuk membuka modal hapus
+                  className="bg-red-700 text-white p-2 rounded"
+                >
+                  Hapus
+                </button>
               </td>
             </tr>
           ))}
@@ -104,6 +126,14 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ data }) => {
             perihal: selectedAjuan.perihal,
             isiAjuan: selectedAjuan.isi,
           }}
+        />
+      )}
+      {selectedAjuan && (
+        <HapusAjuanModal
+          isOpen={isHapusModalOpen}
+          onClose={handleCloseHapusModal}
+          nama={selectedAjuan.nama}
+          onConfirm={handleConfirmHapus} // Panggil fungsi hapus saat konfirmasi
         />
       )}
     </div>
