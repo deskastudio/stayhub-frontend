@@ -5,7 +5,7 @@ interface AjuanResponseModalProps {
   onClose: () => void;
   nama: string;
   noKamar: string;
-  isiAjuan: string;
+  isiAjuan: string; // Misalnya: "AC rusak"
 }
 
 const AjuanResponseModal: React.FC<AjuanResponseModalProps> = ({ isOpen, onClose, nama, noKamar, isiAjuan }) => {
@@ -19,9 +19,8 @@ const AjuanResponseModal: React.FC<AjuanResponseModalProps> = ({ isOpen, onClose
   };
 
   const handleSend = () => {
-    // Tambahkan logika untuk mengirim tanggapan
     console.log("Tanggapan dikirim:", tanggapan);
-    // Lakukan sesuatu dengan tanggapan di sini, misalnya panggil API atau set state
+    // Logika untuk mengirim tanggapan, misalnya panggil API
     handleClose(); // Tutup modal setelah mengirim
   };
 

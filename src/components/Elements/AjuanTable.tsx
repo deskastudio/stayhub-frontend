@@ -1,6 +1,6 @@
-// components/element/AjuanTable.tsx
 import React, { useState } from "react";
-import AjuanResponseModal from "../Elements/AjuanResponseModal"
+import AjuanResponseModal from "../Fragments/AjuanResponseModal";
+import DetailAjuanModal from "../Fragments/DetailAjuanModal"; 
 
 // Mendefinisikan interface untuk item Ajuan
 export interface AjuanItem {
@@ -10,6 +10,7 @@ export interface AjuanItem {
   perihal: string;
   tanggal: string;
   status: string;
+  isi: string; // Field ini merepresentasikan 'isiAjuan'
 }
 
 // Mendefinisikan props untuk komponen AjuanTable
@@ -19,8 +20,9 @@ interface AjuanTableProps {
 }
 
 // Komponen AjuanTable
-const AjuanTable: React.FC<AjuanTableProps> = ({ data}) => {
+const AjuanTable: React.FC<AjuanTableProps> = ({ data }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // State untuk modal detail
   const [selectedAjuan, setSelectedAjuan] = useState<AjuanItem | null>(null);
 
   const handleOpenModal = (ajuan: AjuanItem) => {
@@ -28,8 +30,18 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ data}) => {
     setIsModalOpen(true);
   };
 
+  const handleOpenDetailModal = (ajuan: AjuanItem) => {
+    setSelectedAjuan(ajuan);
+    setIsDetailModalOpen(true); // Buka modal detail
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setSelectedAjuan(null);
+  };
+
+  const handleCloseDetailModal = () => {
+    setIsDetailModalOpen(false);
     setSelectedAjuan(null);
   };
 
@@ -59,11 +71,16 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ data}) => {
                 </div>
               </td>
               <td className="p-4 space-x-2">
-                <button className="bg-gray-100 p-2 rounded">Detail</button>
+                <button
+                  onClick={() => handleOpenDetailModal(item)} // Panggil fungsi untuk membuka modal detail
+                  className="bg-gray-300 p-2 rounded"
+                >
+                  Detail
+                </button>
                 <button
                   onClick={() => {
                     handleOpenModal(item);
-                    // onReplyClick(item); // Memanggil fungsi dari props saat mengklik balas
+                  
                   }}
                   className="bg-primary text-white p-2 rounded"
                 >
@@ -75,8 +92,20 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ data}) => {
           ))}
         </tbody>
       </table>
-
-      {selectedAjuan && <AjuanResponseModal isOpen={isModalOpen} onClose={handleCloseModal} nama={selectedAjuan.nama} noKamar={selectedAjuan.noKamar} isiAjuan={selectedAjuan.perihal} />}
+      {selectedAjuan && <AjuanResponseModal isOpen={isModalOpen} onClose={handleCloseModal} nama={selectedAjuan.nama} noKamar={selectedAjuan.noKamar} isiAjuan={selectedAjuan.isi} />}
+      {selectedAjuan && (
+        <DetailAjuanModal
+          isOpen={isDetailModalOpen}
+          onClose={handleCloseDetailModal}
+          ajuan={{
+            namaLengkap: selectedAjuan.nama,
+            noKamar: selectedAjuan.noKamar,
+            tanggal: selectedAjuan.tanggal,
+            perihal: selectedAjuan.perihal,
+            isiAjuan: selectedAjuan.isi,
+          }}
+        />
+      )}
     </div>
   );
 };

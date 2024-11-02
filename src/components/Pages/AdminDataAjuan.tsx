@@ -4,8 +4,8 @@ import ProfileInfo from "../Elements/ProfileInfo";
 import FilterButton from "../Elements/FilterButton";
 import PrintButton from "../Elements/PrintButton";
 import Pagination from "../Elements/Pagination";
-import DataTable, { AjuanItem } from "../Elements/AjuanTable"; 
-import AjuanResponseModal from "../Elements/AjuanResponseModal"; 
+import DataTable, { AjuanItem } from "../Elements/AjuanTable";
+import AjuanResponseModal from "../Fragments/AjuanResponseModal";
 
 const AdminDataAjuan: React.FC = () => {
   const totalItems = 50; // Total item, bisa diambil dari state atau props
@@ -16,13 +16,13 @@ const AdminDataAjuan: React.FC = () => {
 
   // Contoh data
   const data: AjuanItem[] = [
-    { id: 1, nama: "Kevin Joe", noKamar: "301", perihal: "Fasilitas", tanggal: "22/10/24", status: "Menunggu" },
-    { id: 2, nama: "Alif S", noKamar: "305", perihal: "Fasilitas", tanggal: "22/10/24", status: "Selesai" },
-    { id: 3, nama: "Angel", noKamar: "203", perihal: "Keamanan", tanggal: "22/10/24", status: "Menunggu" },
-    { id: 4, nama: "Ayu L", noKamar: "109", perihal: "Lainnya", tanggal: "22/10/24", status: "Selesai" },
-    { id: 5, nama: "M.Yoga", noKamar: "205", perihal: "Fasilitas", tanggal: "22/10/24", status: "Menunggu" },
-    { id: 6, nama: "Yosi", noKamar: "201", perihal: "Kegaduhan", tanggal: "22/10/24", status: "Selesai" },
-    
+    { id: 1, nama: "Kevin Joe", noKamar: "301", perihal: "Fasilitas", tanggal: "22/10/24", status: "Menunggu", isi: "AC no kamar 301 rusak pak" },
+    { id: 2, nama: "Alif S", noKamar: "305", perihal: "Fasilitas", tanggal: "22/10/24", status: "Selesai", isi: "Wifinya lemot pak segera diperbaiki" },
+    { id: 3, nama: "Angel", noKamar: "203", perihal: "Keamanan", tanggal: "22/10/24", status: "Menunggu", isi: "Motor saya hilang pak bagaimana ini solusinya" },
+    { id: 4, nama: "Ayu L", noKamar: "109", perihal: "Lainnya", tanggal: "22/10/24", status: "Selesai", isi: "Parkirannya diluasin lagi pak" },
+    { id: 5, nama: "M.Yoga", noKamar: "205", perihal: "Fasilitas", tanggal: "22/10/24", status: "Menunggu", isi: "Tambahin cctv pak biar lebih aman" },
+    { id: 6, nama: "Yosi", noKamar: "201", perihal: "Kegaduhan", tanggal: "22/10/24", status: "Selesai", isi: "Kamar 202 berisik pak suruh diem" },
+   
   ];
 
   // Fungsi untuk membuka modal balasan dengan data ajuan yang dipilih
