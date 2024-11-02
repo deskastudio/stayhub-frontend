@@ -7,6 +7,7 @@ import DataPembayaran from './components/Pages/AdminDataPembayaran';
 import DataFasilitas from './components/Pages/AdminDataFasilitas';
 import DataKamar from './components/Pages/AdminDataKamar';
 import DataAjuan from './components/Pages/AdminDataAjuan';
+import TypeKamar from './components/Pages/AdminTypeKamar';
 
 const App: React.FC = () => {
     return (
@@ -20,6 +21,7 @@ const App: React.FC = () => {
                         <Route path="/data-pembayaran" element={<DataPembayaran />} />
                         <Route path="/data-fasilitas" element={<DataFasilitas />} />
                         <Route path="/data-kamar" element={<DataKamar />} />
+                        <Route path="/type-kamar" element={<TypeKamar />} />
                         <Route path="/data-ajuan" element={<DataAjuan />} />
                     </Routes>
                 </div>
