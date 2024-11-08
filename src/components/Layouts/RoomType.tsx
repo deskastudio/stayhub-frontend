@@ -70,37 +70,6 @@ const RoomType: React.FC<RoomTypeProps> = ({
             <form className=" space-y-4">
               <div>
                 <label className="block mb-3 font-medium text-lg">
-                  Nama Lengkap
-                </label>
-                <input
-                  type="text"
-                  placeholder="Masukan nama lengkap"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-3 font-medium text-lg">Email</label>
-                <input
-                  type="email"
-                  placeholder="Masukkan email"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-3 font-medium text-lg">
-                  No Telepon
-                </label>
-                <input
-                  type="text"
-                  placeholder="Masukan no telepon"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-3 font-medium text-lg">
                   Mulai Kos
                 </label>
                 <input
@@ -111,7 +80,7 @@ const RoomType: React.FC<RoomTypeProps> = ({
               </div>
               <div>
                 <label className="block mb-3 font-medium text-lg">
-                  Pilih Kamar
+                  Pilih Nomor Kamar
                 </label>
                 <div className="relative">
                   <select className="w-full p-3 border rounded-lg appearance-none focus:outline-none focus:ring focus:ring-blue-300">
