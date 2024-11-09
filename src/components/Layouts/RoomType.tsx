@@ -9,6 +9,7 @@ import { IoChatbubbleEllipses } from "react-icons/io5";
 
 interface RoomTypeProps {
   title: string;
+  price: string;
   description1: string;
   description2: string;
   images: string[];
@@ -17,6 +18,7 @@ interface RoomTypeProps {
 
 const RoomType: React.FC<RoomTypeProps> = ({
   title,
+  price,
   description1,
   description2,
   images,
@@ -29,7 +31,9 @@ const RoomType: React.FC<RoomTypeProps> = ({
       <Navbar />
       <div className="container py-20">
         <div className="flex items-center gap-4 mb-16">
-          <Link to="/" className="flex items-center justify-center w-12 h-12 bg-default rounded-full shadow-md"
+          <Link
+            to="/"
+            className="flex items-center justify-center w-12 h-12 bg-default rounded-full shadow-md"
           >
             <i className="text-secondary text-3xl">
               <GoArrowLeft />
@@ -67,35 +71,40 @@ const RoomType: React.FC<RoomTypeProps> = ({
             </div>
           </div>
           <div className="w-1/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between">
-            <form className=" space-y-4">
-              <div>
-                <label className="block mb-3 font-medium text-lg">
-                  Mulai Kos
-                </label>
-                <input
-                  type="date"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                  required
-                />
+            <form className="space-y-8">
+              <div className="space-y-3">
+                <h2 className="font-medium text-2xl">Mulai Pemesanan</h2>
+                <h2 className="font-bold text-3xl text-primary">{price}</h2>
               </div>
-              <div>
-                <label className="block mb-3 font-medium text-lg">
-                  Pilih Nomor Kamar
-                </label>
-                <div className="relative">
-                  <select className="w-full p-3 border rounded-lg appearance-none focus:outline-none focus:ring focus:ring-blue-300">
-                    <option>Kamar 101</option>
-                    <option>Kamar 102</option>
-                    <option>Kamar 103</option>
-                  </select>
-                  <span className="absolute top-1/4 right-4 flex items-center pointer-events-none">
-                    ▼
-                  </span>
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-3 font-medium text-lg">
+                    Mulai Kos
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block mb-3 font-medium text-lg">
+                    Pilih Nomor Kamar
+                  </label>
+                  <div className="relative">
+                    <select className="w-full p-3 border rounded-lg appearance-none focus:outline-none focus:ring focus:ring-blue-300">
+                      <option>Kamar 101</option>
+                      <option>Kamar 102</option>
+                      <option>Kamar 103</option>
+                    </select>
+                    <span className="absolute top-1/4 right-4 flex items-center pointer-events-none">
+                      ▼
+                    </span>
+                  </div>
                 </div>
               </div>
-
               <Button type="submit" custom="bg-primary text-white w-full py-3">
-                Ajukan Sewa
+                Pesan Sekarang
               </Button>
             </form>
           </div>
