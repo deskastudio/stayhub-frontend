@@ -14,7 +14,7 @@ const Hero: React.FC = () => {
             nyaman dan sesuai dengan kebutuhan Anda.
           </p>
           <div>
-            <Button custom="bg-primary py-4">Hubungi Kami</Button>
+            <Button custom="bg-primary py-4 text-white">Hubungi Kami</Button>
           </div>
         </div>
         <div>
