@@ -24,11 +24,11 @@ const NavbarMenu = [
   },
 ];
 
-const Navbar:React.FC = () => {
+const Navbar: React.FC = () => {
   return (
     <div className="shadow-md rounded-b-xl sticky top-0 w-full z-10 bg-default">
       <div className="container flex justify-between items-center py-4">
-          <img src="/stayhub-logo2.png" alt="" />
+        <img src="/stayhub-logo2.png" alt="" />
         <div className="hidden lg:block">
           <ul className="flex items-center gap-6">
             {NavbarMenu.map((item) => {
@@ -45,7 +45,10 @@ const Navbar:React.FC = () => {
             })}
           </ul>
         </div>
-        <Button custom="bg-secondary py-3">Masuk</Button>
+        <div className="flex gap-2">
+          <Button custom="border border-primary py-3 text-primary">Masuk</Button>
+          <Button custom="bg-secondary py-3 text-white">Daftar</Button>
+        </div>
       </div>
     </div>
   );
