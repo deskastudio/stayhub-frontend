@@ -18,9 +18,6 @@ import UserProfil from './Pages/UserProfil';
 import UserPembayaran from './Pages/UserPembayaran';
 import UserTestimoni from './Pages/UserTestimoni';
 
-// Import SwitchUserType
-import SwitchUserType from './components/Fragments/SwitchUserType';
-
 const App: React.FC = () => {
   return (
     <UserProvider>
@@ -28,7 +25,6 @@ const App: React.FC = () => {
         <div className="flex bg-primary-bgprimary">
           <Sidebar />
           <div className="flex-1 p-4">
-            <SwitchUserType />
             <Routes>
               {/* Admin Routes */}
               <Route path="/beranda" element={<AdminDashboard />} />
