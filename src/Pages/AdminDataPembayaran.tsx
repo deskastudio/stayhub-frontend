@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import MainLayout from "../Layouts/MainLayout";
-import ProfileInfo from "../Elements/ProfileInfo";
-import FilterButton from "../Elements/FilterButton";
-import PrintButton from "../Elements/PrintButton";
-import Pagination from "../Elements/Pagination";
-import CardPayment from "../Elements/CardPayment";
-import PaymentTable from "../Elements/PaymentTable";
+import MainLayout from "../components/Layouts/MainLayout";
+import ProfileInfo from "../components/Elements/ProfileInfo";
+import FilterButton from "../components/Elements/FilterButton";
+import PrintButton from "../components/Elements/PrintButton";
+import Pagination from "../components/Elements/Pagination";
+import CardPayment from "../components/Elements/CardPayment";
+import PaymentTable from "../components/Elements/PaymentTable";
 
 const AdminDataPembayaran: React.FC = () => {
   const totalItems = 50; // Total item, bisa diambil dari state atau props

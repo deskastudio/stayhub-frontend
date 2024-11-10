@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../Elements/Button";
+import Button from "../components/Elements/Button";
 import { useParams } from "react-router-dom";
 
 interface KamarDetail {

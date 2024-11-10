@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from '../Layouts/AdminLayout';
+import AdminLayout from '../components/Layouts/AdminLayout';
 
 const AdminPage: React.FC = () => (
     <AdminLayout>

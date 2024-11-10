@@ -1,11 +1,11 @@
 // src/components/Dashboard.tsx
 import React from 'react';
-import CardContainerBeranda from '../Fragments/CardContainerBeranda';
-import ProfileInfo from '../Elements/ProfileInfo';
-import StatisticsCard from '../Fragments/StatisticsChart';
-import DataTable from '../Elements/DataTableBeranda';
+import CardContainerBeranda from '../components/Fragments/CardContainerBeranda';
+import ProfileInfo from '../components/Elements/ProfileInfo';
+import StatisticsCard from '../components/Fragments/StatisticsChart';
+import DataTable from '../components/Elements/DataTableBeranda';
 
-const Dashboard: React.FC = () => {
+const Beranda: React.FC = () => {
     const data = [1200000, 1800000, 2000000, 1500000, 1600000, 1900000];
     const labels = ['2017', '2018', '2019', '2020', '2021', '2022'];
 
@@ -47,4 +47,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard;
+export default Beranda;

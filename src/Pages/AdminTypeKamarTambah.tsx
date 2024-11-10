@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../Elements/Button";
+import Button from "../components/Elements/Button";
 
 const AdminTypeKamarTambah: React.FC = () => {
   const [fasilitas, setFasilitas] = useState<string[]>([]);

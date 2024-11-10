@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import MainLayout from "../Layouts/MainLayout";
-import ProfileInfo from "../Elements/ProfileInfo";
-import TypeKamarTable from "../Elements/TypeKamarTable";
+import MainLayout from "../components/Layouts/MainLayout";
+import ProfileInfo from "../components/Elements/ProfileInfo";
+import TypeKamarTable from "../components/Elements/TypeKamarTable";
 import AdminTypeKamarTambah from "./AdminTypeKamarTambah";
 import AdminTypeKamarDetail from "./AdminTypeKamarDetail";
 import AdminTypeKamarEdit from "./AdminTypeKamarEdit";
