@@ -4,6 +4,7 @@ import RoomSilver from "./pages/RoomSilver";
 import RoomGold from "./pages/RoomGold";
 import RoomPlatinum from "./pages/RoomPlatinum";
 import ScrollToTop from "./components/ScrollToTop";
+import BookingPage from "./pages/BookingPage";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/silver" element={<RoomSilver />} />
         <Route path="/gold" element={<RoomGold />} />
         <Route path="/platinum" element={<RoomPlatinum />} />
+        <Route path="/booking" element={<BookingPage />} />
       </Routes>
     </Router>
   );
