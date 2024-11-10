@@ -9,12 +9,18 @@ module.exports = {
           light: "#6cb2eb", // Versi warna lebih terang
           dark: "#226597", // Versi warna lebih gelap
           custom: "#F3F9FB", //warna latar 
+          textDark: "#26282B",
+          textLight: "#7d7d7d",
+          bgprimary: "#F2F4F7"
         },
         secondary: {
           DEFAULT: "#ffed4a", // Warna utama
           light: "#fff382", // Versi warna lebih terang
           dark: "#f9c846", // Versi warna lebih gelap
         }
+      },
+      fontFamily: {
+        poppins: ['Poppins'],
       },
     },
   },

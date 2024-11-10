@@ -11,7 +11,7 @@ import DataAjuan from './components/Pages/AdminDataAjuan';
 const App: React.FC = () => {
     return (
         <Router>
-            <div className="flex">
+            <div className="flex bg-primary-bgprimary">
                 <Sidebar />
                 <div className="flex-1 p-4">
                     <Routes>
