@@ -5,24 +5,25 @@ import { useUser } from '../../hooks/useUser';
 const Sidebar: React.FC = () => {
   const { userType, setUserType } = useUser();
 
-  const sidebarItems = userType === 'admin' 
-    ? [
-        { label: 'Beranda', href: '/beranda', iconSrc: '/icon/beranda-icon.svg' },
-        { label: 'Data User', href: '/data-user', iconSrc: '/icon/user-icon.svg' },
-        { label: 'Data Pembayaran', href: '/data-pembayaran', iconSrc: '/icon/pembayaran-icon.svg' },
-        { label: 'Data Fasilitas', href: '/data-fasilitas', iconSrc: '/icon/fasilitas-icon.svg' },
-        { label: 'Data Kamar', href: '/data-kamar', iconSrc: '/icon/data-kamar-icon.svg' },
-        { label: 'Tipe Kamar', href: '/type-kamar', iconSrc: '/icon/tipe-kamar-icon.svg' },
-        { label: 'Data Ajuan', href: '/data-ajuan', iconSrc: '/icon/ajuan-keluhan-icon.svg' },
-      ] 
-    : [
-        { label: 'Beranda', href: '/user-dashboard', iconSrc: '/icon/beranda-icon.svg' },
-        { label: 'Ajuan', href: '/user-ajuan', iconSrc: '/icon/ajuan-keluhan-icon.svg' },
-        { label: 'List Ajuan', href: '/user-list-ajuan', iconSrc: '/icon/list-ajuan-icon.svg' },
-        { label: 'Testimoni', href: '/user-testimoni', iconSrc: '/icon/testimoni-icon.svg' },
-        { label: 'Pembayaran', href: '/user-settings', iconSrc: '/icon/pembayaran-icon.svg' },
-        { label: 'Profil', href: '/user-profile', iconSrc: '/icon/user-icon.svg' },
-      ];
+  const sidebarItems =
+    userType === "admin"
+      ? [
+          { label: "Beranda", href: "/beranda", iconSrc: "/icon/beranda-icon.svg" },
+          { label: "Data User", href: "/data-user", iconSrc: "/icon/user-icon.svg" },
+          { label: "Data Pembayaran", href: "/data-pembayaran", iconSrc: "/icon/pembayaran-icon.svg" },
+          { label: "Data Fasilitas", href: "/data-fasilitas", iconSrc: "/icon/fasilitas-icon.svg" },
+          { label: "Data Kamar", href: "/data-kamar", iconSrc: "/icon/data-kamar-icon.svg" },
+          { label: "Tipe Kamar", href: "/type-kamar", iconSrc: "/icon/tipe-kamar-icon.svg" },
+          { label: "Data Ajuan", href: "/data-ajuan", iconSrc: "/icon/ajuan-keluhan-icon.svg" },
+        ]
+      : [
+          { label: "Beranda", href: "/user-dashboard", iconSrc: "/icon/beranda-icon.svg" },
+          { label: "Profil", href: "/user-profile", iconSrc: "/icon/user2-icon.svg" },
+          { label: "Pembayaran", href: "/user-payment", iconSrc: "/icon/pembayaran-icon.svg" },
+          { label: "Testimoni", href: "/user-testimoni", iconSrc: "/icon/testimoni-icon.svg" },
+          { label: "Ajuan", href: "/user-ajuan", iconSrc: "/icon/ajuan-keluhan-icon.svg" },
+          { label: "List Ajuan", href: "/user-list-ajuan", iconSrc: "/icon/listAjuan-icon.svg" },
+        ];
 
   // Kelas CSS dinamis berdasarkan userType
   const sidebarClass = userType === 'admin' ? 'bg-admin-sidebar' : 'bg-user-sidebar'; 
