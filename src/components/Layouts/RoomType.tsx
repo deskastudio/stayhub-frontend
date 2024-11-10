@@ -103,9 +103,13 @@ const RoomType: React.FC<RoomTypeProps> = ({
                   </div>
                 </div>
               </div>
-              <Button type="submit" custom="bg-primary text-white w-full py-3">
-                Pesan Sekarang
-              </Button>
+              <div>
+                <Link to="/booking">
+                  <Button custom="bg-primary text-white w-full py-3">
+                    Pesan Sekarang
+                  </Button>
+                </Link>
+              </div>
             </form>
           </div>
         </div>
