@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import AjuanResponseModal from "../Fragments/AjuanResponseModal";
-import DetailAjuanModal from "../Fragments/DetailAjuanModal";
+import AjuanResponseModal from "../Fragments/AjuanBalasModal";
+import DetailAjuanModal from "../Fragments/AjuanDetailModal";
 import HapusAjuanModal from "../Fragments/HapusAjuanModal"; // Pastikan untuk mengimpor modal hapus
 
 // Mendefinisikan interface untuk item Ajuan

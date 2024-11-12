@@ -40,7 +40,6 @@ const KontenTestimoni: React.FC = () => {
       {!showForm && !testimoni && <PesanKosong onClick={handleToggleForm} />}
       {!showForm && testimoni && (
         <div className="p-6 bg-white rounded-md shadow-lg">
-          <h2 className="text-xl font-bold">Testimoni Saya</h2>
           <div className="mt-4">
             <p>
               <strong>Nama Lengkap:</strong> {testimoni.namaLengkap}

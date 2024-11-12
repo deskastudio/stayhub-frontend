@@ -1,0 +1,10 @@
+[
+  { "nama": "Kevin Joe", "noKamar": "301", "perihal": "Fasilitas", "tanggal": "2024-10-22", "status": "Menunggu", "isiAjuan": "AC no kamar 301 rusak pak" },
+  { "nama": "Alif S", "noKamar": "305", "perihal": "Fasilitas", "tanggal": "2024-10-22", "status": "Selesai", "isiAjuan": "Wifinya lemot pak segera diperbaiki" },
+  { "nama": "Angel", "noKamar": "203", "perihal": "Keamanan", "tanggal": "2024-10-22", "status": "Menunggu", "isiAjuan": "Motor saya hilang pak bagaimana ini solusinya" },
+  { "nama": "Ayu L", "noKamar": "109", "perihal": "Lainnya", "tanggal": "2024-10-22", "status": "Menunggu", "isiAjuan": "Parkirannya diluasin lagi pak" },
+  { "nama": "M.Yoga", "noKamar": "205", "perihal": "Fasilitas", "tanggal": "2024-10-22", "status": "Selesai", "isiAjuan": "Tambahin cctv pak biar lebih aman" },
+  { "nama": "Yosi", "noKamar": "201", "perihal": "Lainnya", "tanggal": "2024-8-22", "status": "Selesai", "isiAjuan": "Kamar 202 berisik pak suruh diem" },
+  { "nama": "Ayudha", "noKamar": "309", "perihal": "Keamanan", "tanggal": "2024-8-22", "status": "Selesai", "isiAjuan": "helm saya hilang tingkatkan lagi keamanananya" },
+  { "nama": "Elisabet", "noKamar": "105", "perihal": "Fasilitas", "tanggal": "2024-5-22", "status": "Selesai", "isiAjuan": "pak kasih tempat sampah depan kos" }
+]
