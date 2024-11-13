@@ -1,81 +1,78 @@
 import React, { useState } from 'react';
-import kamarData from '../json/dataKamar.json';
-import Button from '../components/Elements/Button'; // Sesuaikan path dengan struktur Anda
-import FilterButton from '../components/Elements/FilterButton'; // Sesuaikan path dengan struktur Anda
+import ProfileInfo from '../components/Elements/ProfileInfo';
+import TabPilihan from '../components/Fragments/TabPilihan';
+import CustomTable, { DataItem } from "../components/Elements/CustomTable";
 
-// Definisi tipe data Kamar langsung di file ini, jika tidak ingin membuat file terpisah
-type Kamar = {
-  id: number;
-  noKamar: number;
-  status: 'Penuh' | 'Kosong';
-};
+// Data Item untuk Data Kamar (No Kamar, Status, Aksi)
+interface RoomDataItem {
+  noKamar: string;
+  status: string;
+}
 
-const DataKamar: React.FC = () => {
-  const [data] = useState<Kamar[]>(kamarData as Kamar[]);
+// Data dummy untuk tabel Silver, Gold, and Platinum (disesuaikan dengan data kamar)
+const dummySilverData: RoomDataItem[] = [
+  { noKamar: "S101", status: "Tersedia" },
+  { noKamar: "S102", status: "Tidak Tersedia" },
+  { noKamar: "S103", status: "Tersedia" },
+];
+
+const dummyGoldData: RoomDataItem[] = [
+  { noKamar: "G201", status: "Tersedia" },
+  { noKamar: "G202", status: "Tidak Tersedia" },
+  { noKamar: "G203", status: "Tersedia" },
+];
+
+const dummyPlatinumData: RoomDataItem[] = [
+  { noKamar: "P301", status: "Tersedia" },
+  { noKamar: "P302", status: "Tidak Tersedia" },
+  { noKamar: "P303", status: "Tersedia" },
+];
+
+const AdminDataKamar: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>("Silver"); // Menyimpan tab yang aktif
+
+  // Fungsi untuk mengubah tab aktif
+  const handleTabClick = (label: string) => {
+    setActiveTab(label);
+  };
+
+  // Kolom yang akan ditampilkan untuk Silver, Gold, dan Platinum
+  const roomColumns = ["No Kamar", "Status", "Aksi"];
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Data Kamar</h2>
-
-        <div className="flex gap-4">
-          <FilterButton />
-          <Button onClick={() => console.log('Tambah kamar')} variant="primary">
-            + Tambah Kamar
-          </Button>
-        </div>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Data Kamar</h1>
+        <ProfileInfo />
       </div>
 
-      <div className="bg-white shadow rounded-lg p-4">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="border-b-2 p-2">ID</th>
-              <th className="border-b-2 p-2">No Kamar</th>
-              <th className="border-b-2 p-2">Status</th>
-              <th className="border-b-2 p-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((kamar) => (
-              <tr key={kamar.id} className="text-center">
-                <td className="p-2 border-b">{kamar.id}</td>
-                <td className="p-2 border-b">{kamar.noKamar}</td>
-                <td className="p-2 border-b">
-                  <span className={`px-2 py-1 rounded-full text-white ${
-                    kamar.status === 'Penuh' ? 'bg-red-500' : 'bg-green-500'
-                  }`}>
-                    {kamar.status}
-                  </span>
-                </td>
-                <td className="p-2 border-b flex justify-center gap-2">
-                  <button onClick={() => console.log('Lihat detail kamar', kamar.id)} className="text-blue-500 hover:text-blue-700">
-                    👁️
-                  </button>
-                  <button onClick={() => console.log('Edit kamar', kamar.id)} className="text-yellow-500 hover:text-yellow-700">
-                    ✏️
-                  </button>
-                  <button onClick={() => console.log('Hapus kamar', kamar.id)} className="text-red-500 hover:text-red-700">
-                    🗑️
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* Button Section */}
+      <TabPilihan
+        buttons={[
+          { label: "Silver", variant: "primary" },
+          { label: "Gold", variant: "secondary" },
+          { label: "Platinum", variant: "secondary" },
+        ]}
+        activeTab={activeTab} // Pass activeTab ke TabPilihan
+        onTabClick={handleTabClick} // Pass handleTabClick untuk mengubah tab aktif
+        onAddButtonClick={() => {}}
+      />
 
-      <div className="mt-4 flex justify-center">
-        <p className="text-sm text-gray-600">Jumlah 15 dari 50</p>
-        <div className="flex items-center gap-2 ml-4">
-          <button className="px-2 py-1 border rounded">1</button>
-          <button className="px-2 py-1 border rounded">2</button>
-          <button className="px-2 py-1 border rounded">3</button>
-          <button className="px-2 py-1 border rounded">4</button>
-        </div>
+      {/* Render tabel berdasarkan tab yang aktif */}
+      <div className="mt-3">
+        {activeTab === "Silver" && (
+          <CustomTable columns={roomColumns} data={dummySilverData as DataItem[]} />
+        )}
+        {activeTab === "Gold" && (
+          <CustomTable columns={roomColumns} data={dummyGoldData as unknown as DataItem[]} />
+        )}
+        {activeTab === "Platinum" && (
+          <CustomTable columns={roomColumns} data={dummyPlatinumData as unknown as DataItem[]} />
+        )}
       </div>
     </div>
   );
 };
 
-export default DataKamar;
+export default AdminDataKamar;

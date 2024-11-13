@@ -1,88 +1,38 @@
-import React from 'react';
-import { IoMdNotificationsOutline } from 'react-icons/io';
-import { FiEye } from "react-icons/fi";
-import Button from '../components/Elements/Button';
-import dataFasilitas from '../json/dataFasilitas.json';
-import { MdDeleteOutline, MdModeEdit } from 'react-icons/md';
+import { DataItem } from '../components/Elements/CustomTable';
+import CustomTable from '../components/Elements/CustomTable';
+import ProfileInfo from '../components/Elements/ProfileInfo';
 
-const DataFasilitas: React.FC = () => {
-    return (
-        <div className='p-10 flex flex-col gap-10'>
-            <div className='flex justify-between items-center'>
-                <h1 className='font-[poppins] text-4xl font-bold text-primary-textDark'>Fasilitas Kos</h1>
-                <div className='flex items-center gap-4'>
-                    <IoMdNotificationsOutline size={32} />
-                    <div className='w-10 h-10'>
-                        <img src="/profile.png" alt="" />
-                    </div>
-                    <div>
-                        <h1 className='text-lg font-semibold text-primary-textDark'>Subhan Hakim</h1>
-                        <h1 className='text-sm text-primary-textLight'>Admin</h1>
-                    </div>
-                </div>
-            </div>
-            <div className='flex justify-between items-center'>
-                <div>
 
-                </div>
-                <div>
-                    <Button type='button' variant='primary' onClick={() => { }}>Tambah Fasilitas</Button>
-                </div>
-            </div>
-            <div className='bg-white p-5 rounded-md'>
-                <div className="relative overflow-x-auto">
-                    <table className="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase dark:bg-primary-dark dark:text-white">
-                            <tr>
-                                <th scope="col" className="p-5">
-                                    Id
-                                </th>
-                                <th scope="col" className="p-5">
-                                    Fasilitas
-                                </th>
-                                <th scope="col" className="p-5">
-                                    Jumlah
-                                </th>
-                                <th scope="col" className="p-5">
-                                    Dipakai
-                                </th>
-                                <th scope="col" className="p-5">
-                                    Gambar
-                                </th>
-                                <th scope="col" className="p-5">
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {dataFasilitas.map((item) => (
-                                <tr key={item.id} className="dark:bg-white text-primary-textDark">
-                                    <th scope="row" className="p-5 font-medium text-gray-900 whitespace-nowrap">
-                                        {item.id}
-                                    </th>
-                                    <td className="p-5">{item.fasilitas}</td>
-                                    <td className="p-5">{item.jumlah}</td>
-                                    <td className="p-5">{item.dipakai}</td>
-                                    <td className="p-5">{item.image}</td>
-                                    <td className="p-5 flex align-middle items-center justify-center gap-4">
-                                        <tr>
-                                            <FiEye size={24} color='blue'/>
-                                        </tr>
-                                        <tr>
-                                            <MdModeEdit size={24} color='blue'/>
-                                        </tr>
-                                        <tr>
-                                            <MdDeleteOutline size={24} color='blue'/>
-                                        </tr>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    );
+const AdminDataFasilitas: React.FC = () => {
+
+    const fasilityColumns = ["ID","Fasilitas", "Jumlah", "Dipakai", "Gambar", "Aksi"];
+    const dummyFasilitasData: DataItem[] = [
+        { id: "1", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "2", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "3", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "4", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "5", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "6", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "7", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "8", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "9", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+        { id: "10", fasilitas: "Kamar", jumlah: "10", dipakai: "10", gambar: "-", aksi: "-" },
+    ];
+
+  return (
+    <div className="p-6 bg-gray-100 min-h-screen">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Fasilitas Kost</h1>
+        <ProfileInfo />
+      </div>
+
+      <CustomTable columns={fasilityColumns} data={dummyFasilitasData as DataItem[]} />
+
+
+     
+    </div>
+  );
 };
 
-export default DataFasilitas;
+export default AdminDataFasilitas;
