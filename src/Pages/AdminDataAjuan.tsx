@@ -1,52 +1,42 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import MainLayout from "../components/Layouts/MainLayout";
 import FilterButton from "../components/Elements/FilterButton";
 import PrintButton from "../components/Elements/PrintButton";
 import Pagination from "../components/Elements/Pagination";
-import DataTable, { AjuanItem } from "../components/Elements/AjuanTable";
-import AjuanResponseModal from "../components/Fragments/AjuanResponseModal";
-import ProfileAdmin from "../components/Fragments/ProfileAdmin";
+import AjuanTable from "../components/Fragments/AjuanTable";
+import data from "../json/dataAjuan.json";
+import AdminProfil from "../components/Fragments/ProfileAdmin";
+import { DataItem } from "../components/Fragments/AjuanTable";
 
-const AdminDataAjuan: React.FC = () => {
-  const totalItems = 50; // Total item, bisa diambil dari state atau props
-  const itemsPerPage = 15; // Jumlah item per halaman
+const AdminDataAjuan = () => {
+  const [ajuanData, setAjuanData] = useState<DataItem[]>([]);
+  const location = useLocation();
+  const totalItems = data.length; // Total data yang ada (dari json)
+  const itemsPerPage = 5; // Jumlah item per halaman
   const [activePage, setActivePage] = useState<number>(1); // State untuk halaman aktif
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol apakah modal terbuka
-  const [selectedAjuan, setSelectedAjuan] = useState<AjuanItem | null>(null); // Use AjuanItem instead of Ajuan
+  const pageTitle = "Data Ajuan";
 
-  // Contoh data
-  const data: AjuanItem[] = [
-    { id: 1, nama: "Kevin Joe", noKamar: "301", perihal: "Fasilitas", tanggal: "22/10/24", status: "Menunggu", isi: "AC no kamar 301 rusak pak" },
-    { id: 2, nama: "Alif S", noKamar: "305", perihal: "Fasilitas", tanggal: "22/10/24", status: "Selesai", isi: "Wifinya lemot pak segera diperbaiki" },
-    { id: 3, nama: "Angel", noKamar: "203", perihal: "Keamanan", tanggal: "22/10/24", status: "Menunggu", isi: "Motor saya hilang pak bagaimana ini solusinya" },
-    { id: 4, nama: "Ayu L", noKamar: "109", perihal: "Lainnya", tanggal: "22/10/24", status: "Selesai", isi: "Parkirannya diluasin lagi pak" },
-    { id: 5, nama: "M.Yoga", noKamar: "205", perihal: "Fasilitas", tanggal: "22/10/24", status: "Menunggu", isi: "Tambahin cctv pak biar lebih aman" },
-    { id: 6, nama: "Yosi", noKamar: "201", perihal: "Kegaduhan", tanggal: "22/10/24", status: "Selesai", isi: "Kamar 202 berisik pak suruh diem" },
-   
-  ];
+  // Menangani data ajuan dari JSON file
+  useEffect(() => {
+    setAjuanData(data);
+  }, []);
 
-  // Fungsi untuk membuka modal balasan dengan data ajuan yang dipilih
-  const handleOpenModal = (ajuan: AjuanItem) => {
-    setSelectedAjuan(ajuan);
-    setIsModalOpen(true);
-  };
+  // Menghitung data yang ditampilkan pada halaman aktif
+  const indexOfLastItem = activePage * itemsPerPage; // index item terakhir
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage; // index item pertama
+  const currentItems = ajuanData.slice(indexOfFirstItem, indexOfLastItem); // Data untuk halaman saat ini
 
-  // Fungsi untuk menutup modal balasan
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedAjuan(null);
-  };
+  console.log("Current Path:", location.pathname);
 
   return (
     <MainLayout>
       <div className="p-8 flex-grow">
-        {/* Menggunakan flex untuk menyelaraskan judul dan profil */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Data Ajuan</h1>
-          <ProfileAdmin />
+          <h1 className="text-2xl font-bold">{pageTitle}</h1>
+          <AdminProfil />
         </div>
 
-        {/* Container untuk Filter Buttons dan Cetak PDF */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex space-x-4">
             <FilterButton />
@@ -55,16 +45,13 @@ const AdminDataAjuan: React.FC = () => {
           <PrintButton />
         </div>
 
-        {/* Data Table */}
-        <div className="overflow-x-auto">
-          <DataTable data={data} onReplyClick={handleOpenModal} /> {/* Corrected to DataTable */}
-        </div>
+        {/* Mengirimkan data halaman aktif ke AjuanTable */}
+        <AjuanTable ajuanData={currentItems} />
 
-        {/* Container untuk jumlah dan pagination */}
-        <div className="flex items-center mt-4 ">
+        <div className="flex items-center mt-4">
           {/* Tulisan Jumlah */}
           <p className="text-sm">
-            Jumlah {1 + (activePage - 1) * itemsPerPage}-{Math.min(activePage * itemsPerPage, totalItems)} dari {totalItems}
+            Jumlah {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, totalItems)} dari {totalItems}
           </p>
           {/* Menggunakan flex-grow untuk mengisi ruang antara tulisan dan pagination */}
           <div className="flex-grow"></div>
@@ -72,9 +59,6 @@ const AdminDataAjuan: React.FC = () => {
           <Pagination totalItems={totalItems} itemsPerPage={itemsPerPage} activePage={activePage} setActivePage={setActivePage} />
         </div>
       </div>
-
-      {/* Render modal balasan jika ada ajuan yang dipilih */}
-      {selectedAjuan && <AjuanResponseModal isOpen={isModalOpen} onClose={handleCloseModal} nama={selectedAjuan.nama} noKamar={selectedAjuan.noKamar} isiAjuan={selectedAjuan.perihal} />}
     </MainLayout>
   );
 };

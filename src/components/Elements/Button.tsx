@@ -3,7 +3,7 @@ import React from 'react';
 interface ButtonProps {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
-  variant?: "primary" | "secondary" | "disabled" | "plain" | "underlined" | "tertiary";
+  variant?: "primary" | "secondary" | "disabled" | "plain" | "underlined" | "tertiary" | "deleted" | "detail" | "add";
   children: React.ReactNode;
 }
 
@@ -18,6 +18,9 @@ const Button: React.FC<ButtonProps> = ({ type = "button", onClick, variant = "pr
     plain: "bg-transparent text-blue-500 border border-blue-500 hover:bg-blue-100",
     underlined: "bg-transparent text-blue-500 underline hover:text-blue-700 text-primary-dark", // Use underline for text
     tertiary: "bg-white text-primary-dark hover:text-primary-dark",
+    deleted: "bg-red-800 text-white hover:bg-red-700",
+    detail: "bg-gray-500  hover:bg-gray-400 text-white",
+    add: "bg-primary-dark text-white hover:bg-primary",
   };
 
   return (
