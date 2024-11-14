@@ -1,6 +1,7 @@
 // BookingModal.tsx
 import React from "react";
 import Button from "../Elements/Button";
+import PaymentSuccessModal from "./PaymentSuccessModal";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -19,8 +20,19 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
   const [selectedMethod, setSelectedMethod] = React.useState<number | null>(
     null
   );
+  const [isPaymentSuccessOpen, setIsPaymentSuccessOpen] = React.useState(false);
 
   if (!isOpen) return null; // Render nothing if the modal is not open
+
+  const handlePayment = () => {
+    // Buka PaymentSuccessModal saat pembayaran berhasil
+    setIsPaymentSuccessOpen(true);
+  };
+
+  const handleClosePaymentSuccess = () => {
+    setIsPaymentSuccessOpen(false);
+    onClose(); // Tutup BookingModal ketika modal sukses ditutup
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -73,11 +85,14 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
           <Button custom="border border-primary py-3 text-primary" onClick={onClose}>
             Batal
           </Button>
-          <Button custom="bg-secondary py-3 text-white" onClick={onClose}>
+          <Button custom="bg-secondary py-3 text-white" onClick={handlePayment}>
             Bayar
           </Button>
         </div>
       </div>
+      {isPaymentSuccessOpen && (
+        <PaymentSuccessModal onClose={handleClosePaymentSuccess} />
+      )}
     </div>
   );
 };
