@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import MainLayout from "../components/Layouts/MainLayout";
 import FilterButton from "../components/Elements/FilterButton";
 import PrintButton from "../components/Elements/PrintButton";
 import Pagination from "../components/Elements/Pagination";
 import AjuanTable from "../components/Fragments/AjuanTable";
 import data from "../json/dataAjuan.json";
-import AdminProfil from "../components/Fragments/ProfileAdmin";
 import { DataItem } from "../components/Fragments/AjuanTable";
+import ProfileInfo from "../components/Elements/ProfileInfo";
 
 const AdminDataAjuan = () => {
   const [ajuanData, setAjuanData] = useState<DataItem[]>([]);
@@ -30,11 +29,10 @@ const AdminDataAjuan = () => {
   console.log("Current Path:", location.pathname);
 
   return (
-    <MainLayout>
-      <div className="p-8 flex-grow">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">{pageTitle}</h1>
-          <AdminProfil />
+    <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">{pageTitle}</h1>
+          <ProfileInfo />
         </div>
 
         <div className="flex justify-between items-center mb-4">
@@ -59,7 +57,6 @@ const AdminDataAjuan = () => {
           <Pagination totalItems={totalItems} itemsPerPage={itemsPerPage} activePage={activePage} setActivePage={setActivePage} />
         </div>
       </div>
-    </MainLayout>
   );
 };
 

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import MainLayout from "../components/Layouts/MainLayout";
 import ProfileInfo from "../components/Elements/ProfileInfo";
 import FilterButton from "../components/Elements/FilterButton";
 import PrintButton from "../components/Elements/PrintButton";
@@ -21,13 +20,11 @@ const AdminDataPembayaran: React.FC = () => {
   ];
 
   return (
-    <MainLayout>
-      <div className="p-8 flex-grow">
-        {/* Menggunakan flex untuk menyelaraskan judul dan profil */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Data Pembayaran</h1>
-          <ProfileInfo />
-        </div>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Data Pembayaran</h1>
+        <ProfileInfo />
+      </div>
 
         {/* Card Payment */}
         <div className="mb-6">
@@ -71,7 +68,6 @@ const AdminDataPembayaran: React.FC = () => {
           />
         </div>
       </div>
-    </MainLayout>
   );
 };
 

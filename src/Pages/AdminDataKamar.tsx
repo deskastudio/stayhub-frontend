@@ -1,76 +1,129 @@
-import React, { useState } from 'react';
-import ProfileInfo from '../components/Elements/ProfileInfo';
-import TabPilihan from '../components/Fragments/TabPilihan';
-import CustomTable, { DataItem } from "../components/Elements/CustomTable";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import ProfileInfo from "../components/Elements/ProfileInfo";
+import TabPilihan from "../components/Fragments/TabPilihan";
+import CustomTable from "../components/Elements/CustomTable";
+import PopupTambahKamar from "../components/Fragments/PopupTambahKamar";
 
-// Data Item untuk Data Kamar (No Kamar, Status, Aksi)
-interface RoomDataItem {
-  noKamar: string;
+// Definisikan tipe untuk data kamar
+interface Room {
+  id: string;
+  name: string;
+  type: string;
+  cost: number;
   status: string;
 }
 
-// Data dummy untuk tabel Silver, Gold, and Platinum (disesuaikan dengan data kamar)
-const dummySilverData: RoomDataItem[] = [
-  { noKamar: "S101", status: "Tersedia" },
-  { noKamar: "S102", status: "Tidak Tersedia" },
-  { noKamar: "S103", status: "Tersedia" },
-];
-
-const dummyGoldData: RoomDataItem[] = [
-  { noKamar: "G201", status: "Tersedia" },
-  { noKamar: "G202", status: "Tidak Tersedia" },
-  { noKamar: "G203", status: "Tersedia" },
-];
-
-const dummyPlatinumData: RoomDataItem[] = [
-  { noKamar: "P301", status: "Tersedia" },
-  { noKamar: "P302", status: "Tidak Tersedia" },
-  { noKamar: "P303", status: "Tersedia" },
-];
-
 const AdminDataKamar: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>("Silver"); // Menyimpan tab yang aktif
+  const [activeTab, setActiveTab] = useState<string>("Silver");
+  const [roomData, setRoomData] = useState<Room[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
-  // Fungsi untuk mengubah tab aktif
-  const handleTabClick = (label: string) => {
-    setActiveTab(label);
+  // Fetch data kamar dari backend
+  const fetchRooms = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:8000/room"); // Ganti URL sesuai backend
+      setRoomData(response.data.data);
+    } catch (error) {
+      console.error("Error fetching room data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Kolom yang akan ditampilkan untuk Silver, Gold, dan Platinum
-  const roomColumns = ["No Kamar", "Status", "Aksi"];
+  // Hapus kamar
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Apakah Anda yakin ingin menghapus kamar ini?")) {
+      try {
+        await axios.delete(`http://localhost:8000/room/${id}`);
+        fetchRooms(); // Refresh data setelah menghapus kamar
+        alert("Kamar berhasil dihapus!");
+      } catch (error) {
+        console.error("Error deleting room:", error);
+        alert("Gagal menghapus kamar.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  // Handle tab click
+  const handleTabClick = (label: string) => setActiveTab(label);
+
+  // Filter kamar berdasarkan tipe
+  const filteredRooms = roomData.filter(
+    (room) => room.type.toLowerCase() === activeTab.toLowerCase()
+  );
+
+  // Kolom tabel kamar
+  const roomColumns = ["Nama Kamar", "Tipe Kamar", "Biaya", "Status", "Aksi"];
+
+  // Format data untuk tabel
+  const formatTableData = (data: Room[]) =>
+    data.map((room) => ({
+      "Nama Kamar": room.name,
+      "Tipe Kamar": room.type,
+      Biaya: `Rp${room.cost.toLocaleString()}`,
+      Status: (
+        <span
+          className={`px-2 py-1 rounded ${
+            room.status === "Tersedia"
+              ? "bg-green-200 text-green-700"
+              : "bg-gray-200 text-gray-700"
+          }`}
+        >
+          {room.status}
+        </span>
+      ),
+      Aksi: (
+        <div className="flex items-center justify-center space-x-2">
+          <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(room.id)}>
+            <i className="fas fa-trash"></i>
+          </button>
+        </div>
+      ),
+    }));
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Data Kamar</h1>
         <ProfileInfo />
       </div>
 
-      {/* Button Section */}
       <TabPilihan
         buttons={[
           { label: "Silver", variant: "primary" },
           { label: "Gold", variant: "secondary" },
           { label: "Platinum", variant: "secondary" },
         ]}
-        activeTab={activeTab} // Pass activeTab ke TabPilihan
-        onTabClick={handleTabClick} // Pass handleTabClick untuk mengubah tab aktif
-        onAddButtonClick={() => {}}
+        activeTab={activeTab}
+        onTabClick={handleTabClick}
+        onAddButtonClick={() => setIsPopupOpen(true)}
+        addButtonLabel="Tambah Kamar"
       />
 
-      {/* Render tabel berdasarkan tab yang aktif */}
       <div className="mt-3">
-        {activeTab === "Silver" && (
-          <CustomTable columns={roomColumns} data={dummySilverData as DataItem[]} />
-        )}
-        {activeTab === "Gold" && (
-          <CustomTable columns={roomColumns} data={dummyGoldData as unknown as DataItem[]} />
-        )}
-        {activeTab === "Platinum" && (
-          <CustomTable columns={roomColumns} data={dummyPlatinumData as unknown as DataItem[]} />
+        {loading ? (
+          <p>Loading data kamar...</p>
+        ) : (
+          <CustomTable
+            columns={roomColumns}
+            data={formatTableData(filteredRooms)}
+            itemsPerPage={5}
+          />
         )}
       </div>
+
+      <PopupTambahKamar
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onKamarAdded={fetchRooms} // Refresh data setelah menambahkan kamar
+      />
     </div>
   );
 };

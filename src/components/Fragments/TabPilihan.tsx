@@ -12,9 +12,16 @@ interface TabPilihanProps {
   activeTab: string;
   onTabClick: (label: string) => void;
   onAddButtonClick: () => void;
+  addButtonLabel?: string; // Label untuk tombol tambah
 }
 
-const TabPilihan: React.FC<TabPilihanProps> = ({ buttons, activeTab, onTabClick, onAddButtonClick }) => {
+const TabPilihan: React.FC<TabPilihanProps> = ({
+  buttons,
+  activeTab,
+  onTabClick,
+  onAddButtonClick,
+  addButtonLabel = "Tambah", // Default label adalah "Tambah"
+}) => {
   return (
     <div className="flex justify-between items-center gap-4">
       {/* Menampilkan tombol dinamis */}
@@ -29,10 +36,10 @@ const TabPilihan: React.FC<TabPilihanProps> = ({ buttons, activeTab, onTabClick,
           </Button>
         ))}
       </div>
-      {/* Tombol "Tambah Kamar" */}
+      {/* Tombol "Tambah" */}
       <div className="flex justify-end items-center mb-8">
         <Button variant="add" onClick={onAddButtonClick}>
-          Tambah Kamar
+          {addButtonLabel}
         </Button>
       </div>
     </div>
