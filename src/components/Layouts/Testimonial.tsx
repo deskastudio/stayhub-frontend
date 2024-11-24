@@ -41,9 +41,9 @@ const Testimonial = () => {
           ))}
         </div>
         <div className="flex justify-center mt-8">
-          <div className="w-7 h-7 bg-secondary rounded-full mx-1"></div>
-          <div className="w-7 h-7 border border-secondary rounded-full mx-1"></div>
-          <div className="w-7 h-7 border border-secondary rounded-full mx-1"></div>
+          <div className="w-7 h-7 bg-primary rounded-full mx-1"></div>
+          <div className="w-7 h-7 border border-primary rounded-full mx-1"></div>
+          <div className="w-7 h-7 border border-primary rounded-full mx-1"></div>
         </div>
       </div>
     </>

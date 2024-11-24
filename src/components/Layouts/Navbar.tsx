@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
           <Button custom="border border-primary py-3 text-primary">
             Masuk
           </Button>
-          <Button custom="bg-secondary py-3 text-white">Daftar</Button>
+          <Button custom="bg-primary py-3 text-white">Daftar</Button>
         </div>
       </div>
     </div>
