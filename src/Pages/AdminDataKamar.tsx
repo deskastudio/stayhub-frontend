@@ -25,7 +25,7 @@ const AdminDataKamar: React.FC = () => {
     try {
       setLoading(true);
       const response = await axios.get("http://localhost:8000/room");
-      setRoomData(response.data.data);
+      setRoomData(response.data);
     } catch (error) {
       console.error("Error fetching room data:", error);
     } finally {

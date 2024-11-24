@@ -14,6 +14,7 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
 }) => {
   const [noKamar, setNoKamar] = useState<string>("");
   const [typeKamar, setTypeKamar] = useState<string>("Silver");
+  const [cost, setCost] = useState<number>(0);
   const [statusKamar, setStatusKamar] = useState<string>("Tersedia");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -22,11 +23,24 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
     setLoading(true);
 
     try {
+      // Pastikan semua data valid sebelum dikirim
+      if (!noKamar.trim()) {
+        alert("Nomor kamar tidak boleh kosong!");
+        setLoading(false);
+        return;
+      }
+      if (cost < 0) {
+        alert("Biaya kamar tidak boleh kurang dari 0!");
+        setLoading(false);
+        return;
+      }
+
+      // Kirim data ke API
       await axios.post("http://localhost:8000/room/add", {
         name: noKamar,
         type: typeKamar,
+        cost: cost,
         status: statusKamar,
-        cost: 0, // Default biaya, bisa diubah sesuai kebutuhan
       });
 
       alert("Kamar berhasil ditambahkan!");
@@ -74,6 +88,17 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
               <option value="Gold">Gold</option>
               <option value="Platinum">Platinum</option>
             </select>
+          </div>
+          <div className="mb-4">
+            <label className="block font-bold mb-2">Biaya Kamar</label>
+            <input
+              type="number"
+              value={cost}
+              onChange={(e) => setCost(parseFloat(e.target.value))}
+              placeholder="Masukkan biaya kamar"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
           </div>
           <div className="mb-4">
             <label className="block font-bold mb-2">Status Kamar</label>
