@@ -24,7 +24,7 @@ const AdminDataKamar: React.FC = () => {
   const fetchRooms = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8000/room"); // Ganti URL sesuai backend
+      const response = await axios.get("http://localhost:8000/room");
       setRoomData(response.data.data);
     } catch (error) {
       console.error("Error fetching room data:", error);
@@ -38,7 +38,7 @@ const AdminDataKamar: React.FC = () => {
     if (window.confirm("Apakah Anda yakin ingin menghapus kamar ini?")) {
       try {
         await axios.delete(`http://localhost:8000/room/${id}`);
-        fetchRooms(); // Refresh data setelah menghapus kamar
+        fetchRooms();
         alert("Kamar berhasil dihapus!");
       } catch (error) {
         console.error("Error deleting room:", error);
@@ -51,18 +51,14 @@ const AdminDataKamar: React.FC = () => {
     fetchRooms();
   }, []);
 
-  // Handle tab click
   const handleTabClick = (label: string) => setActiveTab(label);
 
-  // Filter kamar berdasarkan tipe
   const filteredRooms = roomData.filter(
     (room) => room.type.toLowerCase() === activeTab.toLowerCase()
   );
 
-  // Kolom tabel kamar
   const roomColumns = ["Nama Kamar", "Tipe Kamar", "Biaya", "Status", "Aksi"];
 
-  // Format data untuk tabel
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
       "Nama Kamar": room.name,
@@ -122,7 +118,7 @@ const AdminDataKamar: React.FC = () => {
       <PopupTambahKamar
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        onKamarAdded={fetchRooms} // Refresh data setelah menambahkan kamar
+        onKamarAdded={fetchRooms}
       />
     </div>
   );

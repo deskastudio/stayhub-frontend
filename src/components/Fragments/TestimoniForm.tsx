@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../Elements/Input";
 import Button from "../Elements/Button";
-import RatingFormModal from "./RatingForm"; 
+import RatingFormModal from "./RatingForm";
 import { TestimonialData } from "../Elements/TestimonialData";
 
 interface TestimonialFormProps {
+  initialData?: TestimonialData;
   onSubmit: (data: TestimonialData) => void;
   onCancel: () => void;
 }
 
-const TestimonialForm: React.FC<TestimonialFormProps> = ({ onSubmit, onCancel }) => {
+const TestimonialForm: React.FC<TestimonialFormProps> = ({ initialData, onSubmit, onCancel }) => {
   const [data, setData] = useState<TestimonialData>({
     name: "",
     roomType: "",
@@ -20,6 +21,13 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({ onSubmit, onCancel })
 
   const [isRatingModalOpen, setRatingModalOpen] = useState(false);
   const [formError, setFormError] = useState<string>("");
+
+  // Setel data awal saat komponen pertama kali di-mount
+  useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+    }
+  }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
