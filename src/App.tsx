@@ -17,6 +17,14 @@ import UserListAjuan from './Pages/UserListAjuan';
 import UserProfil from './Pages/UserProfil';
 import UserPembayaran from './Pages/UserPembayaran';
 import UserTestimoni from './Pages/UserTestimoni';
+        
+// Landing Page
+import LandingPage from "./pages/LandingPage";
+import RoomSilver from "./pages/RoomSilver";
+import RoomGold from "./pages/RoomGold";
+import RoomPlatinum from "./pages/RoomPlatinum";
+import ScrollToTop from "./components/ScrollToTop";
+import BookingPage from "./pages/BookingPage";
 
 const App: React.FC = () => {
   return (
@@ -42,6 +50,13 @@ const App: React.FC = () => {
               <Route path="/user-testimoni" element={<UserTestimoni />} />
               <Route path="/user-ajuan" element={<UserAjuan />} />
               <Route path="/user-list-ajuan" element={<UserListAjuan />} />
+              
+              {/* Landing Page */}
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/silver" element={<RoomSilver />} />
+              <Route path="/gold" element={<RoomGold />} />
+              <Route path="/platinum" element={<RoomPlatinum />} />
+              <Route path="/booking" element={<BookingPage />} />
             </Routes>
           </div>
         </div>
