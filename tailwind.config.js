@@ -4,23 +4,23 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#113F67",
-        secondary: "#226597",
-        white: "#F3F9FB",
-        default: "#FFFFFF",
-      },
-      container: {
-        center: true,
-        padding: {
-          DEFAULT: "1rem",
-          sm: "1rem",
-          lg: "1rem",
-          xl: "6rem",
-          "2xl": "6rem",
+        primary: {
+          DEFAULT: "#113F67", // Warna utama
+          light: "#6cb2eb", // Versi warna lebih terang
+          dark: "#226597", // Versi warna lebih gelap
+          custom: "#F3F9FB", //warna latar 
+          textDark: "#26282B",
+          textLight: "#7d7d7d",
+          bgprimary: "#F2F4F7"
         },
+        secondary: {
+          DEFAULT: "#ffed4a", // Warna utama
+          light: "#fff382", // Versi warna lebih terang
+          dark: "#f9c846", // Versi warna lebih gelap
+        }
       },
-      fontFamily: { 
-        main: ["Poppins"] 
+      fontFamily: {
+        poppins: ['Poppins'],
       },
     },
   },

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Elements/Button";
+import Button from "../Elements/ButtonLanding";
 
 const NavbarMenu = [
   {
@@ -46,7 +46,9 @@ const Navbar: React.FC = () => {
           </ul>
         </div>
         <div className="flex gap-2">
-          <Button custom="border border-primary py-3 text-primary">Masuk</Button>
+          <Button custom="border border-primary py-3 text-primary">
+            Masuk
+          </Button>
           <Button custom="bg-secondary py-3 text-white">Daftar</Button>
         </div>
       </div>

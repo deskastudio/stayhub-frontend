@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import Button from "../Elements/Button";
+import Button from "../Elements/ButtonLanding";
 import { GoArrowLeft } from "react-icons/go";
 import { FaCalculator } from "react-icons/fa";
 import { IoChatbubbleEllipses } from "react-icons/io5";
