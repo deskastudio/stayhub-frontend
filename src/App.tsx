@@ -41,6 +41,7 @@ const AppContent: React.FC = () => {
     "/user-dashboard",
     "/user-profile",
     "/user-settings",
+    "/user-payment",
     "/user-testimoni",
     "/user-ajuan",
     "/user-list-ajuan",
@@ -67,7 +68,7 @@ const AppContent: React.FC = () => {
           {/* User Routes */}
           <Route path="/user-dashboard" element={<UserBeranda />} />
           <Route path="/user-profile" element={<UserProfil />} />
-          <Route path="/user-settings" element={<UserPembayaran />} />
+          <Route path="/user-payment" element={<UserPembayaran />} />
           <Route path="/user-testimoni" element={<UserTestimoni />} />
           <Route path="/user-ajuan" element={<UserAjuan />} />
           <Route path="/user-list-ajuan" element={<UserListAjuan />} />

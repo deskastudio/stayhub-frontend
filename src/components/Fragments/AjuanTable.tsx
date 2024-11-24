@@ -51,7 +51,7 @@ const AjuanTable: React.FC<AjuanTableProps> = ({ ajuanData }) => {
   // Fungsi untuk menangani penghapusan ajuan
   const handleDelete = (noKamar: string) => {
     console.log("Ajuan dengan noKamar:", noKamar, "dihapus");
-    // Logika penghapusan bisa ditambahkan di sini (misalnya menghapus dari state)
+   
   };
 
   // Fungsi untuk menutup modal
