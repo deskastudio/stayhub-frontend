@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "username": "admin",
+        "password": "admin",
+        "role": "admin",
+        "status": "active",
+        "nohp": "081234567890",
+        "email": "admin@gmail.com",
+        "image": "https://via.placeholder.com/150"
+    },
+    {
+        "id": 2,
+        "username": "member",
+        "password": "member",
+        "role": "member",
+        "status": "active",
+        "nohp": "081234567890",
+        "email": "member@gmail.com",
+        "image": "https://via.placeholder.com/150"
+    },
+    {
+        "id": 3,
+        "username": "member2",
+        "password": "member2",
+        "role": "member",
+        "status": "active",
+        "nohp": "081234567890",
+        "email": "member2@gmail.com",
+        "image": "https://via.placeholder.com/150"
+    },      
+    {
+        "id": 4,
+        "username": "member3",
+        "password": "member3",
+        "role": "member",
+        "status": "active",
+        "nohp": "081234567890",
+        "email": "member3@gmail.com",
+        "image": "https://via.placeholder.com/150"
+    }   
+]

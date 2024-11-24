@@ -1,0 +1,33 @@
+[
+    { 
+        "id": 1, 
+        "noKamar": 101, 
+        "status": "Penuh" 
+    },
+    { 
+        "id": 2, 
+        "noKamar": 102, 
+        "status": "Kosong" 
+    },
+    { 
+        "id": 3, 
+        "noKamar": 103, 
+        "status": "Kosong" 
+    },
+    { 
+        "id": 4, 
+        "noKamar": 104, 
+        "status": "Penuh" 
+    },
+    { 
+        "id": 5, 
+        "noKamar": 105, 
+        "status": "Penuh" 
+    },
+    { 
+        "id": 6, 
+        "noKamar": 106, 
+        "status": "Penuh" 
+    }
+]
+  
