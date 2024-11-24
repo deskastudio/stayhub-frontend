@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../components/Elements/Button";
+import Button from "../components/Elements/ButtonLanding";
 import BookingModal from "../components/Fragments/BookingModal";
 
 const BookingPage: React.FC = () => {
@@ -130,7 +130,9 @@ const BookingPage: React.FC = () => {
           <Button custom="border border-primary py-3 text-primary">
             Batal
           </Button>
-          <Button custom="bg-secondary py-3 text-white" onClick={openModal}>Bayar</Button>
+          <Button custom="bg-secondary py-3 text-white" onClick={openModal}>
+            Bayar
+          </Button>
         </div>
       </div>
       <BookingModal isOpen={isModalOpen} onClose={closeModal} />

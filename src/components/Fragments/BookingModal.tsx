@@ -1,6 +1,6 @@
 // BookingModal.tsx
 import React from "react";
-import Button from "../Elements/Button";
+import Button from "../Elements/ButtonLanding";
 import PaymentSuccessModal from "./PaymentSuccessModal";
 
 interface BookingModalProps {
@@ -82,7 +82,10 @@ const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
           ))}
         </div>
         <div className="flex justify-center gap-3 mt-10">
-          <Button custom="border border-primary py-3 text-primary" onClick={onClose}>
+          <Button
+            custom="border border-primary py-3 text-primary"
+            onClick={onClose}
+          >
             Batal
           </Button>
           <Button custom="bg-secondary py-3 text-white" onClick={handlePayment}>

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Elements/Button";
+import Button from "../Elements/ButtonLanding";
 
 interface PaymentSuccessModalProps {
   onClose: () => void;
