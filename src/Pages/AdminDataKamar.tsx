@@ -4,8 +4,9 @@ import ProfileInfo from "../components/Elements/ProfileInfo";
 import TabPilihan from "../components/Fragments/TabPilihan";
 import CustomTable from "../components/Elements/CustomTable";
 import PopupTambahKamar from "../components/Fragments/PopupTambahKamar";
+import PopupEditKamar from "../components/Fragments/PopupEditKamar";
+import Button from "../components/Elements/Button";
 
-// Definisikan tipe untuk data kamar
 interface Room {
   id: string;
   name: string;
@@ -14,31 +15,54 @@ interface Room {
   status: string;
 }
 
+interface TypeKamar {
+  id: string;
+  namaTipe: string;
+  fasilitas: { nama: string }[];
+  deskripsi: string;
+  harga: number;
+}
+
 const AdminDataKamar: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("Silver");
   const [roomData, setRoomData] = useState<Room[]>([]);
+  const [typeKamarData, setTypeKamarData] = useState<TypeKamar[]>([]); // Data tipe kamar
   const [loading, setLoading] = useState<boolean>(true);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState<boolean>(false);
+  const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
 
-  // Fetch data kamar dari backend
-  const fetchRooms = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8000/room");
-      setRoomData(response.data);
+      const roomResponse = await axios.get<Room[]>("http://localhost:8000/room");
+      const typeKamarResponse = await axios.get<TypeKamar[]>("http://localhost:8000/type-kamar");
+      setRoomData(roomResponse.data);
+      setTypeKamarData(typeKamarResponse.data);
     } catch (error) {
-      console.error("Error fetching room data:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Hapus kamar
+  const handleEditKamar = async (room: Room) => {
+    try {
+      await axios.put(`http://localhost:8000/room/${room.id}`, room);
+      fetchData();
+      alert("Kamar berhasil diperbarui!");
+      setIsEditPopupOpen(false);
+    } catch (error) {
+      console.error("Error updating room:", error);
+      alert("Gagal memperbarui kamar.");
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus kamar ini?")) {
       try {
         await axios.delete(`http://localhost:8000/room/${id}`);
-        fetchRooms();
+        fetchData();
         alert("Kamar berhasil dihapus!");
       } catch (error) {
         console.error("Error deleting room:", error);
@@ -48,14 +72,12 @@ const AdminDataKamar: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchRooms();
+    fetchData();
   }, []);
 
-  const handleTabClick = (label: string) => setActiveTab(label);
-
-  const filteredRooms = roomData.filter(
-    (room) => room.type.toLowerCase() === activeTab.toLowerCase()
-  );
+  const filteredRooms = activeTab
+    ? roomData.filter((room) => room.type.toLowerCase() === activeTab.toLowerCase())
+    : roomData;
 
   const roomColumns = ["Nama Kamar", "Tipe Kamar", "Biaya", "Status", "Aksi"];
 
@@ -64,22 +86,15 @@ const AdminDataKamar: React.FC = () => {
       "Nama Kamar": room.name,
       "Tipe Kamar": room.type,
       Biaya: `Rp${room.cost.toLocaleString()}`,
-      Status: (
-        <span
-          className={`px-2 py-1 rounded ${
-            room.status === "Tersedia"
-              ? "bg-green-200 text-green-700"
-              : "bg-gray-200 text-gray-700"
-          }`}
-        >
-          {room.status}
-        </span>
-      ),
+      Status: room.status === "Tersedia" ? "Tersedia" : "Tidak Tersedia",
       Aksi: (
         <div className="flex items-center justify-center space-x-2">
-          <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(room.id)}>
-            <i className="fas fa-trash"></i>
-          </button>
+          <Button variant="primary" onClick={() => { setCurrentRoom(room); setIsEditPopupOpen(true); }}>
+            Edit
+          </Button>
+          <Button variant="deleted" onClick={() => handleDelete(room.id)}>
+            Hapus
+          </Button>
         </div>
       ),
     }));
@@ -98,27 +113,28 @@ const AdminDataKamar: React.FC = () => {
           { label: "Platinum", variant: "secondary" },
         ]}
         activeTab={activeTab}
-        onTabClick={handleTabClick}
+        onTabClick={setActiveTab}
         onAddButtonClick={() => setIsPopupOpen(true)}
         addButtonLabel="Tambah Kamar"
       />
 
-      <div className="mt-3">
-        {loading ? (
-          <p>Loading data kamar...</p>
-        ) : (
-          <CustomTable
-            columns={roomColumns}
-            data={formatTableData(filteredRooms)}
-            itemsPerPage={5}
-          />
-        )}
-      </div>
+      {loading ? (
+        <p>Loading data kamar...</p>
+      ) : (
+        <CustomTable columns={roomColumns} data={formatTableData(filteredRooms)} itemsPerPage={5} />
+      )}
 
       <PopupTambahKamar
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        onKamarAdded={fetchRooms}
+        onKamarAdded={fetchData}
+      />
+      <PopupEditKamar
+        isOpen={isEditPopupOpen}
+        onClose={() => setIsEditPopupOpen(false)}
+        onSubmit={handleEditKamar}
+        currentData={currentRoom}
+        typeKamarData={typeKamarData}
       />
     </div>
   );

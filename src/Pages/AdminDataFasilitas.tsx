@@ -5,12 +5,10 @@ import PopupTambahFasilitas from "../components/Fragments/PopupTambahFasilitas";
 import ProfileInfo from "../components/Elements/ProfileInfo";
 import Button from "../components/Elements/Button";
 
+// Tipe data fasilitas
 interface Fasilitas {
   id: string;
   fasilitas: string;
-  jumlah: number;
-  dipakai: number;
-  gambar: string | null;
 }
 
 const AdminDataFasilitas: React.FC = () => {
@@ -31,25 +29,10 @@ const AdminDataFasilitas: React.FC = () => {
   };
 
   // Tambah fasilitas
-  const handleAddFasilitas = async (data: {
-    fasilitas: string;
-    jumlah: number;
-    dipakai: number;
-    gambar: File | null;
-  }) => {
-    const formData = new FormData();
-    formData.append("fasilitas", data.fasilitas);
-    formData.append("jumlah", data.jumlah.toString());
-    formData.append("dipakai", data.dipakai.toString());
-    if (data.gambar) formData.append("gambar", data.gambar);
-
+  const handleAddFasilitas = async (fasilitas: string) => {
     try {
-      await axios.post("http://localhost:8000/fasilitas", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      fetchFasilitas();
+      await axios.post("http://localhost:8000/fasilitas", { fasilitas });
+      fetchFasilitas(); // Refresh data setelah penambahan
       alert("Fasilitas berhasil ditambahkan!");
       setIsPopupOpen(false);
     } catch (error) {
@@ -63,7 +46,7 @@ const AdminDataFasilitas: React.FC = () => {
     if (window.confirm("Apakah Anda yakin ingin menghapus fasilitas ini?")) {
       try {
         await axios.delete(`http://localhost:8000/fasilitas/${id}`);
-        fetchFasilitas();
+        fetchFasilitas(); // Refresh data setelah penghapusan
         alert("Fasilitas berhasil dihapus!");
       } catch (error) {
         console.error("Error deleting fasilitas:", error);
@@ -76,28 +59,17 @@ const AdminDataFasilitas: React.FC = () => {
     fetchFasilitas();
   }, []);
 
-  const columns = ["Fasilitas", "Jumlah", "Dipakai", "Gambar", "Aksi"];
+  const columns = ["Nama Fasilitas", "Aksi"];
 
   // Format data untuk tabel
   const formatTableData = (data: Fasilitas[]) =>
     data.map((item) => ({
-      Fasilitas: item.fasilitas,
-      Jumlah: item.jumlah,
-      Dipakai: item.dipakai,
-      Gambar: item.gambar ? (
-        <img
-          src={item.gambar}
-          alt={item.fasilitas}
-          className="w-16 h-16 object-cover rounded"
-        />
-      ) : (
-        "-"
-      ),
+      "Nama Fasilitas": item.fasilitas,
       Aksi: (
         <div className="flex items-center justify-center space-x-2">
-          <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(item.id)}>
-            <i className="fas fa-trash"></i>
-          </button>
+          <Button variant="deleted" onClick={() => handleDelete(item.id)}>
+            Hapus
+          </Button>
         </div>
       ),
     }));

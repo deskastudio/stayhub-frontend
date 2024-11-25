@@ -1,15 +1,15 @@
 import React from 'react';
 import AuthLayout from '../components/Layouts/AuthLayout';
-import LoginForm from '../components/Fragments/LoginFormAdmin';
 import ImageCarousel from '../components/Fragments/ImageCarousel';
+import RegisterForm from '../components/Fragments/RegisterForm';
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   return (
     <AuthLayout>
       <div className="flex h-screen w-full bg-white">
         <div className="w-full flex items-center justify-center">
           <div className="w-full max-w-md">
-            <LoginForm />
+            <RegisterForm />
           </div>
         </div>
         <div className="w-full">
@@ -20,4 +20,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

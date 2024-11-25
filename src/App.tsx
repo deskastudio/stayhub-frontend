@@ -17,7 +17,7 @@ import UserListAjuan from './Pages/UserListAjuan';
 import UserProfil from './Pages/UserProfil';
 import UserPembayaran from './Pages/UserPembayaran';
 import UserTestimoni from './Pages/UserTestimoni';
-        
+
 // Landing Page
 import LandingPage from "./Pages/LandingPage";
 import RoomSilver from "./Pages/RoomSilver";
@@ -25,6 +25,8 @@ import RoomGold from "./Pages/RoomGold";
 import RoomPlatinum from "./Pages/RoomPlatinum";
 // import ScrollToTop from "./components/ScrollToTop";
 import BookingPage from "./Pages/BookingPage";
+import LoginPage from './Pages/LoginPageUser';
+import RegisterPage from './Pages/RegisterPage';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -40,7 +42,6 @@ const AppContent: React.FC = () => {
     "/data-ajuan",
     "/user-dashboard",
     "/user-profile",
-    "/user-settings",
     "/user-payment",
     "/user-testimoni",
     "/user-ajuan",
@@ -56,6 +57,11 @@ const AppContent: React.FC = () => {
       {showSidebar && <Sidebar />}
       <div className="flex-1 p-4">
         <Routes>
+          {/* Rute Login dan register */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+
           {/* Admin Routes */}
           <Route path="/beranda" element={<AdminDashboard />} />
           <Route path="/data-user" element={<DataUser />} />

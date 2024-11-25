@@ -32,7 +32,8 @@ const UserPembayaran = () => {
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const pageTitle = "Hello John";
-   console.log("Current Path:", location.pathname);
+
+  console.log("Current Path:", location.pathname);
 
   useEffect(() => {
     // Load data awal
@@ -79,7 +80,7 @@ const UserPembayaran = () => {
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-4">
           {/* Filter Status */}
-          <FilterButton options={["Semua", "Lunas", "Menunggu"]} onFilter={(option) => setFilterStatus(option)} />
+          <FilterButton options={["Semua", "Lunas", "Belum bayar"]} onFilter={(option) => setFilterStatus(option)} />
           {/* Filter Bulan */}
           <FilterButton options={["Semua", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]} onFilter={(option) => setFilterMonth(option)} />
         </div>
