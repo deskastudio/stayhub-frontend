@@ -5,9 +5,9 @@ import FilterButton from "../components/Elements/FilterButton";
 import PaymentTable from "../components/Fragments/PaymentTable";
 import data from "../json/payment.json";
 import Pagination from "../components/Elements/Pagination";
-import Search from "../components/Elements/Search"; 
+import Search from "../components/Elements/Search";
 
-
+// Tipe untuk item pembayaran
 export interface PaymentItem {
   id: string;
   date: string;
@@ -15,30 +15,55 @@ export interface PaymentItem {
 }
 
 const UserPembayaran = () => {
-  const [paymentData, setPaymentData] = useState<PaymentItem[]>([]); // Menggunakan PaymentItem[] sebagai tipe data
+  const [paymentData, setPaymentData] = useState<PaymentItem[]>([]); // Data asli
+  const [filteredData, setFilteredData] = useState<PaymentItem[]>([]); // Data setelah filter
   const location = useLocation();
-  const totalItems = paymentData.length; // Total data yang ada (dari state)
+  const totalItems = filteredData.length; // Total data setelah filter
   const itemsPerPage = 5; // Jumlah item per halaman
-  const [activePage, setActivePage] = useState<number>(1); // State untuk halaman aktif
-  const [searchQuery, setSearchQuery] = useState<string>(""); // State untuk menyimpan query pencarian
+  const [activePage, setActivePage] = useState<number>(1); // Halaman aktif
+  const [searchQuery, setSearchQuery] = useState<string>(""); // Query pencarian
+  const [filterStatus, setFilterStatus] = useState<string>("Semua"); // Filter status
+  const [filterMonth, setFilterMonth] = useState<string>("Semua"); // Filter bulan
 
-  // Menghitung data yang ditampilkan pada halaman aktif
-  const indexOfLastItem = activePage * itemsPerPage; // index item terakhir
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage; // index item pertama
-  const currentItems = paymentData
-    .filter(
-      (item) => item.id.toLowerCase().includes(searchQuery.toLowerCase()) || item.status.toLowerCase().includes(searchQuery.toLowerCase()) // Filter berdasarkan query
-    )
-    .slice(indexOfFirstItem, indexOfLastItem);
+  // Menghitung indeks data yang ditampilkan
+  const indexOfLastItem = activePage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const pageTitle = "Hello John";
+   console.log("Current Path:", location.pathname);
 
-  
   useEffect(() => {
-    setPaymentData(data); 
+    // Load data awal
+    setPaymentData(data);
+    setFilteredData(data);
   }, []);
 
-  console.log("Current Path:", location.pathname);
+  // Fungsi untuk menerapkan semua filter
+  useEffect(() => {
+    let tempData = [...paymentData];
+
+    // Filter status
+    if (filterStatus !== "Semua") {
+      tempData = tempData.filter((item) => item.status.toLowerCase() === filterStatus.toLowerCase());
+    }
+
+    // Filter bulan
+    if (filterMonth !== "Semua") {
+      tempData = tempData.filter((item) => {
+        const itemMonth = new Date(item.date).toLocaleString("id-ID", { month: "long" });
+        return itemMonth.toLowerCase() === filterMonth.toLowerCase();
+      });
+    }
+
+    // Filter search query
+    if (searchQuery) {
+      tempData = tempData.filter((item) => item.id.toLowerCase().includes(searchQuery.toLowerCase()) || item.status.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+
+    setFilteredData(tempData);
+  }, [paymentData, filterStatus, filterMonth, searchQuery]);
 
   return (
     <div className="p-8 flex-grow">
@@ -53,23 +78,24 @@ const UserPembayaran = () => {
       {/* Filter Section */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-4">
-          <FilterButton />
-          <FilterButton />
+          {/* Filter Status */}
+          <FilterButton options={["Semua", "Lunas", "Menunggu"]} onFilter={(option) => setFilterStatus(option)} />
+          {/* Filter Bulan */}
+          <FilterButton options={["Semua", "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]} onFilter={(option) => setFilterMonth(option)} />
         </div>
         <div>
           <Search onSearch={(query) => setSearchQuery(query)} />
         </div>
       </div>
-  
+
+      {/* Payment Table */}
       <PaymentTable data={currentItems} />
       <div className="flex items-center mt-4">
-       
         <p className="text-sm">
           Jumlah {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, totalItems)} dari {totalItems}
         </p>
-        {/* Menggunakan flex-grow untuk mengisi ruang antara tulisan dan pagination */}
         <div className="flex-grow"></div>
-        {/* Komponen Pagination dengan props aktif */}
+        {/* Pagination */}
         <Pagination totalItems={totalItems} itemsPerPage={itemsPerPage} activePage={activePage} setActivePage={setActivePage} />
       </div>
     </div>
