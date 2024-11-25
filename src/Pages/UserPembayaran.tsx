@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ProfileUser from "../components/Fragments/ProfileUser";
 import FilterButton from "../components/Elements/FilterButton";
-import PaymentTable from "../components/Fragments/PaymentTable";
+import PaymentTable from "../components/Fragments/PaymentTableUser";
 import data from "../json/payment.json";
 import Pagination from "../components/Elements/Pagination";
 import Search from "../components/Elements/Search";

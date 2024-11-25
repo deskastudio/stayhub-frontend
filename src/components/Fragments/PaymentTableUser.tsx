@@ -12,7 +12,7 @@ interface PaymentTableProps {
   data: PaymentItem[];
 }
 
-const PaymentTable: React.FC<PaymentTableProps> = ({ data }) => {
+const PaymentTableUser: React.FC<PaymentTableProps> = ({ data }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white shadow-md rounded-lg border-collapse">
@@ -37,14 +37,11 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ data }) => {
                 <td className="p-4 text-center">{item.id}</td>
                 <td className="p-4 text-center">{format(new Date(item.date), "dd/MM/yyyy")}</td>
                 <td className="p-4 text-center w-32">
-                  <span className={`px-2 py-1 rounded text-center inline-block w-full ${item.status === "Lunas" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{item.status}</span>
+                  <span className={`w-32 h-8 rounded-lg flex items-center justify-center ${item.status === "Lunas" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{item.status}</span>
                 </td>
                 <td className="p-4 text-center">
-                  <Button
-                    variant={item.status === "Lunas" ? "disabled" : "primary"}
-                    onClick={() => console.log(item.status === "Lunas" ? "Selesai" : "Bayar", item.id)}
-                   >
-                    {item.status === "Lunas" ? "Selesai" : "Bayar"} 
+                  <Button variant={item.status === "Lunas" ? "disabled" : "primary"} onClick={() => console.log(item.status === "Lunas" ? "Selesai" : "Bayar", item.id)}>
+                    {item.status === "Lunas" ? "Selesai" : "Bayar"}
                   </Button>
                 </td>
               </tr>
@@ -56,4 +53,4 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ data }) => {
   );
 };
 
-export default PaymentTable;
+export default PaymentTableUser;

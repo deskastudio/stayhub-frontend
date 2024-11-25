@@ -1,6 +1,6 @@
 import React from "react";
 
-interface PaymentItem {
+export interface PaymentItem {
   idBayar: string; 
   typeKamar: string;
   noKamar: string;
