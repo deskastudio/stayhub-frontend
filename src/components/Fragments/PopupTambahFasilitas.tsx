@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Button from "../Elements/Button";
 
 interface PopupTambahFasilitasProps {
@@ -14,7 +15,7 @@ const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({
 }) => {
   const [fasilitas, setFasilitas] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validasi input
@@ -23,10 +24,29 @@ const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({
       return;
     }
 
-    // Kirim nama fasilitas ke parent
-    onSubmit(fasilitas.trim());
-    setFasilitas(""); // Reset input
-    onClose(); // Tutup popup
+    try {
+      // Kirim nama fasilitas ke backend menggunakan API POST
+      const response = await axios.post("http://localhost:8000/facility/add", { name: fasilitas.trim() });
+
+      if (response.status === 201) {
+        // Jika berhasil, kirim data ke parent untuk di-refresh
+        alert("Fasilitas berhasil ditambahkan!");
+        onSubmit(fasilitas.trim());
+        setFasilitas(""); // Reset input setelah berhasil
+        onClose(); // Tutup popup
+      } else {
+        alert("Gagal menambahkan fasilitas, coba lagi.");
+      }
+    } catch (error) {
+      console.error("Error adding fasilitas:", error);
+
+      // Tangani error dengan lebih detail
+      if (axios.isAxiosError(error)) {
+        alert(`Gagal menambahkan fasilitas: ${error.response?.data?.message || error.message}`);
+      } else {
+        alert("Gagal menambahkan fasilitas: Terjadi kesalahan yang tidak diketahui.");
+      }
+    }
   };
 
   if (!isOpen) return null;

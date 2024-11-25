@@ -18,9 +18,11 @@ const AdminDataFasilitas: React.FC = () => {
 
   // Fetch data fasilitas dari backend
   const fetchFasilitas = async () => {
+    setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/fasilitas");
-      setFasilitasData(response.data.data);
+      const response = await axios.get("http://localhost:8000/facility");
+      console.log("Fetched Data:", response.data); // Memeriksa struktur data
+      setFasilitasData(response.data.data); // Update state dengan data yang benar
     } catch (error) {
       console.error("Error fetching fasilitas data:", error);
     } finally {
@@ -29,23 +31,21 @@ const AdminDataFasilitas: React.FC = () => {
   };
 
   // Tambah fasilitas
-  const handleAddFasilitas = async (fasilitas: string) => {
-    try {
-      await axios.post("http://localhost:8000/fasilitas", { fasilitas });
-      fetchFasilitas(); // Refresh data setelah penambahan
-      alert("Fasilitas berhasil ditambahkan!");
-      setIsPopupOpen(false);
-    } catch (error) {
-      console.error("Error adding fasilitas:", error);
-      alert("Gagal menambahkan fasilitas.");
-    }
+  const handleAddFasilitas = (fasilitas: string) => {
+    // Tambahkan fasilitas baru ke dalam state
+    setFasilitasData((prevData) => [
+      ...prevData,
+      { id: Date.now().toString(), fasilitas }, // Menambahkan fasilitas ke data yang ada
+    ]);
+    fetchFasilitas(); // Pastikan data yang baru ditambahkan muncul setelah reload
   };
+  
 
   // Delete fasilitas
   const handleDelete = async (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus fasilitas ini?")) {
       try {
-        await axios.delete(`http://localhost:8000/fasilitas/${id}`);
+        await axios.delete(`http://localhost:8000/facility/delete/${id}`);
         fetchFasilitas(); // Refresh data setelah penghapusan
         alert("Fasilitas berhasil dihapus!");
       } catch (error) {
@@ -54,17 +54,18 @@ const AdminDataFasilitas: React.FC = () => {
       }
     }
   };
+  
 
   useEffect(() => {
-    fetchFasilitas();
-  }, []);
+    fetchFasilitas(); // Memanggil fetchFasilitas saat komponen dimuat
+  }, []);  
 
   const columns = ["Nama Fasilitas", "Aksi"];
 
   // Format data untuk tabel
   const formatTableData = (data: Fasilitas[]) =>
     data.map((item) => ({
-      "Nama Fasilitas": item.fasilitas,
+      "Nama Fasilitas": item.fasilitas || item.name, // Gunakan `name` jika `fasilitas` tidak ada
       Aksi: (
         <div className="flex items-center justify-center space-x-2">
           <Button variant="deleted" onClick={() => handleDelete(item.id)}>
@@ -73,6 +74,8 @@ const AdminDataFasilitas: React.FC = () => {
         </div>
       ),
     }));
+  
+  
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">

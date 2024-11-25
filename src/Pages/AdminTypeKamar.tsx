@@ -28,7 +28,7 @@ const AdminTypeKamar: React.FC = () => {
   const fetchData = async () => {
     try {
       const typeKamarResponse = await axios.get("http://localhost:8000/type-kamar");
-      const fasilitasResponse = await axios.get("http://localhost:8000/fasilitas");
+      const fasilitasResponse = await axios.get("http://localhost:8000/facility");
       setTypeKamarData(typeKamarResponse.data.data);
       setFasilitasData(fasilitasResponse.data.data);
     } catch (error) {
@@ -116,7 +116,7 @@ const AdminTypeKamar: React.FC = () => {
         onClose={() => setIsPopupOpen(false)}
         onSubmit={handleAddTypeKamar}
         currentData={currentData} // Jika ada data, form akan diisi untuk edit
-        fasilitasData={fasilitasData}
+        fasilitasData={fasilitasData} // Kirim data fasilitas ke popup
       />
     </div>
   );
