@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ProfileUser from "../components/Fragments/ProfileUser";
@@ -5,7 +6,7 @@ import FilterButton from "../components/Elements/FilterButton";
 import PaymentTable from "../components/Fragments/PaymentTable";
 import data from "../json/payment.json";
 import Pagination from "../components/Elements/Pagination";
-import Search from "../components/Elements/Search"; 
+import Search from "../components/Elements/Search";
 
 
 export interface PaymentItem {
@@ -33,9 +34,9 @@ const UserPembayaran = () => {
 
   const pageTitle = "Hello John";
 
-  
+
   useEffect(() => {
-    setPaymentData(data); 
+    setPaymentData(data);
   }, []);
 
   console.log("Current Path:", location.pathname);
@@ -60,10 +61,10 @@ const UserPembayaran = () => {
           <Search onSearch={(query) => setSearchQuery(query)} />
         </div>
       </div>
-  
+
       <PaymentTable data={currentItems} />
       <div className="flex items-center mt-4">
-       
+
         <p className="text-sm">
           Jumlah {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, totalItems)} dari {totalItems}
         </p>

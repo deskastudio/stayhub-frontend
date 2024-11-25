@@ -46,10 +46,10 @@ const Navbar: React.FC = () => {
           </ul>
         </div>
         <div className="flex gap-2">
-          <Button custom="border border-primary py-3 text-primary">
+          <Button custom="border border-primary py-3 text-primary" to="/login">
             Masuk
           </Button>
-          <Button custom="bg-primary py-3 text-white">Daftar</Button>
+          <Button custom="bg-primary py-3 text-white" to="/register">Daftar</Button>
         </div>
       </div>
     </div>
