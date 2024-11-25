@@ -1,32 +1,32 @@
 import React, { useState } from "react";
+import Button from "../Elements/Button";
 
 interface PopupTambahFasilitasProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: { fasilitas: string; jumlah: number; dipakai: number; gambar: File | null }) => void;
+  onSubmit: (fasilitas: string) => void;
 }
 
-const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({ isOpen, onClose, onSubmit }) => {
+const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+}) => {
   const [fasilitas, setFasilitas] = useState("");
-  const [jumlah, setJumlah] = useState<number | string>("");
-  const [dipakai, setDipakai] = useState<number | string>("");
-  const [gambar, setGambar] = useState<File | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fasilitas || !jumlah || !dipakai) {
-      alert("Mohon lengkapi semua data!");
+    // Validasi input
+    if (!fasilitas.trim()) {
+      alert("Nama fasilitas tidak boleh kosong!");
       return;
     }
 
-    onSubmit({
-      fasilitas,
-      jumlah: Number(jumlah),
-      dipakai: Number(dipakai),
-      gambar,
-    });
-    onClose(); // Tutup popup setelah submit
+    // Kirim nama fasilitas ke parent
+    onSubmit(fasilitas.trim());
+    setFasilitas(""); // Reset input
+    onClose(); // Tutup popup
   };
 
   if (!isOpen) return null;
@@ -37,76 +37,37 @@ const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({ isOpen, onC
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Menambahkan Fasilitas</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
+          <Button variant="plain" onClick={onClose}>
             ×
-          </button>
+          </Button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          <p className="mb-4 text-gray-500">Mohon isi dengan fasilitas yang ingin ditambahkan</p>
-          
+          <p className="mb-4 text-gray-500">
+            Masukkan nama fasilitas yang ingin ditambahkan.
+          </p>
+
           {/* Input Fasilitas */}
           <div className="mb-4">
-            <label className="block font-bold mb-2">Fasilitas</label>
+            <label className="block font-bold mb-2">Nama Fasilitas</label>
             <input
               type="text"
               value={fasilitas}
               onChange={(e) => setFasilitas(e.target.value)}
-              placeholder="Masukkan Fasilitas"
+              placeholder="Masukkan nama fasilitas"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          
-          {/* Input Jumlah */}
-          <div className="mb-4">
-            <label className="block font-bold mb-2">Jumlah</label>
-            <input
-              type="number"
-              value={jumlah}
-              onChange={(e) => setJumlah(e.target.value)}
-              placeholder="Jumlah Barang"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          
-          {/* Input Dipakai */}
-          <div className="mb-4">
-            <label className="block font-bold mb-2">Dipakai</label>
-            <input
-              type="number"
-              value={dipakai}
-              onChange={(e) => setDipakai(e.target.value)}
-              placeholder="Jumlah Barang yang Dipakai"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          
-          {/* Input Gambar */}
-          <div className="mb-4">
-            <label className="block font-bold mb-2">Upload Gambar</label>
-            <input
-              type="file"
-              onChange={(e) => setGambar(e.target.files ? e.target.files[0] : null)}
-              className="w-full px-3 py-2 border border-dashed rounded-lg focus:outline-none"
             />
           </div>
 
           {/* Actions */}
           <div className="flex justify-end space-x-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
-            >
+            <Button variant="secondary" onClick={onClose}>
               Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
+            </Button>
+            <Button type="submit" variant="primary">
               Tambah Fasilitas
-            </button>
+            </Button>
           </div>
         </form>
       </div>

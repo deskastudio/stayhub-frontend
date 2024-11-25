@@ -25,7 +25,7 @@ const AdminDataUser: React.FC = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8000/user"); // Ganti URL sesuai backend
+      const response = await axios.get("http://localhost:8000/list/user"); // Ganti URL sesuai backend
       const users = response.data.data;
 
       // Filter data berdasarkan role
