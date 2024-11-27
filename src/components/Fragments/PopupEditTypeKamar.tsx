@@ -61,37 +61,26 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
   };
 
   // Fungsi submit untuk mengirim data yang telah diubah
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!namaTipe || !fasilitas.length || !deskripsi || harga <= 0) {
-      alert("Semua data harus diisi!");
-      return;
-    }
-
-    // Format fasilitas menjadi array of objects
-    const fasilitasData = fasilitas.map((f) => ({ id: f, nama: f }));
-
-    // Update tipe kamar ke backend
+  const handleSubmit = async (data: TypeKamar) => {
+    const payload = {
+      name: data.namaTipe,
+      facility: data.fasilitas.map((f) => f.nama),
+      description: data.deskripsi,
+      cost: data.harga,
+    };
+  
     try {
-      const updatedData = {
-        namaTipe,
-        fasilitas: fasilitasData,
-        deskripsi,
-        harga,
-      };
-
-      // Kirim request PUT ke server
-      if (currentData?.id) {
-        await axios.put(`http://localhost:8000/type-kamar/${currentData.id}`, updatedData);
-        alert("Tipe kamar berhasil diupdate!");
-        onSubmit(updatedData); // Update data di parent component
-        onClose(); // Tutup popup setelah submit
-      }
+      await axios.put(`http://localhost:8000/type/update/${data.id}`, payload);
+      alert('Tipe kamar berhasil diperbarui!');
+      fetchData(); // Refresh data setelah edit
     } catch (error) {
-      console.error("Error updating type kamar:", error);
-      alert("Gagal memperbarui tipe kamar.");
+      console.error('Error updating type kamar:', error.response?.data || error.message);
+      alert('Gagal memperbarui tipe kamar.');
     }
   };
+  
+  
+  
 
   if (!isOpen) return null;
 

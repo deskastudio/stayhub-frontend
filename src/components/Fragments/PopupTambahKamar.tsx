@@ -9,17 +9,9 @@ interface PopupTambahKamarProps {
   onKamarAdded: () => void; // Callback untuk refresh data setelah kamar ditambahkan
 }
 
-interface Fasilitas {
-  id: string;
-  nama: string;
-}
-
 interface TypeKamar {
   id: string;
   namaTipe: string;
-  fasilitas: Fasilitas[];
-  deskripsi: string;
-  harga: number;
 }
 
 const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
@@ -28,7 +20,7 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   onKamarAdded,
 }) => {
   const [noKamar, setNoKamar] = useState<string>(""); // Nomor Kamar
-  const [typeKamar, setTypeKamar] = useState<TypeKamar | null>(null); // Data tipe kamar yang dipilih
+  const [typeKamar, setTypeKamar] = useState<string>(""); // ID tipe kamar yang dipilih
   const [statusKamar, setStatusKamar] = useState<"Tersedia" | "Tidak Tersedia">(
     "Tersedia"
   );
@@ -39,8 +31,15 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   useEffect(() => {
     const fetchTipeKamar = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/type-kamar");
-        setTipeKamarList(response.data.data);
+        const response = await axios.get("http://localhost:8000/type");
+        console.log("Response dari API tipe kamar:", response.data.data); // Log data dari backend
+
+        const transformedData = response.data.data.map((item: any) => ({
+          id: item.id,
+          namaTipe: item.name, // Sesuaikan dengan backend
+        }));
+
+        setTipeKamarList(transformedData);
       } catch (error) {
         console.error("Error fetching type kamar:", error);
       }
@@ -50,39 +49,35 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   }, []);
 
   // Fungsi untuk menangani submit form
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!noKamar.trim() || !typeKamar || !gambarKamar || gambarKamar.length === 0) {
-      alert("Data tidak lengkap, pastikan semua input terisi!");
+  
+    if (!noKamar || !typeKamar || !gambarKamar || gambarKamar.length === 0) {
+      alert("Pastikan semua data terisi!");
       return;
     }
-
+  
     const formData = new FormData();
-    formData.append("name", noKamar);
-    formData.append("type", typeKamar.namaTipe);
-    formData.append("status", statusKamar);
-
-    // Menambahkan gambar ke formData
-    Array.from(gambarKamar).forEach((file) => {
-      formData.append("gambar", file);
-    });
-
+    formData.append('name', noKamar); // Nama kamar
+    formData.append('type', typeKamar); // ID tipe kamar
+    Array.from(gambarKamar).forEach((file) => formData.append('roomImages', file)); // Key harus 'roomImages'
+  
     try {
-      await axios.post("http://localhost:8000/room/add", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await axios.post('http://localhost:8000/room/add', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-
-      alert("Kamar berhasil ditambahkan!");
-      onKamarAdded(); // Refresh data di parent
+      console.log('Response dari server:', response.data); // Tambahkan ini untuk menggunakan response
+      alert('Kamar berhasil ditambahkan!');
+      onKamarAdded(); // Refresh data
       onClose(); // Tutup popup
     } catch (error) {
-      console.error("Error adding room:", error);
-      alert("Gagal menambahkan kamar.");
+      console.error('Error adding room:', error);
+      alert('Gagal menambahkan kamar.');
     }
   };
+  
+  
+  
 
   // Jika popup tidak terbuka, jangan render apa pun
   if (!isOpen) return null;
@@ -92,7 +87,10 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Tambah Kamar</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-800"
+          >
             ×
           </button>
         </div>
@@ -112,17 +110,21 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
           {/* Pilihan tipe kamar */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Tipe Kamar</label>
-            <div className="flex flex-wrap gap-2">
+            <select
+              value={typeKamar}
+              onChange={(e) => setTypeKamar(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg"
+              required
+            >
+              <option value="" disabled>
+                Pilih tipe kamar
+              </option>
               {tipeKamarList.map((item) => (
-                <Button
-                  key={item.id}
-                  variant={typeKamar?.id === item.id ? "primary" : "secondary"}
-                  onClick={() => setTypeKamar(item)}
-                >
+                <option key={item.id} value={item.id}>
                   {item.namaTipe}
-                </Button>
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
           {/* Status kamar */}
@@ -130,7 +132,9 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
             <label className="block font-bold mb-2">Status Kamar</label>
             <select
               value={statusKamar}
-              onChange={(e) => setStatusKamar(e.target.value as "Tersedia" | "Tidak Tersedia")}
+              onChange={(e) =>
+                setStatusKamar(e.target.value as "Tersedia" | "Tidak Tersedia")
+              }
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="Tersedia">Tersedia</option>

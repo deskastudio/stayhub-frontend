@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Button from "../Elements/Button";
 
-// Tipe data untuk tipe kamar
 interface Fasilitas {
   id: string;
   nama: string;
@@ -31,14 +30,15 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
   fasilitasData,
 }) => {
   const [namaTipe, setNamaTipe] = useState("");
-  const [fasilitas, setFasilitas] = useState<string[]>([]); // Fasilitas yang dipilih
+  const [fasilitas, setFasilitas] = useState<string[]>([]); // Simpan ID fasilitas
   const [deskripsi, setDeskripsi] = useState("");
   const [harga, setHarga] = useState(0);
 
+  // Set data awal saat popup dibuka
   useEffect(() => {
     if (currentData) {
       setNamaTipe(currentData.namaTipe);
-      setFasilitas(currentData.fasilitas.map((item) => item.nama));
+      setFasilitas(currentData.fasilitas.map((item) => item.id)); // Gunakan ID fasilitas
       setDeskripsi(currentData.deskripsi);
       setHarga(currentData.harga);
     } else {
@@ -49,11 +49,12 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
     }
   }, [currentData]);
 
-  const toggleFasilitas = (fasilitasNama: string) => {
+  // Tambah atau hapus fasilitas
+  const toggleFasilitas = (fasilitasId: string) => {
     setFasilitas((prev) =>
-      prev.includes(fasilitasNama)
-        ? prev.filter((item) => item !== fasilitasNama)
-        : [...prev, fasilitasNama]
+      prev.includes(fasilitasId)
+        ? prev.filter((id) => id !== fasilitasId) // Hapus ID fasilitas jika sudah ada
+        : [...prev, fasilitasId] // Tambahkan ID fasilitas jika belum ada
     );
   };
 
@@ -63,18 +64,24 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
       alert("Semua data harus diisi!");
       return;
     }
-
-    // Format fasilitas menjadi array of objects
-    const fasilitasData = fasilitas.map((f) => ({ id: f, nama: f }));
-
+  
     onSubmit({
       id: currentData?.id,
       namaTipe,
-      fasilitas: fasilitasData,
+      fasilitas: fasilitas.map((id) => ({
+        id,
+        nama: fasilitasData.find((item) => item.id === id)?.nama || "",
+      })), // Kirim ID dan nama fasilitas
       deskripsi,
       harga,
     });
   };
+
+  useEffect(() => {
+    console.log("Data fasilitas diterima di PopupTambahTypeKamar:", fasilitasData);
+  }, [fasilitasData]);
+  
+  
 
   if (!isOpen) return null;
 
@@ -88,6 +95,7 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
           </Button>
         </div>
         <form onSubmit={handleSubmit}>
+          {/* Nama Tipe Kamar */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Nama Tipe Kamar</label>
             <input
@@ -98,22 +106,27 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
             />
           </div>
 
-          {/* Fasilitas sebagai tombol */}
+          {/* Fasilitas */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Fasilitas</label>
             <div className="flex flex-wrap gap-2">
-              {fasilitasData.map((fasilitasItem) => (
-                <Button
-                  key={fasilitasItem.id}
-                  variant={fasilitas.includes(fasilitasItem.nama) ? "primary" : "secondary"}
-                  onClick={() => toggleFasilitas(fasilitasItem.nama)}
-                >
-                  {fasilitasItem.nama}
-                </Button>
-              ))}
+              {fasilitasData && fasilitasData.length > 0 ? (
+                fasilitasData.map((fasilitasItem) => (
+                  <Button
+                    key={fasilitasItem.id}
+                    variant={fasilitas.includes(fasilitasItem.id) ? "primary" : "secondary"}
+                    onClick={() => toggleFasilitas(fasilitasItem.id)}
+                  >
+                    {fasilitasItem.nama} {/* Gunakan `nama` untuk menampilkan */}
+                  </Button>
+                ))
+              ) : (
+                <p>Fasilitas tidak ditemukan.</p>
+              )}
             </div>
           </div>
 
+          {/* Deskripsi */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Deskripsi</label>
             <textarea
@@ -122,6 +135,8 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
+
+          {/* Harga */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Harga</label>
             <input
@@ -131,12 +146,11 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
-          <div className="flex justify-end space-x-2">
-            <Button variant="secondary" onClick={onClose}>
-              Cancel
-            </Button>
+
+          {/* Tombol Aksi */}
+          <div className="flex justify-end">
             <Button type="submit" variant="primary">
-              {currentData ? "Update" : "Tambah"} Tipe Kamar
+              {currentData ? "Update" : "Tambah"}
             </Button>
           </div>
         </form>
@@ -146,3 +160,4 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
 };
 
 export default PopupTambahTypeKamar;
+

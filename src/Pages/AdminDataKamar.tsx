@@ -10,17 +10,20 @@ import Button from "../components/Elements/Button";
 interface Room {
   id: string;
   name: string;
-  type: string;
-  cost: number;
+  type: {
+    id: string;
+    name: string;
+  };
   status: string;
+  images: { url: string }[];
 }
 
 interface TypeKamar {
   id: string;
-  namaTipe: string;
-  fasilitas: { nama: string }[];
-  deskripsi: string;
-  harga: number;
+  name: string;
+  facility: { name: string }[];
+  description: string;
+  cost: number;
 }
 
 const AdminDataKamar: React.FC = () => {
@@ -32,36 +35,50 @@ const AdminDataKamar: React.FC = () => {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState<boolean>(false);
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
 
+  // Fungsi untuk mengambil data kamar dan tipe kamar
   const fetchData = async () => {
     try {
       setLoading(true);
-      const roomResponse = await axios.get<Room[]>("http://localhost:8000/room");
-      const typeKamarResponse = await axios.get<TypeKamar[]>("http://localhost:8000/type-kamar");
-      setRoomData(roomResponse.data);
-      setTypeKamarData(typeKamarResponse.data);
+  
+      // Ambil data kamar
+      const roomResponse = await axios.get("http://localhost:8000/room");
+      const formattedRooms = roomResponse.data.data.map((room: any) => ({
+        id: room.id,
+        name: room.name,
+        type: room.type.name || "Unknown",
+        status: room.status || "Tersedia",
+        images: room.images || [],
+      }));
+  
+      // Ambil data tipe kamar
+      const typeKamarResponse = await axios.get("http://localhost:8000/type");
+      const formattedTypeKamar = typeKamarResponse.data.data.map((type: any) => ({
+        id: type.id,
+        namaTipe: type.name,
+        fasilitas: type.facility.map((fasilitas: any) => ({ nama: fasilitas.name })),
+        deskripsi: type.description,
+        harga: type.cost,
+      }));
+  
+      setRoomData(formattedRooms); // Simpan data kamar
+      setTypeKamarData(formattedTypeKamar); // Simpan data tipe kamar
     } catch (error) {
       console.error("Error fetching data:", error);
+      alert("Gagal memuat data.");
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
-  const handleEditKamar = async (room: Room) => {
-    try {
-      await axios.put(`http://localhost:8000/room/${room.id}`, room);
-      fetchData();
-      alert("Kamar berhasil diperbarui!");
-      setIsEditPopupOpen(false);
-    } catch (error) {
-      console.error("Error updating room:", error);
-      alert("Gagal memperbarui kamar.");
-    }
-  };
+  useEffect(() => {
+    fetchData(); // Ambil data saat komponen dimuat
+  }, []);
+  
 
   const handleDelete = async (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus kamar ini?")) {
       try {
-        await axios.delete(`http://localhost:8000/room/${id}`);
+        await axios.delete(`http://localhost:8000/room/delete/${id}`);
         fetchData();
         alert("Kamar berhasil dihapus!");
       } catch (error) {
@@ -72,21 +89,44 @@ const AdminDataKamar: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    const fetchTipeKamar = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/type");
+        console.log("Response tipe kamar:", response.data); // Tambahkan log
+        setTipeKamarList(response.data.data);
+      } catch (error) {
+        console.error("Error fetching type kamar:", error);
+      }
+    };
+  
+    fetchTipeKamar();
   }, []);
+  
 
+  // Filter kamar berdasarkan tipe kamar
   const filteredRooms = activeTab
     ? roomData.filter((room) => room.type.toLowerCase() === activeTab.toLowerCase())
     : roomData;
 
-  const roomColumns = ["Nama Kamar", "Tipe Kamar", "Biaya", "Status", "Aksi"];
+  const roomColumns = ["Nama Kamar", "Tipe Kamar", "Status", "Gambar", "Aksi"];
 
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
       "Nama Kamar": room.name,
       "Tipe Kamar": room.type,
-      Biaya: `Rp${room.cost.toLocaleString()}`,
       Status: room.status === "Tersedia" ? "Tersedia" : "Tidak Tersedia",
+      Gambar: (
+        <div className="flex gap-2">
+          {room.images.map((image, index) => (
+            <img
+              key={index}
+              src={`http://localhost:8000${image.url}`}
+              alt={`Room ${room.name}`}
+              className="w-10 h-10 object-cover rounded"
+            />
+          ))}
+        </div>
+      ),
       Aksi: (
         <div className="flex items-center justify-center space-x-2">
           <Button variant="primary" onClick={() => { setCurrentRoom(room); setIsEditPopupOpen(true); }}>
@@ -107,11 +147,7 @@ const AdminDataKamar: React.FC = () => {
       </div>
 
       <TabPilihan
-        buttons={[
-          { label: "Silver", variant: "primary" },
-          { label: "Gold", variant: "secondary" },
-          { label: "Platinum", variant: "secondary" },
-        ]}
+        buttons={typeKamarData.map((type) => ({ label: type.namaTipe, variant: "secondary" }))}
         activeTab={activeTab}
         onTabClick={setActiveTab}
         onAddButtonClick={() => setIsPopupOpen(true)}
@@ -128,13 +164,17 @@ const AdminDataKamar: React.FC = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         onKamarAdded={fetchData}
+        typeKamarData={typeKamarData} // Kirim tipe kamar ke popup tambah kamar
       />
       <PopupEditKamar
         isOpen={isEditPopupOpen}
         onClose={() => setIsEditPopupOpen(false)}
-        onSubmit={handleEditKamar}
+        onSubmit={() => {
+          setIsEditPopupOpen(false);
+          fetchData();
+        }}
         currentData={currentRoom}
-        typeKamarData={typeKamarData}
+        typeKamarData={typeKamarData} // Kirim tipe kamar ke popup edit kamar
       />
     </div>
   );
