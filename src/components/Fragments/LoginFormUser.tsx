@@ -3,22 +3,21 @@ import React, { useState } from 'react';
 import Button from '../Elements/Button';
 import Image from '../Elements/Image';
 import Input from '../Elements/Input';
-import Label from '../Elements/Label';
 import ForgotPasswordLink from '../Elements/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false); // Track loading state
   const navigate = useNavigate();
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setMessage(''); // Clear previous messages
 
     try {
       const response = await axios.post('http://localhost:8000/auth/signin', {
@@ -27,34 +26,52 @@ const LoginForm: React.FC = () => {
       });
 
       if (response.status === 200) {
-        const { token, role } = response.data;
+        const { token, role, fullName } = response.data;
 
-        // Set token and role in session storage
+        // Simpan token dan role ke session storage
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('role', role);
 
-        // Redirect based on role
-        if (role === 'admin') {
-          navigate('/beranda');
-        } else {
-          navigate('/user-dashboard');
-        }
+        console.log(response);
 
-        // Show success message
-        setMessage('Login successful!');
+
+
+        // Pop-up berhasil login
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful!',
+          text: `Welcome, ${fullName}!`,
+          showConfirmButton: false,
+          timer: 2000,
+        });
+
+        // Redirect berdasarkan role
+        if (role === 'admin') {
+          navigate('/beranda'); // Admin dashboard
+        } else {
+          navigate('/user-dashboard'); // User dashboard
+        }
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      // Error handling for different types of errors
-      if (error.response) {
-        // Server responded with an error code
-        setMessage(`Login failed! ${error.response.data.message || 'Invalid email or password'}`);
+
+      if (axios.isAxiosError(error) && error.response) {
+        // Jika ada respons error dari server
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed!',
+          text: error.response.data.message || 'Invalid email or password.',
+        });
       } else {
-        // Network or other errors
-        setMessage('Login failed! Please check your connection.');
+        // Error jaringan atau error lain
+        Swal.fire({
+          icon: 'error',
+          title: 'Network Error!',
+          text: 'Please check your internet connection and try again.',
+        });
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Reset loading state
     }
   };
 
@@ -79,7 +96,6 @@ const LoginForm: React.FC = () => {
         />
       </div>
       <div>
-        <Label htmlFor="password">Kata Sandi</Label>
         <Input
           label="Password"
           name="password"
@@ -95,7 +111,6 @@ const LoginForm: React.FC = () => {
         <Button type="submit" variant="primary" disabled={isLoading}>
           {isLoading ? 'Memuat...' : 'Masuk Akun'}
         </Button>
-        {message && <p className="text-red-500">{message}</p>}
       </div>
     </form>
   );

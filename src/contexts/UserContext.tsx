@@ -1,37 +1,30 @@
-// contexts/UserContext.tsx
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, ReactNode, useContext } from 'react';
 
-interface UserContextType {
-  userType: 'admin' | 'user' | null;
-  setUserType: (type: 'admin' | 'user' | null) => void;
+interface UserContextProps {
+  children: ReactNode;
 }
 
-// Membuat konteks dengan tipe default undefined
+export interface UserContextType {
+  userType: string;
+  setUserType: React.Dispatch<React.SetStateAction<string>>;
+}
+
 export const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// Hook custom untuk menggunakan UserContext dengan aman
-export const useUser = (): UserContextType => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
-};
-
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [userType, setUserType] = useState<'admin' | 'user' | null>(null);
-
-  // Memuat role dari sessionStorage ketika aplikasi dimulai
-  useEffect(() => {
-    const role = sessionStorage.getItem('role');
-    if (role === 'admin' || role === 'user') {
-      setUserType(role);
-    }
-  }, []);
+export const UserProvider: React.FC<UserContextProps> = ({ children }) => {
+  const [userType, setUserType] = useState<string>('user');
 
   return (
     <UserContext.Provider value={{ userType, setUserType }}>
       {children}
     </UserContext.Provider>
   );
+};
+
+export const useUser = (): UserContextType => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+  return context;
 };

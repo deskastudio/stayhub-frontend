@@ -5,9 +5,10 @@ interface ButtonProps {
   onClick?: () => void;
   variant?: "primary" | "secondary" | "disabled" | "plain" | "underlined" | "tertiary" | "deleted" | "detail" | "add";
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ type = "button", onClick, variant = "primary", children }) => {
+const Button: React.FC<ButtonProps> = ({ type = "button", onClick, variant = "primary", children}) => {
   const baseClass = "py-2 px-4 rounded font-semibold";
   
   // Variants with specific styles
