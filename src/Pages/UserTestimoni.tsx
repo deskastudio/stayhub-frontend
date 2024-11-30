@@ -1,19 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import UserProfil from "../components/Fragments/ProfileUser";
-import Placeholder from "../components/Fragments/Placeholder"
+import Placeholder from "../components/Fragments/Placeholder";
 import TestimoniForm from "../components/Fragments/TestimoniForm";
 import TestimonialItem from "../components/Fragments/TestimonialItem";
 import { TestimonialData } from "../components/Elements/TestimonialData";
+import axios from "axios";
 
 const UserTestimoni: React.FC = () => {
-  const location = useLocation();
   const [step, setStep] = useState<"empty" | "form" | "list">("empty");
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
-  const [tempTestimonial, setTempTestimonial] = useState<TestimonialData | null>(null);
+  const [tempTestimonial, setTempTestimonial] =
+    useState<TestimonialData | null>(null);
   const pageTitle = "Testimoni Saya";
 
-  console.log("Current Path:", location.pathname);
+  // Get token from session storage
+  const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/review/674697266332fae91507f6ed",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+
+        if (response.data?.data) {
+          const testimonial = response.data.data;
+          setTestimonials([
+            {
+              id: testimonial.id,
+              fullName: testimonial.user.fullName,
+              roomType: testimonial.room.type[0].name, // Ambil tipe pertama
+              roomNumber: testimonial.room.name,
+              comment: testimonial.comment,
+              rating: testimonial.rating,
+            },
+          ]);
+          setStep("list");
+        } else {
+          setStep("empty");
+        }
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+        setStep("empty");
+      }
+    };
+
+    fetchTestimonials();
+  }, [token]);
 
   const handleAddTestimonial = () => {
     setTempTestimonial(null);
@@ -23,7 +63,7 @@ const UserTestimoni: React.FC = () => {
   const handleFormSubmit = (data: TestimonialData) => {
     if (tempTestimonial) {
       setTestimonials((prev) =>
-        prev.map((item) => (item === tempTestimonial ? data : item))
+        prev.map((item) => (item.id === tempTestimonial.id ? data : item))
       );
     } else {
       setTestimonials((prev) => [...prev, data]);
@@ -74,12 +114,16 @@ const UserTestimoni: React.FC = () => {
 
         {step === "list" && testimonials.length > 0 && (
           <div className="space-y-4">
-            {testimonials.map((testimonial, index) => (
+            {testimonials.map((testimonial) => (
               <TestimonialItem
-                key={index}
+                key={testimonial.id}
                 testimonial={testimonial}
-                onEdit={() => handleEditTestimonial(index)}
-                onDelete={() => handleDeleteTestimonial(index)}
+                onEdit={() =>
+                  handleEditTestimonial(testimonials.indexOf(testimonial))
+                }
+                onDelete={() =>
+                  handleDeleteTestimonial(testimonials.indexOf(testimonial))
+                }
               />
             ))}
           </div>

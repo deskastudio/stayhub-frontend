@@ -1,7 +1,15 @@
+// TestimonialData.ts
 export interface TestimonialData {
-  name: string;
+  fullName: string;
   roomType: string;
   roomNumber: string;
-  review: string;
-  rating: number;
+  comment: string;
+  rating: number; // Rating as a number
+}
+
+// TestimonialItemProps.ts
+export interface TestimonialItemProps {
+  testimonial: TestimonialData;
+  onEdit: () => void;
+  onDelete: () => void;
 }
