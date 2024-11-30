@@ -2,39 +2,46 @@
 import React from 'react';
 import SidebarItem from '../Elements/SidebarItem';
 import { useUser } from '../../hooks/useUser';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const Sidebar: React.FC = () => {
   const { userType } = useUser(); // Pastikan context memberikan userType yang benar
+  const navigate = useNavigate();
 
   // Tentukan item sidebar berdasarkan userType
   const sidebarItems =
     userType === 'admin'
       ? [
-          { label: 'Beranda', href: '/beranda', iconSrc: '/icon/beranda-icon.svg' },
-          { label: 'Data User', href: '/data-user', iconSrc: '/icon/user-icon.svg' },
-          { label: 'Data Pembayaran', href: '/data-pembayaran', iconSrc: '/icon/pembayaran-icon.svg' },
-          { label: 'Data Fasilitas', href: '/data-fasilitas', iconSrc: '/icon/fasilitas-icon.svg' },
-          { label: 'Data Kamar', href: '/data-kamar', iconSrc: '/icon/data-kamar-icon.svg' },
-          { label: 'Tipe Kamar', href: '/type-kamar', iconSrc: '/icon/tipe-kamar-icon.svg' },
-          { label: 'Data Ajuan', href: '/data-ajuan', iconSrc: '/icon/ajuan-keluhan-icon.svg' },
-        ]
+        { label: 'Beranda', href: '/beranda', iconSrc: '/icon/beranda-icon.svg' },
+        { label: 'Data User', href: '/data-user', iconSrc: '/icon/user-icon.svg' },
+        { label: 'Data Pembayaran', href: '/data-pembayaran', iconSrc: '/icon/pembayaran-icon.svg' },
+        { label: 'Data Fasilitas', href: '/data-fasilitas', iconSrc: '/icon/fasilitas-icon.svg' },
+        { label: 'Data Kamar', href: '/data-kamar', iconSrc: '/icon/data-kamar-icon.svg' },
+        { label: 'Tipe Kamar', href: '/type-kamar', iconSrc: '/icon/tipe-kamar-icon.svg' },
+        { label: 'Data Ajuan', href: '/data-ajuan', iconSrc: '/icon/ajuan-keluhan-icon.svg' },
+      ]
       : [
-          { label: 'Beranda', href: '/user-dashboard', iconSrc: '/icon/beranda-icon.svg' },
-          { label: 'Profil', href: '/user-profile', iconSrc: '/icon/user2-icon.svg' },
-          { label: 'Pembayaran', href: '/user-payment', iconSrc: '/icon/pembayaran-icon.svg' },
-          { label: 'Testimoni', href: '/user-testimoni', iconSrc: '/icon/testimoni-icon.svg' },
-          { label: 'Ajuan', href: '/user-ajuan', iconSrc: '/icon/ajuan-keluhan-icon.svg' },
-          { label: 'List Ajuan', href: '/user-list-ajuan', iconSrc: '/icon/listAjuan-icon.svg' },
-        ];
+        { label: 'Beranda', href: '/user-dashboard', iconSrc: '/icon/beranda-icon.svg' },
+        { label: 'Profil', href: '/user-profile', iconSrc: '/icon/user2-icon.svg' },
+        { label: 'Pembayaran', href: '/user-payment', iconSrc: '/icon/pembayaran-icon.svg' },
+        { label: 'Testimoni', href: '/user-testimoni', iconSrc: '/icon/testimoni-icon.svg' },
+        { label: 'Ajuan', href: '/user-ajuan', iconSrc: '/icon/ajuan-keluhan-icon.svg' },
+        { label: 'List Ajuan', href: '/user-list-ajuan', iconSrc: '/icon/listAjuan-icon.svg' },
+      ];
 
   const sidebarClass = userType === 'admin' ? 'bg-admin-sidebar' : 'bg-user-sidebar';
 
   // Fungsi untuk menangani logout
   const handleLogout = () => {
-    // Hapus data dari sessionStorage dan arahkan pengguna ke halaman login
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('role');
-    window.location.href = '/login'; // Ganti dengan navigasi menggunakan react-router
+
+    axios.post('http://localhost:8000/auth/logout', {}, { withCredentials: true }); // Lakukan logout di server
+
+
+    navigate('/login'); // Redirect ke halaman login
   };
 
   return (

@@ -3,13 +3,13 @@ import Button from '../Elements/Button';
 import Image from '../Elements/Image';
 import Input from '../Elements/Input';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const RegisterForm: React.FC = () => {
     const [fullName, setFullName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [message, setMessage] = useState<string>('');
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex untuk validasi email
@@ -35,17 +35,29 @@ const RegisterForm: React.FC = () => {
 
         // Validasi input
         if (!validateEmail(email)) {
-            setMessage('Invalid email!');
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Email!',
+                text: 'Email must be in a valid format.',
+            })
             return;
         }
 
         if (!validatePhone(phone)) {
-            setMessage('Invalid phone number! Phone number must contain 10 to 15 digits.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Phone Number!',
+                text: 'Phone number must be between 10 to 15 digits.',
+            })
             return;
         }
 
         if (!validatePassword(password)) {
-            setMessage('Invalid password! Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Password!',
+                text: 'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+            })
             return;
         }
 
@@ -56,20 +68,37 @@ const RegisterForm: React.FC = () => {
                 phone,
                 password,
             });
-            setMessage(response.data.message);
+            Swal.fire({
+                icon: 'success',
+                title: 'Registration Success!',
+                text: response.data.message,
+                confirmButtonText: "login now",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/login';
+                }
+            })
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                setMessage(error.response?.data?.message || 'An unknown error occurred');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration Failed',
+                    text: error.response?.data?.message || 'An unknown error occurred.',
+                });
             } else {
-                setMessage('An unknown error occurred');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Unexpected Error',
+                    text: 'An unknown error occurred. Please try again later.',
+                });
             }
         }
 
-        console.log({fullName, email, phone, password});
-        
+        console.log({ fullName, email, phone, password });
+
     };
 
-    
+
 
     return (
         <form onSubmit={handleRegister} method='post' className="space-y-4">
@@ -125,7 +154,6 @@ const RegisterForm: React.FC = () => {
                 <Button type="submit" variant="primary">
                     Daftar Akun
                 </Button>
-                {message && <p>{message}</p>}
             </div>
         </form>
     );

@@ -31,7 +31,6 @@ import RegisterPage from './Pages/RegisterPage';
 const AppContent: React.FC = () => {
   const location = useLocation();
 
-  // Routes that require Sidebar
   const routesWithSidebar = [
     '/beranda',
     '/data-user',
@@ -48,7 +47,6 @@ const AppContent: React.FC = () => {
     '/user-list-ajuan',
   ];
 
-  // Check if the current location matches any route that should show Sidebar
   const showSidebar = routesWithSidebar.some((route) =>
     location.pathname.startsWith(route)
   );
@@ -59,11 +57,9 @@ const AppContent: React.FC = () => {
       <div className="flex-1 p-4">
         {/* <ScrollToTop /> Uncomment this if you want to scroll to top on route change */}
         <Routes>
-          {/* Login and Register Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Admin Routes */}
           <Route path="/beranda" element={<AdminDashboard />} />
           <Route path="/data-user" element={<DataUser />} />
           <Route path="/data-pembayaran" element={<DataPembayaran />} />
@@ -72,7 +68,6 @@ const AppContent: React.FC = () => {
           <Route path="/type-kamar/*" element={<TypeKamar />} />
           <Route path="/data-ajuan" element={<DataAjuan />} />
 
-          {/* User Routes */}
           <Route path="/user-dashboard" element={<UserBeranda />} />
           <Route path="/user-profile" element={<UserProfil />} />
           <Route path="/user-payment" element={<UserPembayaran />} />
@@ -80,7 +75,6 @@ const AppContent: React.FC = () => {
           <Route path="/user-ajuan" element={<UserAjuan />} />
           <Route path="/user-list-ajuan" element={<UserListAjuan />} />
 
-          {/* Landing Page */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/silver" element={<RoomSilver />} />
           <Route path="/gold" element={<RoomGold />} />
