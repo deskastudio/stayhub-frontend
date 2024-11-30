@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Button from "../Elements/Button";
 
 // Tipe data untuk properti komponen
 interface PopupTambahKamarProps {
   isOpen: boolean; // Menentukan apakah popup terbuka atau tidak
   onClose: () => void; // Callback untuk menutup popup
   onKamarAdded: () => void; // Callback untuk refresh data setelah kamar ditambahkan
+  onAddRoom: (newRoom: FormData) => void; // Tambahkan properti ini
 }
 
 interface TypeKamar {
@@ -18,6 +18,7 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   isOpen,
   onClose,
   onKamarAdded,
+  onAddRoom, // Tambahkan properti ini
 }) => {
   const [noKamar, setNoKamar] = useState<string>(""); // Nomor Kamar
   const [typeKamar, setTypeKamar] = useState<string>(""); // ID tipe kamar yang dipilih
@@ -53,44 +54,27 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
     };
 
     fetchTipeKamar();
-  }, []);
+  }, [token]);
 
   // Fungsi untuk menangani submit form
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
     if (!noKamar || !typeKamar || !gambarKamar || gambarKamar.length === 0) {
       alert("Pastikan semua data terisi!");
       return;
     }
-
-    
   
     const formData = new FormData();
     formData.append('name', noKamar); // Nama kamar
     formData.append('type', typeKamar); // ID tipe kamar
+    formData.append('status', statusKamar); // Status kamar
     Array.from(gambarKamar).forEach((file) => formData.append('roomImages', file)); // Key harus 'roomImages'
   
-    try {
-      const response = await axios.post('http://localhost:8000/room/add', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`, // Menambahkan Bearer Token
-        },
-        withCredentials: true, // Menyertakan kredensial (cookies) dalam permintaan
-      });
-      console.log('Response dari server:', response.data); // Tambahkan ini untuk menggunakan response
-      alert('Kamar berhasil ditambahkan!');
-      onKamarAdded(); // Refresh data
-      onClose(); // Tutup popup
-    } catch (error) {
-      console.error('Error adding room:', error);
-      alert('Gagal menambahkan kamar.');
-    }
+    onAddRoom(formData); // Panggil fungsi ini untuk menambahkan kamar
+    onKamarAdded(); // Refresh data
+    onClose(); // Tutup popup
   };
-  
-  
-  
 
   // Jika popup tidak terbuka, jangan render apa pun
   if (!isOpen) return null;
@@ -107,7 +91,7 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
             ×
           </button>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} method="post">
           <div className="mb-4">
             <label className="block font-bold mb-2">No Kamar</label>
             <input

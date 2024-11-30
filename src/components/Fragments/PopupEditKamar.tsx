@@ -72,7 +72,7 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
       };
 
       // Mengirim permintaan PUT untuk memperbarui data kamar
-      await axios.put(`http://localhost:8000/room/${currentData?.id}`, updatedRoom);
+      await axios.put(`http://localhost:8000/room/update/${currentData?.id}`, updatedRoom);
       alert("Kamar berhasil diperbarui!");
       onClose(); // Menutup popup setelah berhasil memperbarui
     } catch (error) {
