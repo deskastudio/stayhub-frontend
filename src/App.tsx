@@ -19,35 +19,36 @@ import UserPembayaran from './Pages/UserPembayaran';
 import UserTestimoni from './Pages/UserTestimoni';
 
 // Landing Page
-import LandingPage from "./Pages/LandingPage";
-import RoomSilver from "./Pages/RoomSilver";
-import RoomGold from "./Pages/RoomGold";
-import RoomPlatinum from "./Pages/RoomPlatinum";
-// import ScrollToTop from "./components/ScrollToTop";
-import BookingPage from "./Pages/BookingPage";
+import LandingPage from './Pages/LandingPage';
+import RoomSilver from './Pages/RoomSilver';
+import RoomGold from './Pages/RoomGold';
+import RoomPlatinum from './Pages/RoomPlatinum';
+// import ScrollToTop from "./components/ScrollToTop"; // Tambahkan jika dibutuhkan
+import BookingPage from './Pages/BookingPage';
 import LoginPage from './Pages/LoginPageUser';
 import RegisterPage from './Pages/RegisterPage';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
 
-  // Rute yang memerlukan Sidebar
+  // Routes that require Sidebar
   const routesWithSidebar = [
-    "/beranda",
-    "/data-user",
-    "/data-pembayaran",
-    "/data-fasilitas",
-    "/data-kamar",
-    "/type-kamar",
-    "/data-ajuan",
-    "/user-dashboard",
-    "/user-profile",
-    "/user-payment",
-    "/user-testimoni",
-    "/user-ajuan",
-    "/user-list-ajuan",
+    '/beranda',
+    '/data-user',
+    '/data-pembayaran',
+    '/data-fasilitas',
+    '/data-kamar',
+    '/type-kamar',
+    '/data-ajuan',
+    '/user-dashboard',
+    '/user-profile',
+    '/user-payment',
+    '/user-testimoni',
+    '/user-ajuan',
+    '/user-list-ajuan',
   ];
 
+  // Check if the current location matches any route that should show Sidebar
   const showSidebar = routesWithSidebar.some((route) =>
     location.pathname.startsWith(route)
   );
@@ -56,11 +57,11 @@ const AppContent: React.FC = () => {
     <div className="flex bg-primary-bgprimary">
       {showSidebar && <Sidebar />}
       <div className="flex-1 p-4">
+        {/* <ScrollToTop /> Uncomment this if you want to scroll to top on route change */}
         <Routes>
-          {/* Rute Login dan register */}
+          {/* Login and Register Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
 
           {/* Admin Routes */}
           <Route path="/beranda" element={<AdminDashboard />} />
