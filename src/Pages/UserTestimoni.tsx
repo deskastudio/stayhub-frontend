@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import UserProfil from '../components/Fragments/ProfileUser';
 import Placeholder from '../components/Fragments/Placeholder';
 import TestimoniForm from '../components/Fragments/TestimoniForm';
@@ -35,6 +34,7 @@ const UserTestimoni: React.FC = () => {
           const testimonial = response.data.data;
           setTestimonials([
             {
+              id: testimonial[0].id,
               fullName: testimonial[0].user.fullName,
               roomType: testimonial[0].room.type[0].name,
               roomNumber: testimonial[0].room.name,
