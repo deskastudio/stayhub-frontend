@@ -25,11 +25,18 @@ const AdminTypeKamar: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentData, setCurrentData] = useState<TypeKamar | null>(null);
 
+  const token = sessionStorage.getItem('token');
+
   // Fungsi untuk mengambil data fasilitas
   const fetchFasilitas = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/facility");
+      const response = await axios.get("http://localhost:8000/facility", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
       const fasilitasTransformed = response.data.data.map((item: any) => ({
         id: item.id,
         nama: item.name, // Ubah `name` ke `nama`
@@ -50,7 +57,12 @@ const AdminTypeKamar: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/type");
+      const response = await axios.get("http://localhost:8000/type", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
       console.log("Respons dari backend:", response.data);
   
       const transformedData = response.data.data.map((item) => ({
@@ -88,7 +100,12 @@ const AdminTypeKamar: React.FC = () => {
     console.log("Payload yang dikirim ke backend:", payload); // Tambahkan log
   
     try {
-      await axios.post("http://localhost:8000/type/add", payload);
+      await axios.post("http://localhost:8000/type/add", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
       fetchData();
       alert("Tipe kamar berhasil ditambahkan!");
       setIsPopupOpen(false);
@@ -108,7 +125,12 @@ const AdminTypeKamar: React.FC = () => {
   const handleDeleteTypeKamar = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus tipe kamar ini?')) {
       try {
-        await axios.delete(`http://localhost:8000/type/delete/${id}`);
+        await axios.delete(`http://localhost:8000/type/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
         alert('Tipe kamar berhasil dihapus!');
         fetchData(); // Refresh data setelah hapus
       } catch (error) {

@@ -35,13 +35,21 @@ const AdminDataKamar: React.FC = () => {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState<boolean>(false);
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
 
+
+  const token = sessionStorage.getItem('token');
+
   // Fungsi untuk mengambil data kamar dan tipe kamar
   const fetchData = async () => {
     try {
       setLoading(true);
   
       // Ambil data kamar
-      const roomResponse = await axios.get("http://localhost:8000/room");
+      const roomResponse = await axios.get("http://localhost:8000/room", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
       const formattedRooms = roomResponse.data.data.map((room: any) => ({
         id: room.id,
         name: room.name,
@@ -51,7 +59,12 @@ const AdminDataKamar: React.FC = () => {
       }));
   
       // Ambil data tipe kamar
-      const typeKamarResponse = await axios.get("http://localhost:8000/type");
+      const typeKamarResponse = await axios.get("http://localhost:8000/type", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
       const formattedTypeKamar = typeKamarResponse.data.data.map((type: any) => ({
         id: type.id,
         namaTipe: type.name,
@@ -78,7 +91,12 @@ const AdminDataKamar: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus kamar ini?")) {
       try {
-        await axios.delete(`http://localhost:8000/room/delete/${id}`);
+        await axios.delete(`http://localhost:8000/room/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
         fetchData();
         alert("Kamar berhasil dihapus!");
       } catch (error) {
@@ -91,7 +109,12 @@ const AdminDataKamar: React.FC = () => {
   useEffect(() => {
     const fetchTipeKamar = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/type");
+        const response = await axios.get("http://localhost:8000/type", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
         console.log("Response tipe kamar:", response.data); // Tambahkan log
         setTipeKamarList(response.data.data);
       } catch (error) {

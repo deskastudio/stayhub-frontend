@@ -27,11 +27,18 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   const [gambarKamar, setGambarKamar] = useState<FileList | null>(null); // Untuk gambar lebih dari satu
   const [tipeKamarList, setTipeKamarList] = useState<TypeKamar[]>([]); // Menyimpan data tipe kamar yang ada
 
+  const token = sessionStorage.getItem('token');
+
   // Ambil data tipe kamar dari backend
   useEffect(() => {
     const fetchTipeKamar = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/type");
+        const response = await axios.get("http://localhost:8000/type", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
         console.log("Response dari API tipe kamar:", response.data.data); // Log data dari backend
 
         const transformedData = response.data.data.map((item: any) => ({
@@ -56,6 +63,8 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
       alert("Pastikan semua data terisi!");
       return;
     }
+
+    
   
     const formData = new FormData();
     formData.append('name', noKamar); // Nama kamar
@@ -64,7 +73,11 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   
     try {
       const response = await axios.post('http://localhost:8000/room/add', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`, // Menambahkan Bearer Token
+        },
+        withCredentials: true, // Menyertakan kredensial (cookies) dalam permintaan
       });
       console.log('Response dari server:', response.data); // Tambahkan ini untuk menggunakan response
       alert('Kamar berhasil ditambahkan!');

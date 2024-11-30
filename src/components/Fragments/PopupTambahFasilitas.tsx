@@ -14,6 +14,7 @@ const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({
   onSubmit,
 }) => {
   const [fasilitas, setFasilitas] = useState("");
+  const token = sessionStorage.getItem('token');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +27,16 @@ const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({
 
     try {
       // Kirim nama fasilitas ke backend menggunakan API POST
-      const response = await axios.post("http://localhost:8000/facility/add", { name: fasilitas.trim() });
+      const response = await axios.post(
+        "http://localhost:8000/facility/add",
+        { name: fasilitas.trim() }, // Data yang dikirim ke backend
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Token harus disertakan di header
+          },
+          withCredentials: true, // Jika Anda menggunakan cookies
+        }
+      );
 
       if (response.status === 201) {
         // Jika berhasil, kirim data ke parent untuk di-refresh
