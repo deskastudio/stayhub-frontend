@@ -43,7 +43,7 @@ const LoginForm: React.FC = () => {
         });
 
         // Redirect based on role
-        const role = getUserRole();
+        const { role } = getUserRole();
         if (role === 'admin') {
           navigate('/beranda'); // Admin dashboard
         } else {
