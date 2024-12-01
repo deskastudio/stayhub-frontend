@@ -18,7 +18,8 @@ export const getTokenPayload = () => {
 // get user role
 export const getUserRole = () => {
   const payload = getTokenPayload();
-  return payload ? payload.role : null;
+  const role = payload ? payload.role : 'unknown';
+  return { role };
 };
 
 // get user id
