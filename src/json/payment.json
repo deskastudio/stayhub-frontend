@@ -1,0 +1,37 @@
+[
+  {
+    "id": "P007",
+    "date": "2024-11-20",
+    "status": "Belum bayar"
+  },
+  {
+    "id": "P006",
+    "date": "2024-10-19",
+    "status": "Lunas"
+  },
+  {
+    "id": "P005",
+    "date": "2024-9-19",
+    "status": "Lunas"
+  },
+  {
+    "id": "P004",
+    "date": "2024-8-19",
+    "status": "Lunas"
+  },
+  {
+    "id": "P003",
+    "date": "2024-7-19",
+    "status": "Lunas"
+  },
+  {
+    "id": "P002",
+    "date": "2024-6-19",
+    "status": "Lunas"
+  },
+  {
+    "id": "P001",
+    "date": "2024-5-19",
+    "status": "Lunas"
+  }
+]
