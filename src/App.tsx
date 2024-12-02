@@ -27,6 +27,7 @@ import RoomPlatinum from './Pages/RoomPlatinum';
 import BookingPage from './Pages/BookingPage';
 import LoginPage from './Pages/LoginPageUser';
 import RegisterPage from './Pages/RegisterPage';
+import ProtectedRoute from './components/Elements/ProtectRouted';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -60,20 +61,20 @@ const AppContent: React.FC = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          <Route path="/beranda" element={<AdminDashboard />} />
-          <Route path="/data-user" element={<DataUser />} />
-          <Route path="/data-pembayaran" element={<DataPembayaran />} />
-          <Route path="/data-fasilitas" element={<DataFasilitas />} />
-          <Route path="/data-kamar" element={<DataKamar />} />
-          <Route path="/type-kamar/*" element={<TypeKamar />} />
-          <Route path="/data-ajuan" element={<DataAjuan />} />
+          <Route path="/beranda" element={<ProtectedRoute role='admin'><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/data-user" element={<ProtectedRoute role='admin'><DataUser /></ProtectedRoute>} />
+          <Route path="/data-pembayaran" element={<ProtectedRoute role='admin'><DataPembayaran /></ProtectedRoute>} />
+          <Route path="/data-fasilitas" element={<ProtectedRoute role='admin'><DataFasilitas /></ProtectedRoute>} />
+          <Route path="/data-kamar" element={<ProtectedRoute role='admin'><DataKamar /></ProtectedRoute>} />
+          <Route path="/type-kamar/*" element={<ProtectedRoute role='admin'><TypeKamar /></ProtectedRoute>} />
+          <Route path="/data-ajuan" element={<ProtectedRoute role='admin'><DataAjuan /></ProtectedRoute>} />
 
-          <Route path="/user-dashboard" element={<UserBeranda />} />
-          <Route path="/user-profile" element={<UserProfil />} />
-          <Route path="/user-payment" element={<UserPembayaran />} />
-          <Route path="/user-testimoni" element={<UserTestimoni />} />
-          <Route path="/user-ajuan" element={<UserAjuan />} />
-          <Route path="/user-list-ajuan" element={<UserListAjuan />} />
+          <Route path="/user-dashboard" element={<ProtectedRoute role='user'><UserBeranda /></ProtectedRoute>} />
+          <Route path="/user-profile" element={<ProtectedRoute role='user'><UserProfil /></ProtectedRoute>} />
+          <Route path="/user-payment" element={<ProtectedRoute role='user'><UserPembayaran /></ProtectedRoute>} />
+          <Route path="/user-testimoni" element={<ProtectedRoute role='user'><UserTestimoni /></ProtectedRoute>} />
+          <Route path="/user-ajuan" element={<ProtectedRoute role='user'><UserAjuan /></ProtectedRoute>} />
+          <Route path="/user-list-ajuan" element={<ProtectedRoute role='user'><UserListAjuan /></ProtectedRoute>} />
 
           <Route path="/" element={<LandingPage />} />
           <Route path="/silver" element={<RoomSilver />} />
