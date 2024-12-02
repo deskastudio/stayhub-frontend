@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Button from "../Elements/Button";
 import axios from "axios";
 
-// Tipe data untuk tipe kamar
 interface Fasilitas {
   id: string;
   nama: string;
@@ -62,7 +61,6 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
     }
 
     try {
-      // Kirim data kamar yang telah diubah ke backend
       const updatedRoom: Room = {
         id: currentData?.id || "",
         name: noKamar,
@@ -71,10 +69,9 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
         status: statusKamar,
       };
 
-      // Mengirim permintaan PUT untuk memperbarui data kamar
       await axios.put(`http://localhost:8000/room/update/${currentData?.id}`, updatedRoom);
       alert("Kamar berhasil diperbarui!");
-      onClose(); // Menutup popup setelah berhasil memperbarui
+      onClose();
     } catch (error) {
       console.error("Error updating room:", error);
       alert("Gagal memperbarui kamar.");
@@ -104,7 +101,6 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
             />
           </div>
 
-          {/* Pilihan Tipe Kamar */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Tipe Kamar</label>
             <select
@@ -120,7 +116,6 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
             </select>
           </div>
 
-          {/* Status Kamar */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Status Kamar</label>
             <select

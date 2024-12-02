@@ -40,14 +40,14 @@ const AdminDataKamar: React.FC = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-
+  
       const roomResponse = await axios.get("http://localhost:8000/room", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
-
+  
       const formattedRooms = roomResponse.data.data.map((room: any) => ({
         id: room.id,
         name: room.name,
@@ -55,14 +55,14 @@ const AdminDataKamar: React.FC = () => {
         status: room.status || "Tersedia",
         images: room.images || [],
       }));
-
+  
       const typeKamarResponse = await axios.get("http://localhost:8000/type", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
-
+  
       const formattedTypeKamar = typeKamarResponse.data.data.map((type: any) => ({
         id: type.id,
         name: type.name,
@@ -70,7 +70,7 @@ const AdminDataKamar: React.FC = () => {
         description: type.description,
         cost: type.cost,
       }));
-
+  
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
     } catch (error) {
@@ -103,26 +103,14 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
-  const handleAddRoom = async (newRoom: FormData) => {
-    try {
-      await axios.post("http://localhost:8000/room/add", newRoom, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
-      fetchData();
-      alert("Kamar berhasil ditambahkan!");
-    } catch (error) {
-      console.error("Error adding room:", error);
-      alert("Gagal menambahkan kamar.");
-    }
-  };
-
   const handleEditRoom = async (updatedRoom: Room) => {
     try {
-      await axios.put(`http://localhost:8000/room/update/${updatedRoom.id}`, updatedRoom, {
+      const updatedRoomData = {
+        ...updatedRoom,
+        type: updatedRoom.type.id,
+      };
+  
+      await axios.put(`http://localhost:8000/room/update/${updatedRoom.id}`, updatedRoomData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -137,15 +125,15 @@ const AdminDataKamar: React.FC = () => {
   };
 
   const filteredRooms = activeTab
-  ? roomData.filter((room) => room.type?.id === activeTab || room.type?.name?.toLowerCase() === activeTab.toLowerCase())
-  : roomData;
+    ? roomData.filter((room) => room.type?.id === activeTab || room.type?.name?.toLowerCase() === activeTab.toLowerCase())
+    : roomData;
 
   const roomColumns = ["Nama Kamar", "Tipe Kamar", "Status", "Gambar", "Aksi"];
 
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
       "Nama Kamar": room.name,
-      "Tipe Kamar": room.type.name,
+      "Tipe Kamar": room.type?.name || "Tipe tidak tersedia",
       Status: room.status === "Tersedia" ? "Tersedia" : "Tidak Tersedia",
       Gambar: (
         <div className="flex gap-2">
@@ -196,14 +184,14 @@ const AdminDataKamar: React.FC = () => {
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         onKamarAdded={fetchData}
-        onAddRoom={handleAddRoom}
         typeKamarData={typeKamarData}
       />
+
       <PopupEditKamar
         isOpen={isEditPopupOpen}
         onClose={() => setIsEditPopupOpen(false)}
         currentData={currentRoom}
-        typeKamarData={typeKamarData} // Kirim tipe kamar ke popup edit kamar
+        typeKamarData={typeKamarData}
       />
     </div>
   );
