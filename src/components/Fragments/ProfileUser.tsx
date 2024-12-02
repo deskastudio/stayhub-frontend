@@ -1,8 +1,12 @@
-import React from "react";
-import ProfileInfo from "../Elements/Profile";
+import React from 'react';
+import ProfileInfo from '../Elements/Profile';
+import { getUserName, getUserRole } from '../../utils/auth.utils';
 
-const ProfileUser: React.FC = () => <ProfileInfo 
-name="Kevin Joe" role="Penghuni"
-profileImage="profile.png" />;
+const ProfileUser: React.FC = () => {
+  const userName = getUserName();
+  const { role } = getUserRole();
+
+  return <ProfileInfo name={userName} role={role} profileImage='profile.png' />;
+};
 
 export default ProfileUser;
