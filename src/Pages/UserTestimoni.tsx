@@ -4,8 +4,6 @@ import Placeholder from '../components/Fragments/Placeholder';
 import TestimoniForm from '../components/Fragments/TestimoniForm';
 import TestimonialItem from '../components/Fragments/TestimonialItem';
 import { TestimonialData } from '../components/Elements/TestimonialData';
-
-// new import axios and use authUtils
 import axios from 'axios';
 import { getUserId } from '../utils/auth.utils';
 
@@ -16,7 +14,7 @@ const UserTestimoni: React.FC = () => {
     useState<TestimonialData | null>(null);
   const pageTitle = 'Testimoni Saya';
 
-  // NEW get token and idUser
+  // get token and idUser
   const token = sessionStorage.getItem('token');
   const id = getUserId();
 

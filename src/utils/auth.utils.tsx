@@ -15,6 +15,12 @@ export const getTokenPayload = () => {
   }
 };
 
+// get user id
+export const getUserId = () => {
+  const payload = getTokenPayload();
+  return payload ? payload.id : null;
+};
+
 // get user role
 export const getUserRole = () => {
   const payload = getTokenPayload();
@@ -22,8 +28,8 @@ export const getUserRole = () => {
   return { role };
 };
 
-// get user id
-export const getUserId = () => {
+// get user name
+export const getUserName = () => {
   const payload = getTokenPayload();
-  return payload ? payload.id : null;
+  return payload ? payload.name : 'Guest';
 };
