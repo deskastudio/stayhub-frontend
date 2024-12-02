@@ -6,9 +6,7 @@ import Input from '../Elements/Input';
 import ForgotPasswordLink from '../Elements/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-// new
-import { getUserRole } from '../../utils/auth.utils';
+import { getUserRole, getUserName } from '../../utils/auth.utils';
 import Swal from 'sweetalert2';
 
 const LoginForm: React.FC = () => {
@@ -28,16 +26,17 @@ const LoginForm: React.FC = () => {
       });
 
       if (response.status === 200) {
-        const { token, fullName } = response.data;
+        const { token } = response.data;
 
-        // Set token and role in session storage
+        // Set token in session storage
         sessionStorage.setItem('token', token);
 
         // Pop-up berhasil login
+        const name = getUserName();
         Swal.fire({
           icon: 'success',
           title: 'Login Successful!',
-          text: `Welcome, ${fullName}!`,
+          text: `Welcome, ${name}!`,
           showConfirmButton: false,
           timer: 2000,
         });
