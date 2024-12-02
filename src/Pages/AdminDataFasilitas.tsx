@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahFasilitas from '../components/Fragments/PopupTambahFasilitas';
-import ProfileInfo from '../components/Elements/ProfileInfo';
+import ProfileAdmin from '../components/Fragments/ProfileAdmin';
 import Button from '../components/Elements/Button';
 
 // Tipe data fasilitas
@@ -87,7 +87,7 @@ const AdminDataFasilitas: React.FC = () => {
     <div className='p-6 bg-gray-100 min-h-screen'>
       <div className='flex justify-between items-center mb-8'>
         <h1 className='text-3xl font-bold text-gray-800'>Fasilitas Kos</h1>
-        <ProfileInfo />
+        <ProfileAdmin />
       </div>
       <div className='flex justify-end mb-4'>
         <Button variant='add' onClick={() => setIsPopupOpen(true)}>
