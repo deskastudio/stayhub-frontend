@@ -4,7 +4,6 @@ import ProfileInfo from "../components/Elements/ProfileInfo";
 import TabPilihan from "../components/Fragments/TabPilihan";
 import PopupTambahUser from "../components/Fragments/PopupTambahUser";
 import CustomTable from "../components/Elements/CustomTable";
-import { set } from "date-fns";
 
 interface User {
   id: string;
@@ -34,11 +33,11 @@ const AdminDataUser: React.FC = () => {
         },
         withCredentials: true,
       });
-      const users = response.data.data;
-      setMembers(users.filter((user: User) => user.role === "user"));
-      console.log(users);
       
+      const users = response.data.data; // Verifikasi struktur data yang diterima
+      console.log(users); // Menampilkan data untuk debugging
 
+      // Memisahkan members dan admins berdasarkan role
       setMembers(users.filter((user: User) => user.role === "Member"));
       setAdmins(users.filter((user: User) => user.role === "Admin"));
     } catch (err) {
@@ -74,7 +73,7 @@ const AdminDataUser: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, []); // Hanya dipanggil sekali saat komponen pertama kali dimuat
 
   const columns = ["Nama", "No Hp", "Email", "Status", "Aksi"];
 
