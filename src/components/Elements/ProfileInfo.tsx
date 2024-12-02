@@ -1,10 +1,6 @@
 import React from 'react';
-import { getUserName, getUserRole } from '../../utils/auth.utils';
 
 const ProfileInfo: React.FC = () => {
-  const userName = getUserName();
-  const { role } = getUserRole();
-
   return (
     <div className='flex items-center space-x-4'>
       {/* Gambar profil di sebelah kanan */}
@@ -16,8 +12,8 @@ const ProfileInfo: React.FC = () => {
       />
       {/* Teks untuk nama pengguna dan "Admin" */}
       <div className='flex flex-col'>
-        <span className='text-lg font-semibold'>{userName}</span>
-        <span className='text-sm text-gray-600'>{role}</span>
+        <span className='text-lg font-semibold'>user-name</span>
+        <span className='text-sm text-gray-600'>role</span>
       </div>
     </div>
   );
