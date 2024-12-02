@@ -105,6 +105,8 @@ const AdminDataKamar: React.FC = () => {
 
   const handleAddRoom = async (newRoom: FormData) => {
     try {
+      console.log(newRoom);
+      
       await axios.post("http://localhost:8000/room/add", newRoom, {
         headers: {
           Authorization: `Bearer ${token}`,
