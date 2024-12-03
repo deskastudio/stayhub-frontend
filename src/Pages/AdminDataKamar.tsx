@@ -41,13 +41,13 @@ const AdminDataKamar: React.FC = () => {
     try {
       setLoading(true);
 
-      const roomResponse = await axios.get("http://localhost:8000/room", {
+      const roomResponse = await axios.get('http://localhost:8000/room', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
-  
+
       const formattedRooms = roomResponse.data.data.map((room: any) => ({
         id: room.id,
         name: room.name,
@@ -56,20 +56,24 @@ const AdminDataKamar: React.FC = () => {
         images: room.images || [],
       }));
 
-      const typeKamarResponse = await axios.get("http://localhost:8000/type", {
+      const typeKamarResponse = await axios.get('http://localhost:8000/type', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
 
-      const formattedTypeKamar = typeKamarResponse.data.data.map((type: any) => ({
-        id: type.id,
-        name: type.name,
-        facility: type.facility.map((fasilitas: any) => ({ name: fasilitas.name })),
-        description: type.description,
-        cost: type.cost,
-      }));
+      const formattedTypeKamar = typeKamarResponse.data.data.map(
+        (type: any) => ({
+          id: type.id,
+          name: type.name,
+          facility: type.facility.map((fasilitas: any) => ({
+            name: fasilitas.name,
+          })),
+          description: type.description,
+          cost: type.cost,
+        })
+      );
 
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
@@ -103,8 +107,6 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleAddRoom = async (newRoom: FormData) => {
     try {
       await axios.post('http://localhost:8000/room/add', newRoom, {
@@ -122,15 +124,18 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
->>>>>>> 2b5b5f00be1c168589d61d0dd75b7f84177a2518
   const handleEditRoom = async (updatedRoom: Room) => {
     try {
-      await axios.put(`http://localhost:8000/room/update/${updatedRoom.id}`, updatedRoom, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      await axios.put(
+        `http://localhost:8000/room/update/${updatedRoom.id}`,
+        updatedRoom,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
       fetchData();
       alert('Kamar berhasil diperbarui!');
     } catch (error) {
@@ -140,16 +145,20 @@ const AdminDataKamar: React.FC = () => {
   };
 
   const filteredRooms = activeTab
-  ? roomData.filter((room) => room.type?.id === activeTab || room.type?.name?.toLowerCase() === activeTab.toLowerCase())
-  : roomData;
+    ? roomData.filter(
+        (room) =>
+          room.type?.id === activeTab ||
+          room.type?.name?.toLowerCase() === activeTab.toLowerCase()
+      )
+    : roomData;
 
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
 
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
-      "Nama Kamar": room.name,
-      "Tipe Kamar": room.type.name,
-      Status: room.status === "Tersedia" ? "Tersedia" : "Tidak Tersedia",
+      'Nama Kamar': room.name,
+      'Tipe Kamar': room.type.name,
+      Status: room.status === 'Tersedia' ? 'Tersedia' : 'Tidak Tersedia',
       Gambar: (
         <div className='flex gap-2'>
           {room.images.map((image, index) => (
