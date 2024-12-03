@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import Button from ".././components/Elements/Button";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Elements/Button";
 import UserProfil from "../components/Fragments/ProfileUser";
 import Placeholder from "../components/Fragments/Placeholder";
-
+import EditAjuanModal from "../components/Fragments/EditAjuanModal"; // Import modal edit
 
 // Menyesuaikan tipe data Ajuan
 export interface Ajuan {
   id: number;
   perihal: string;
-  status: "Selesai" | "Menunggu"; 
+  status: "Selesai" | "Menunggu";
   tanggal: string;
   isiAjuan: string;
 }
@@ -17,6 +17,8 @@ export interface Ajuan {
 const UserListAjuan: React.FC = () => {
   const pageTitle = "List Ajuan";
   const [ajuanList, setAjuanList] = useState<Ajuan[]>([]); // Daftar keluhan
+  const [isModalOpen, setIsModalOpen] = useState(false); // Untuk membuka/tutup modal
+  const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null); // Ajuan yang dipilih untuk diedit
   const navigate = useNavigate(); // Hook untuk navigasi
 
   // Memuat data keluhan dari localStorage saat halaman di-load
@@ -31,13 +33,33 @@ const UserListAjuan: React.FC = () => {
   };
 
   const handleEdit = (id: number) => {
-    // Navigasi ke halaman edit ajuan (misalnya /edit-ajuan/:id)
-    navigate(`/edit-ajuan/${id}`);
+    // Cari ajuan yang akan diedit berdasarkan id
+    const ajuanToEdit = ajuanList.find((ajuan) => ajuan.id === id);
+    if (ajuanToEdit) {
+      setSelectedAjuan(ajuanToEdit);
+      setIsModalOpen(true); // Buka modal edit
+    }
   };
 
   const handleDelete = (id: number) => {
-    // Menghapus ajuan berdasarkan id
-    const updatedAjuanList = ajuanList.filter((ajuan) => ajuan.id !== id);
+    // Menampilkan alert konfirmasi sebelum menghapus
+    const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus ajuan ini?");
+    if (confirmDelete) {
+      // Menghapus ajuan berdasarkan id
+      const updatedAjuanList = ajuanList.filter((ajuan) => ajuan.id !== id);
+      setAjuanList(updatedAjuanList);
+      localStorage.setItem("ajuanList", JSON.stringify(updatedAjuanList)); // Simpan ke localStorage
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false); // Menutup modal edit
+    setSelectedAjuan(null); // Reset data ajuan yang sedang diedit
+  };
+
+  const handleSaveAjuan = (updatedAjuan: Ajuan) => {
+    // Update data ajuan di localStorage
+    const updatedAjuanList = ajuanList.map((ajuan) => (ajuan.id === updatedAjuan.id ? updatedAjuan : ajuan));
     setAjuanList(updatedAjuanList);
     localStorage.setItem("ajuanList", JSON.stringify(updatedAjuanList)); // Simpan ke localStorage
   };
@@ -51,12 +73,7 @@ const UserListAjuan: React.FC = () => {
 
       <div>
         {ajuanList.length === 0 ? (
-          <Placeholder
-            title="Belum ada ajuan"
-            description="Silakan tambahkan ajuan baru."
-            buttonText="Tambah Ajuan"
-            onAdd={handleAddAjuan} // Panggil handleAddAjuan saat klik tombol
-          />
+          <Placeholder title="Belum ada ajuan" description="Silakan tambahkan ajuan baru." buttonText="Tambah Ajuan" onAdd={handleAddAjuan} />
         ) : (
           <table className="w-full border-collapse border">
             <thead>
@@ -93,6 +110,9 @@ const UserListAjuan: React.FC = () => {
           </table>
         )}
       </div>
+
+      {/* Modal untuk Edit Ajuan */}
+      {selectedAjuan && <EditAjuanModal isOpen={isModalOpen} ajuanData={selectedAjuan} onClose={handleModalClose} onSave={handleSaveAjuan} />}
     </div>
   );
 };
