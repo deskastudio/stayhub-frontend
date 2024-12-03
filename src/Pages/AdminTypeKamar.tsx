@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // src/pages/AdminTypeKamar.tsx
 
 import React, { useState, useEffect } from "react";
@@ -8,14 +7,6 @@ import PopupTambahTypeKamar from "../components/Fragments/PopupTambahTypeKamar";
 import PopupEditTypeKamar from "../components/Fragments/PopupEditTypeKamar";
 import ProfileInfo from "../components/Elements/ProfileInfo";
 import Button from "../components/Elements/Button";
-=======
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import CustomTable from '../components/Elements/CustomTable';
-import PopupTambahTypeKamar from '../components/Fragments/PopupTambahTypeKamar';
-import ProfileAdmin from '../components/Fragments/ProfileAdmin';
-import Button from '../components/Elements/Button';
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
 
 interface Fasilitas {
   id: string;
@@ -46,7 +37,7 @@ const AdminTypeKamar: React.FC = () => {
   const fetchFasilitas = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/facility', {
+      const response = await axios.get("http://localhost:8000/facility", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -57,9 +48,9 @@ const AdminTypeKamar: React.FC = () => {
         nama: item.name,
       }));
       setFasilitasData(fasilitasTransformed);
-      console.log('Data fasilitas berhasil diambil:', fasilitasTransformed);
+      console.log("Data fasilitas berhasil diambil:", fasilitasTransformed);
     } catch (error) {
-      console.error('Error fetching fasilitas data:', error);
+      console.error("Error fetching fasilitas data:", error);
     } finally {
       setLoading(false);
     }
@@ -73,21 +64,15 @@ const AdminTypeKamar: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/type', {
+      const response = await axios.get("http://localhost:8000/type", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
-<<<<<<< HEAD
       console.log("Respons dari backend:", response.data);
 
       const transformedData = response.data.data.map((item: any) => ({
-=======
-      console.log('Respons dari backend:', response.data);
-
-      const transformedData = response.data.data.map((item) => ({
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
         id: item.id,
         namaTipe: item.name,
         fasilitas: item.facility.map((fasilitasItem: any) => ({
@@ -97,10 +82,10 @@ const AdminTypeKamar: React.FC = () => {
         deskripsi: item.description,
         harga: item.cost,
       }));
-      console.log('Data yang sudah ditransformasi:', transformedData);
+      console.log("Data yang sudah ditransformasi:", transformedData);
       setTypeKamarData(transformedData);
     } catch (error) {
-      console.error('Error fetching type kamar data:', error);
+      console.error("Error fetching type kamar data:", error);
     } finally {
       setLoading(false);
     }
@@ -119,21 +104,16 @@ const AdminTypeKamar: React.FC = () => {
       cost: data.harga,
     };
 
-<<<<<<< HEAD
     console.log("Payload yang dikirim ke backend:", payload);
-=======
-    console.log('Payload yang dikirim ke backend:', payload); // Tambahkan log
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
 
     try {
-      await axios.post('http://localhost:8000/type/add', payload, {
+      await axios.post("http://localhost:8000/type/add", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
       fetchData();
-<<<<<<< HEAD
       alert("Tipe kamar berhasil ditambahkan!");
       setIsTambahPopupOpen(false);
     } catch (error: any) {
@@ -148,23 +128,6 @@ const AdminTypeKamar: React.FC = () => {
       alert("ID tidak ditemukan.");
       return;
     }
-=======
-      alert('Tipe kamar berhasil ditambahkan!');
-      setIsPopupOpen(false);
-    } catch (error) {
-      console.error(
-        'Error adding type kamar:',
-        error.response?.data || error.message
-      );
-      alert('Gagal menambahkan tipe kamar.');
-    }
-  };
-
-  const handleEditTypeKamar = (data: TypeKamar) => {
-    setCurrentData(data); // Tetapkan data yang akan diedit
-    setIsPopupOpen(true); // Buka popup edit
-  };
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
 
     const payload = {
       name: data.namaTipe,
@@ -203,44 +166,25 @@ const AdminTypeKamar: React.FC = () => {
           withCredentials: true,
         });
         alert('Tipe kamar berhasil dihapus!');
-<<<<<<< HEAD
         fetchData();
       } catch (error: any) {
         console.error('Error deleting type kamar:', error.response?.data || error.message);
-=======
-        fetchData(); // Refresh data setelah hapus
-      } catch (error) {
-        console.error(
-          'Error deleting type kamar:',
-          error.response?.data || error.message
-        );
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
         alert(error.response?.data.message || 'Gagal menghapus tipe kamar.');
       }
     }
   };
-<<<<<<< HEAD
 
   // Handle Edit Button Click
   const handleEditTypeKamar = (data: TypeKamar) => {
     setCurrentData(data);
     setIsEditPopupOpen(true);
   };
-=======
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
 
-  const columns = [
-    'Nama Tipe Kamar',
-    'Fasilitas',
-    'Deskripsi',
-    'Harga',
-    'Aksi',
-  ];
+  const columns = ['Nama Tipe Kamar', 'Fasilitas', 'Deskripsi', 'Harga', 'Aksi'];
 
   const formatTableData = (data: TypeKamar[]) =>
     data.map((item) => ({
       'Nama Tipe Kamar': item.namaTipe,
-<<<<<<< HEAD
       Fasilitas: item.fasilitas.map((f) => f.nama).join(', ') || 'Tidak ada fasilitas',
       Deskripsi: item.deskripsi || 'Tidak ada deskripsi',
       Harga: `Rp ${item.harga.toLocaleString()}`,
@@ -250,21 +194,6 @@ const AdminTypeKamar: React.FC = () => {
             Edit
           </Button>
           <Button variant="deleted" onClick={() => handleDeleteTypeKamar(item.id)}>
-=======
-      Fasilitas:
-        item.fasilitas.map((f) => f.nama).join(', ') || 'Tidak ada fasilitas',
-      Deskripsi: item.deskripsi || 'Tidak ada deskripsi',
-      Harga: `Rp ${item.harga.toLocaleString()}`,
-      Aksi: (
-        <div className='flex gap-2'>
-          <Button variant='primary' onClick={() => handleEditTypeKamar(item)}>
-            Edit
-          </Button>
-          <Button
-            variant='deleted'
-            onClick={() => handleDeleteTypeKamar(item.id)}
-          >
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
             Hapus
           </Button>
         </div>
@@ -272,26 +201,17 @@ const AdminTypeKamar: React.FC = () => {
     }));
 
   return (
-    <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Data Tipe Kamar</h1>
-        <ProfileAdmin />
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Data Tipe Kamar</h1>
+        <ProfileInfo />
       </div>
-<<<<<<< HEAD
       <div className="flex justify-end mb-4">
         <Button
           variant="add"
           onClick={() => {
             setCurrentData(null);
             setIsTambahPopupOpen(true);
-=======
-      <div className='flex justify-end mb-4'>
-        <Button
-          variant='add'
-          onClick={() => {
-            setCurrentData(null); // Menetapkan currentData menjadi null agar form kosong saat tambah
-            setIsPopupOpen(true);
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
           }}
         >
           Tambah Tipe Kamar
@@ -316,7 +236,6 @@ const AdminTypeKamar: React.FC = () => {
         onSubmit={handleAddTypeKamar}
         fasilitasData={fasilitasData}
       />
-<<<<<<< HEAD
 
       {/* Edit Popup */}
       <PopupEditTypeKamar
@@ -329,8 +248,6 @@ const AdminTypeKamar: React.FC = () => {
         currentData={currentData}
         fasilitasData={fasilitasData}
       />
-=======
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
     </div>
   );
 };

@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import ProfileInfo from "../components/Elements/ProfileInfo";
-import TabPilihan from "../components/Fragments/TabPilihan";
-import PopupTambahUser from "../components/Fragments/PopupTambahUser";
-import CustomTable from "../components/Elements/CustomTable";
-=======
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProfileAdmin from '../components/Fragments/ProfileAdmin';
 import TabPilihan from '../components/Fragments/TabPilihan';
 import PopupTambahUser from '../components/Fragments/PopupTambahUser';
 import CustomTable from '../components/Elements/CustomTable';
-import { set } from 'date-fns';
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
 
 interface User {
   id: string;
@@ -43,22 +34,14 @@ const AdminDataUser: React.FC = () => {
         },
         withCredentials: true,
       });
-<<<<<<< HEAD
-      
-      const users = response.data.data; // Verifikasi struktur data yang diterima
-      console.log(users); // Menampilkan data untuk debugging
 
-      // Memisahkan members dan admins berdasarkan role
-      setMembers(users.filter((user: User) => user.role === "Member"));
-      setAdmins(users.filter((user: User) => user.role === "Admin"));
-=======
       const users = response.data.data;
       setMembers(users.filter((user: User) => user.role === 'user'));
       console.log(users);
 
       setMembers(users.filter((user: User) => user.role === 'Member'));
       setAdmins(users.filter((user: User) => user.role === 'Admin'));
->>>>>>> 448ca898492bb9e75483dd1e24d550baf0f533e0
+
     } catch (err) {
       console.error('Error fetching user data:', err);
       setError('Gagal mengambil data user.');
