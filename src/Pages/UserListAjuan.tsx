@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import Button from ".././components/Elements/Button";
 import UserProfil from "../components/Fragments/ProfileUser";
 import Placeholder from "../components/Fragments/Placeholder";
+
 
 // Menyesuaikan tipe data Ajuan
 export interface Ajuan {
@@ -74,14 +76,16 @@ const UserListAjuan: React.FC = () => {
                   <td className="px-4 py-2 border">{ajuan.tanggal}</td>
                   <td className="px-4 py-2 border">{ajuan.perihal}</td>
                   <td className="px-4 py-2 border">{ajuan.isiAjuan}</td>
-                  <td className={`px-4 py-2 border ${ajuan.status === "Selesai" ? "text-green-600" : "text-red-600"}`}>{ajuan.status}</td>
-                  <td className="px-4 py-2 border">
-                    <button onClick={() => handleEdit(ajuan.id)} className="text-blue-600 hover:text-blue-800 mr-2">
+                  <td className="p-4 text-center w-32">
+                    <span className={`px-2 py-1 rounded text-center w-full inline-block ${ajuan.status === "Selesai" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{ajuan.status}</span>
+                  </td>
+                  <td className="px-4 py-2 border space-x-2">
+                    <Button variant="primary" onClick={() => handleEdit(ajuan.id)}>
                       Edit
-                    </button>
-                    <button onClick={() => handleDelete(ajuan.id)} className="text-red-600 hover:text-red-800">
+                    </Button>
+                    <Button variant="deleted" onClick={() => handleDelete(ajuan.id)}>
                       Hapus
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}

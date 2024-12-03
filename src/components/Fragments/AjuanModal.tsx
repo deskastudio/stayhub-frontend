@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Ajuan } from "../../Pages/UserListAjuan"; // Pastikan path ini benar
 
 interface AjuanModalProps {
@@ -16,6 +17,8 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
     perihal: "Fasilitas",
     isiAjuan: "",
   });
+
+  const navigate = useNavigate(); // Inisialisasi useNavigate
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -38,11 +41,14 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
       tanggal,
       perihal,
       isiAjuan,
-      status: "Menunggu", 
-    
+      status: "Menunggu",
     };
 
+    // Kirim data ke parent melalui onSubmit
     onSubmit(dataToSubmit); // Mengirimkan data ke parent component
+
+    // Setelah form disubmit, arahkan pengguna ke halaman UserListAjuan
+    navigate("/user-list-ajuan"); // Ganti dengan path yang sesuai
   };
 
   if (!isOpen) return null; // Menyembunyikan modal jika isOpen false
@@ -76,7 +82,7 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
             <select name="perihal" value={formData.perihal} onChange={handleChange} className="w-full border rounded px-3 py-2">
               <option value="Fasilitas">Fasilitas</option>
               <option value="Kebersihan">Kebersihan</option>
-              <option value="Kebersihan">Keamanan</option>
+              <option value="Keamanan">Keamanan</option>
               <option value="Lainnya">Lainnya</option>
             </select>
           </div>
