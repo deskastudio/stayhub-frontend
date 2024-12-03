@@ -6,7 +6,6 @@ interface PopupTambahKamarProps {
   isOpen: boolean; // Menentukan apakah popup terbuka atau tidak
   onClose: () => void; // Callback untuk menutup popup
   onKamarAdded: () => void; // Callback untuk refresh data setelah kamar ditambahkan
-  onAddRoom: (newRoom: FormData) => void; // Tambahkan properti ini
 }
 
 interface TypeKamar {
@@ -18,7 +17,6 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   isOpen,
   onClose,
   onKamarAdded,
-  onAddRoom, // Tambahkan properti ini
 }) => {
   const [noKamar, setNoKamar] = useState<string>(""); // Nomor Kamar
   const [typeKamar, setTypeKamar] = useState<string>(""); // ID tipe kamar yang dipilih
@@ -28,7 +26,7 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   const [gambarKamar, setGambarKamar] = useState<FileList | null>(null); // Untuk gambar lebih dari satu
   const [tipeKamarList, setTipeKamarList] = useState<TypeKamar[]>([]); // Menyimpan data tipe kamar yang ada
 
-  const token = sessionStorage.getItem('token');
+  const token = sessionStorage.getItem("token");
 
   // Ambil data tipe kamar dari backend
   useEffect(() => {
@@ -59,21 +57,44 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   // Fungsi untuk menangani submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     if (!noKamar || !typeKamar || !gambarKamar || gambarKamar.length === 0) {
       alert("Pastikan semua data terisi!");
       return;
     }
-  
+
     const formData = new FormData();
-    formData.append('name', noKamar); // Nama kamar
-    formData.append('type', typeKamar); // ID tipe kamar
-    formData.append('status', statusKamar); // Status kamar
-    Array.from(gambarKamar).forEach((file) => formData.append('roomImages', file)); // Key harus 'roomImages'
-  
-    onAddRoom(formData); // Panggil fungsi ini untuk menambahkan kamar
-    onKamarAdded(); // Refresh data
-    onClose(); // Tutup popup
+    formData.append("name", noKamar); // Nama kamar
+    formData.append("type", typeKamar); // ID tipe kamar
+    formData.append("status", statusKamar); // Status kamar
+
+    // Menambahkan gambar kamar ke formData dengan key 'files'
+    Array.from(gambarKamar).forEach((file) =>
+      formData.append("files", file) // Key 'files' sesuai dengan backend
+    );
+
+    try {
+      // Kirim data ke API untuk menambahkan kamar
+      const response = await axios.post("http://localhost:8000/room", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
+
+      // Periksa status respons dari server
+      if (response.status === 200 || response.status === 201) {
+        alert("Kamar berhasil ditambahkan!");
+        onKamarAdded(); // Panggil callback untuk refresh data
+        onClose(); // Tutup popup
+      } else {
+        alert("Gagal menambahkan kamar.");
+      }
+    } catch (error) {
+      console.error("Error menambahkan kamar:", error);
+      alert("Terjadi kesalahan saat menambahkan kamar.");
+    }
   };
 
   // Jika popup tidak terbuka, jangan render apa pun
@@ -84,10 +105,7 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Tambah Kamar</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-800"
-          >
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
             ×
           </button>
         </div>
