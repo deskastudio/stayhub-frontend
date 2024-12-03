@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ProfileAdmin from '../components/Fragments/ProfileAdmin';
 import TabPilihan from '../components/Fragments/TabPilihan';
 import PopupTambahUser from '../components/Fragments/PopupTambahUser';
 import CustomTable from '../components/Elements/CustomTable';
-import { set } from 'date-fns';
 
 interface User {
   id: string;
@@ -34,12 +34,14 @@ const AdminDataUser: React.FC = () => {
         },
         withCredentials: true,
       });
+
       const users = response.data.data;
       setMembers(users.filter((user: User) => user.role === 'user'));
       console.log(users);
 
       setMembers(users.filter((user: User) => user.role === 'Member'));
       setAdmins(users.filter((user: User) => user.role === 'Admin'));
+
     } catch (err) {
       console.error('Error fetching user data:', err);
       setError('Gagal mengambil data user.');
@@ -73,7 +75,7 @@ const AdminDataUser: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, []); // Hanya dipanggil sekali saat komponen pertama kali dimuat
 
   const columns = ['Nama', 'No Hp', 'Email', 'Status', 'Aksi'];
 
