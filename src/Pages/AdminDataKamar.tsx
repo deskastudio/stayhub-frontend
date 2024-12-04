@@ -40,12 +40,6 @@ const AdminDataKamar: React.FC = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const roomResponse = await axios.get('http://localhost:8000/room', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
       const [roomResponse, typeKamarResponse] = await Promise.all([
         axios.get('http://localhost:8000/room', {
           headers: {
@@ -68,25 +62,6 @@ const AdminDataKamar: React.FC = () => {
         status: room.status || 'Tersedia',
         images: room.images || [],
       }));
-
-      const typeKamarResponse = await axios.get('http://localhost:8000/type', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
-
-      const formattedTypeKamar = typeKamarResponse.data.data.map(
-        (type: any) => ({
-          id: type.id,
-          name: type.name,
-          facility: type.facility.map((fasilitas: any) => ({
-            name: fasilitas.name,
-          })),
-          description: type.description,
-          cost: type.cost,
-        })
-      );
 
       const formattedTypeKamar = typeKamarResponse.data.data.map(
         (type: any) => ({
@@ -149,58 +124,6 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-  const handleAddRoom = async (newRoom: FormData) => {
-    try {
-      await axios.post('http://localhost:8000/room/add', newRoom, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
-      fetchData();
-      alert('Kamar berhasil ditambahkan!');
-    } catch (error) {
-      console.error('Error adding room:', error);
-      alert('Gagal menambahkan kamar.');
-    }
-  };
-
-  const handleEditRoom = async (updatedRoom: Room) => {
-    try {
-      await axios.put(
-        `http://localhost:8000/room/update/${updatedRoom.id}`,
-        updatedRoom,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-      fetchData();
-      alert('Kamar berhasil diperbarui!');
-    } catch (error) {
-      console.error('Error updating room:', error);
-      alert('Gagal memperbarui kamar.');
-    }
-  };
-
-  const filteredRooms = activeTab
-    ? roomData.filter(
-        (room) =>
-          room.type?.id === activeTab ||
-          room.type?.name?.toLowerCase() === activeTab.toLowerCase()
-      )
-    : roomData;
-  const filteredRooms =
-    activeTab === 'all'
-      ? roomData
-      : roomData.filter((room) => room.type?.id === activeTab);
-
-=======
->>>>>>> bb9b9ff92dfa680405e331c52856a896a03fa1f5
   console.log(`Active Tab: ${activeTab}`);
   console.log(`Filtered Rooms:`, filteredRooms);
 
