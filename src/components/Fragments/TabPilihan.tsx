@@ -1,5 +1,3 @@
-// src/components/Fragments/TabPilihan.tsx
-
 import React from "react";
 import Button from "../Elements/Button";
 
@@ -13,9 +11,9 @@ interface ButtonItem {
 interface TabPilihanProps {
   buttons: ButtonItem[];
   activeTab: string;
-  onTabClick: (value: string) => void; // Receive 'value' instead of 'label'
-  onAddButtonClick: () => void;
-  addButtonLabel?: string; // Label for the add button
+  onTabClick: (label: string) => void;
+  onAddButtonClick?: () => void;
+  addButtonLabel?: string; // Label untuk tombol tambah
 }
 
 const TabPilihan: React.FC<TabPilihanProps> = ({
@@ -42,12 +40,14 @@ const TabPilihan: React.FC<TabPilihanProps> = ({
           </Button>
         ))}
       </div>
-      {/* "Tambah" Button */}
-      <div className="flex justify-end items-center mb-8">
-        <Button variant="add" onClick={onAddButtonClick}>
-          {addButtonLabel}
-        </Button>
-      </div>
+      {/* Tombol "Tambah" */}
+      {onAddButtonClick && (
+        <div className="flex justify-end items-center mb-8">
+          <Button variant="add" onClick={onAddButtonClick}>
+            {addButtonLabel}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
