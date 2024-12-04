@@ -59,17 +59,28 @@ const AdminDataKamar: React.FC = () => {
       const formattedRooms = roomResponse.data.data.map((room: any) => ({
         id: room.id,
         name: room.name,
-        type: room.type || { id: 'unknown', name: 'Unknown' },
-        status: room.status || 'Tersedia',
+        type: room.type[0],
+        status: room.status,
         images: room.images || [],
       }));
 
-      const typeKamarResponse = await axios.get('http://localhost:8000/type', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      console.log('data room', formattedRooms);
+
+      const formattedTypeKamar = typeKamarResponse.data.data.map(
+        (type: any) => ({
+          id: type.id,
+
+          name: type.name,
+
+          facility: type.facility.map((fasilitas: any) => ({
+            name: fasilitas.name,
+          })),
+
+          description: type.description,
+
+          cost: type.cost,
+        })
+      );
 
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
@@ -125,7 +136,7 @@ const AdminDataKamar: React.FC = () => {
     data.map((room) => ({
       'Nama Kamar': room.name,
       'Tipe Kamar': room.type.name,
-      Status: room.status === 'Tersedia' ? 'Tersedia' : 'Tidak Tersedia',
+      Status: room.status === 'available' ? 'Tersedia' : 'Tidak Tersedia',
       Gambar: (
         <div className='flex gap-2'>
           {room.images.map((image, index) => (
