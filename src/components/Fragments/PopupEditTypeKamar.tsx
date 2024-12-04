@@ -1,5 +1,3 @@
-// src/components/Fragments/PopupEditTypeKamar.tsx
-
 import React, { useState, useEffect, FormEvent } from "react";
 import Button from "../Elements/Button";
 
@@ -64,13 +62,16 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
       alert("Data tidak tersedia untuk diupdate.");
       return;
     }
+
+    // Update only the fields that have changed
     const updatedData: TypeKamar = {
       id: currentData.id,
-      namaTipe,
+      namaTipe: currentData.namaTipe, // Keep the old 'namaTipe' if it was not changed
       fasilitas: fasilitasData.filter((f) => fasilitas.includes(f.nama)),
-      deskripsi,
-      harga,
+      deskripsi: deskripsi || currentData.deskripsi, // Update deskripsi only if it's changed
+      harga: harga || currentData.harga, // Update harga only if it's changed
     };
+
     onSubmit(updatedData);
   };
 
@@ -93,7 +94,6 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
               value={namaTipe}
               onChange={(e) => setNamaTipe(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg"
-              required
             />
           </div>
 
@@ -118,7 +118,6 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
               value={deskripsi}
               onChange={(e) => setDeskripsi(e.target.value)}
               className="w-full px-3 py-2 border rounded-lg"
-              required
             />
           </div>
           <div className="mb-4">
@@ -128,7 +127,6 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
               value={harga}
               onChange={(e) => setHarga(Number(e.target.value))}
               className="w-full px-3 py-2 border rounded-lg"
-              required
               min="0"
             />
           </div>
