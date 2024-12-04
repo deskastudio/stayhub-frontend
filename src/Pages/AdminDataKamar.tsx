@@ -103,8 +103,7 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
+
   const handleAddRoom = async (newRoom: FormData) => {
     try {
       await axios.post('http://localhost:8000/room/add', newRoom, {
@@ -122,7 +121,6 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
->>>>>>> 2b5b5f00be1c168589d61d0dd75b7f84177a2518
   const handleEditRoom = async (updatedRoom: Room) => {
     try {
       await axios.put(`http://localhost:8000/room/update/${updatedRoom.id}`, updatedRoom, {

@@ -11,7 +11,7 @@ interface TabPilihanProps {
   buttons: ButtonItem[];
   activeTab: string;
   onTabClick: (label: string) => void;
-  onAddButtonClick: () => void;
+  onAddButtonClick?: () => void;
   addButtonLabel?: string; // Label untuk tombol tambah
 }
 
@@ -37,11 +37,13 @@ const TabPilihan: React.FC<TabPilihanProps> = ({
         ))}
       </div>
       {/* Tombol "Tambah" */}
-      <div className="flex justify-end items-center mb-8">
-        <Button variant="add" onClick={onAddButtonClick}>
-          {addButtonLabel}
-        </Button>
-      </div>
+      {onAddButtonClick && (
+        <div className="flex justify-end items-center mb-8">
+          <Button variant="add" onClick={onAddButtonClick}>
+            {addButtonLabel}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
