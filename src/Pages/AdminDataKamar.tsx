@@ -27,7 +27,7 @@ interface TypeKamar {
 }
 
 const AdminDataKamar: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('all'); // Initialize with 'all' for All tab
+  const [activeTab, setActiveTab] = useState<string>('all');
   const [roomData, setRoomData] = useState<Room[]>([]);
   const [typeKamarData, setTypeKamarData] = useState<TypeKamar[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,6 +38,11 @@ const AdminDataKamar: React.FC = () => {
   const token = sessionStorage.getItem('token');
 
   const fetchData = useCallback(async () => {
+    if (!token) {
+      alert('Token is missing!');
+      return;
+    }
+
     try {
       setLoading(true);
       const roomResponse = await axios.get('http://localhost:8000/room', {
@@ -47,16 +52,12 @@ const AdminDataKamar: React.FC = () => {
         withCredentials: true,
       });
       const [roomResponse, typeKamarResponse] = await Promise.all([
-        axios.get('http://localhost:8000/room', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        axios.get("http://localhost:8000/room", {
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
-        axios.get('http://localhost:8000/type', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        axios.get("http://localhost:8000/type", {
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
       ]);
@@ -64,7 +65,7 @@ const AdminDataKamar: React.FC = () => {
       const formattedRooms = roomResponse.data.data.map((room: any) => ({
         id: room.id,
         name: room.name,
-        type: room.type[0] || { id: 'unknown', name: 'Unknown' }, // Provide default type if missing
+        type: room.type || { id: "unknown", name: "Unknown" },
         status: room.status || 'Tersedia',
         images: room.images || [],
       }));
@@ -76,47 +77,14 @@ const AdminDataKamar: React.FC = () => {
         withCredentials: true,
       });
 
-      const formattedTypeKamar = typeKamarResponse.data.data.map(
-        (type: any) => ({
-          id: type.id,
-          name: type.name,
-          facility: type.facility.map((fasilitas: any) => ({
-            name: fasilitas.name,
-          })),
-          description: type.description,
-          cost: type.cost,
-        })
-      );
-
-      const formattedTypeKamar = typeKamarResponse.data.data.map(
-        (type: any) => ({
-          id: type.id,
-          name: type.name,
-          facility: type.facility.map((fasilitas: any) => ({
-            name: fasilitas.name,
-          })),
-          description: type.description,
-          cost: type.cost,
-        })
-      );
-
-      console.log('Formatted Rooms:', formattedRooms);
-      console.log('Formatted Type Kamar:', formattedTypeKamar);
-
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
 
-      // If activeTab is 'all', do nothing
-      // Otherwise, ensure activeTab is valid
+      // Ensure activeTab is valid
       if (activeTab !== 'all') {
-        const isValidTab = formattedTypeKamar.some(
-          (type) => type.id === activeTab
-        );
-        if (!isValidTab && formattedTypeKamar.length > 0) {
-          setActiveTab(formattedTypeKamar[0].id);
-          console.log(
-            `Active tab was invalid. Resetting to first type: ${formattedTypeKamar[0].id}`
-          );
+        const isValidTab = formattedTypeKamar.some(type => type.id === activeTab);
+        if (!isValidTab) {
+          setActiveTab('all'); // Reset to 'all' if the current tab is invalid
         }
       }
     } catch (error) {
@@ -131,13 +99,15 @@ const AdminDataKamar: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
+  const filteredRooms = activeTab === 'all'
+    ? roomData
+    : roomData.filter(room => room.type.id === activeTab);
+
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
       try {
         await axios.delete(`http://localhost:8000/room/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
         fetchData();
@@ -149,58 +119,6 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
-<<<<<<< HEAD
-  const handleAddRoom = async (newRoom: FormData) => {
-    try {
-      await axios.post('http://localhost:8000/room/add', newRoom, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
-      fetchData();
-      alert('Kamar berhasil ditambahkan!');
-    } catch (error) {
-      console.error('Error adding room:', error);
-      alert('Gagal menambahkan kamar.');
-    }
-  };
-
-  const handleEditRoom = async (updatedRoom: Room) => {
-    try {
-      await axios.put(
-        `http://localhost:8000/room/update/${updatedRoom.id}`,
-        updatedRoom,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-      fetchData();
-      alert('Kamar berhasil diperbarui!');
-    } catch (error) {
-      console.error('Error updating room:', error);
-      alert('Gagal memperbarui kamar.');
-    }
-  };
-
-  const filteredRooms = activeTab
-    ? roomData.filter(
-        (room) =>
-          room.type?.id === activeTab ||
-          room.type?.name?.toLowerCase() === activeTab.toLowerCase()
-      )
-    : roomData;
-  const filteredRooms =
-    activeTab === 'all'
-      ? roomData
-      : roomData.filter((room) => room.type?.id === activeTab);
-
-=======
->>>>>>> bb9b9ff92dfa680405e331c52856a896a03fa1f5
   console.log(`Active Tab: ${activeTab}`);
   console.log(`Filtered Rooms:`, filteredRooms);
 
@@ -212,21 +130,21 @@ const AdminDataKamar: React.FC = () => {
       'Tipe Kamar': room.type.name,
       Status: room.status === 'Tersedia' ? 'Tersedia' : 'Tidak Tersedia',
       Gambar: (
-        <div className='flex gap-2'>
+        <div className="flex gap-2">
           {room.images.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:8000/${image.url}`} // Ensure URL aligns with static serving
+              src={`http://localhost:8000/${image.url}`}
               alt={`Room ${room.name}`}
-              className='w-10 h-10 object-cover rounded'
+              className="w-10 h-10 object-cover rounded"
             />
           ))}
         </div>
       ),
       Aksi: (
-        <div className='flex items-center justify-center space-x-2'>
+        <div className="flex items-center justify-center space-x-2">
           <Button
-            variant='primary'
+            variant="primary"
             onClick={() => {
               setCurrentRoom(room);
               setIsEditPopupOpen(true);
@@ -234,7 +152,7 @@ const AdminDataKamar: React.FC = () => {
           >
             Edit
           </Button>
-          <Button variant='deleted' onClick={() => handleDelete(room.id)}>
+          <Button variant="deleted" onClick={() => handleDelete(room.id)}>
             Hapus
           </Button>
         </div>
@@ -242,9 +160,9 @@ const AdminDataKamar: React.FC = () => {
     }));
 
   return (
-    <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Data Kamar</h1>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Data Kamar</h1>
         <ProfileAdmin />
       </div>
 
@@ -260,7 +178,7 @@ const AdminDataKamar: React.FC = () => {
         activeTab={activeTab}
         onTabClick={setActiveTab}
         onAddButtonClick={() => setIsPopupOpen(true)}
-        addButtonLabel='Tambah Kamar'
+        addButtonLabel="Tambah Kamar"
       />
 
       {loading ? (
@@ -295,3 +213,4 @@ const AdminDataKamar: React.FC = () => {
 };
 
 export default AdminDataKamar;
+
