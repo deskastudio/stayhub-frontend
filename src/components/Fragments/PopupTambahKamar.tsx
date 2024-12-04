@@ -55,17 +55,18 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
       );
 
       // Check response status
-      if (response.status === 200 || response.status === 201) {
+      if (response.status === 201) {
         alert('Kamar berhasil ditambahkan!');
         onKamarAdded(); // Refresh data
         onClose(); // Close popup
       } else {
         alert('Gagal menambahkan kamar.');
       }
-    } catch (error: any) {
-      console.error('Error menambahkan kamar:', error);
+    } catch (error) {
+      const err = error as { response?: { data?: { message?: string } } };
+      console.error('Error menambahkan kamar:', err);
       alert(
-        error.response?.data?.message ||
+        err.response?.data?.message ||
           'Terjadi kesalahan saat menambahkan kamar.'
       );
     }
