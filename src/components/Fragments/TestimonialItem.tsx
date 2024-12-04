@@ -3,7 +3,7 @@ import Button from "../Elements/Button";
 import { TestimonialItemProps } from "../Elements/TestimonialData";
 
 const TestimonialItem: React.FC<TestimonialItemProps> = ({ testimonial, onEdit, onDelete }) => {
-  const { fullName, roomType, roomNumber, comment, rating } = testimonial;
+  const { id, fullName, roomType, roomNumber, comment, rating } = testimonial;
 
   return (
     <div className="border rounded shadow-2xl max-w-full">
@@ -34,7 +34,7 @@ const TestimonialItem: React.FC<TestimonialItemProps> = ({ testimonial, onEdit, 
         </tbody>
       </table>
       <div className="flex justify-center space-x-2 mt-4 mb-4">
-        <Button variant="deleted" onClick={onDelete}>
+        <Button variant="deleted" onClick={() => onDelete(id)}>
           Hapus
         </Button>
         <Button variant="detail" onClick={onEdit}>
