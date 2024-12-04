@@ -25,7 +25,7 @@ const EditAjuanModal: React.FC<EditAjuanModalProps> = ({ isOpen, ajuanData, onCl
   }, [ajuanData]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
     field: keyof Ajuan // Membatasi field yang dapat diubah
   ) => {
     setFormData({
@@ -46,22 +46,36 @@ const EditAjuanModal: React.FC<EditAjuanModalProps> = ({ isOpen, ajuanData, onCl
       <div className="bg-white p-6 rounded-md w-1/3">
         <h3 className="text-xl font-semibold mb-4">Edit Ajuan</h3>
         <form>
+          {/* Dropdown Perihal */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Perihal</label>
-            <input type="text" className="mt-1 p-2 border w-full" value={formData?.perihal} onChange={(e) => handleInputChange(e, "perihal")} />
+            <select className="mt-1 p-2 border w-full" value={formData?.perihal} onChange={(e) => handleInputChange(e, "perihal")}>
+              <option value="Fasilitas">Fasiitas</option>
+              <option value="Kebersihan">Kebersihan</option>
+              <option value="Keamanan">Keamanan</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
           </div>
+
+          {/* Input Tanggal */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Tanggal</label>
             <input type="date" className="mt-1 p-2 border w-full" value={formData?.tanggal} onChange={(e) => handleInputChange(e, "tanggal")} />
           </div>
+
+          {/* Textarea Isi Ajuan */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Isi Ajuan</label>
             <textarea className="mt-1 p-2 border w-full" value={formData?.isiAjuan} onChange={(e) => handleInputChange(e, "isiAjuan")} />
           </div>
+
+          {/* Status Ajuan */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Status</label>
             <p className={`mt-1 p-2 rounded border ${formData?.status === "Selesai" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{formData?.status}</p>
           </div>
+
+          {/* Tombol Simpan dan Batal */}
           <div className="flex justify-end space-x-2">
             <Button variant="secondary" onClick={onClose}>
               Batal

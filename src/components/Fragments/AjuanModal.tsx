@@ -1,57 +1,109 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Ajuan } from "../../Pages/UserListAjuan"; // Pastikan path ini benar
+import axios from "axios";
+import { Ajuan } from "../../Pages/UserListAjuan";
+import { getUserId } from "../../utils/auth.utils";
 
 interface AjuanModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: Omit<Ajuan, "id">) => void; // Menambahkan prop onSubmit
+  onSubmit: (data: Omit<Ajuan, "id">) => void;
 }
 
 const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     namaLengkap: "",
     email: "",
-    noKamar: "",
+    roomId: "",
     tanggal: "",
     perihal: "Fasilitas",
     isiAjuan: "",
   });
 
-  const navigate = useNavigate(); // Inisialisasi useNavigate
+  const [rooms, setRooms] = useState([]); // Untuk menyimpan daftar kamar
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Handle input changes
+  // Ambil token dan userId
+  const token = sessionStorage.getItem("token");
+  const id = getUserId();
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/room", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setRooms(response.data.data);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+        alert("Gagal memuat daftar kamar.");
+      }
+    };
+
+    fetchRooms();
+  }, [token]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle submit form
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Ambil data dari form
-    const { namaLengkap, email, noKamar, tanggal, perihal, isiAjuan } = formData;
+    const { namaLengkap, email, roomId, tanggal, perihal, isiAjuan } = formData;
 
-    // Menambahkan status dan aksi dengan nilai default
-    const dataToSubmit: Omit<Ajuan, "id"> = {
-      namaLengkap,
-      email,
-      noKamar,
-      tanggal,
-      perihal,
-      isiAjuan,
-      status: "Menunggu",
+    // Validasi input form
+    if (!namaLengkap || !email || !roomId || !tanggal || !isiAjuan) {
+      alert("Semua field harus diisi!");
+      return;
+    }
+
+    const dataToSubmit = {
+      user: id,
+      room: roomId,
+      title: perihal,
+      description: isiAjuan,
+      status: "pending", // Default status
     };
 
-    // Kirim data ke parent melalui onSubmit
-    onSubmit(dataToSubmit); // Mengirimkan data ke parent component
+    try {
+      setLoading(true);
+      const response = await axios.post(`http://localhost:8000/complaint/${roomId}`, dataToSubmit, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json", // Mengirim data sebagai JSON
+        },
+      });
 
-    // Setelah form disubmit, arahkan pengguna ke halaman UserListAjuan
-    navigate("/user-list-ajuan"); // Ganti dengan path yang sesuai
+      console.log("Response dari API:", response);
+
+      if (response.status === 201) {
+        alert("Ajuan berhasil dikirim!");
+        onSubmit(dataToSubmit);
+        setFormData({
+          namaLengkap: "",
+          email: "",
+          roomId: "",
+          tanggal: "",
+          perihal: "Fasilitas",
+          isiAjuan: "",
+        });
+        onClose();
+        navigate("/user-list-ajuan");
+      } else {
+        alert("Gagal mengirim ajuan, coba lagi.");
+      }
+    } catch (error) {
+      console.error("Error submitting ajuan:", error);
+      alert("Gagal mengirim ajuan.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!isOpen) return null; // Menyembunyikan modal jika isOpen false
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
@@ -70,8 +122,21 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
             <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="Masukkan email" />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">No Kamar</label>
-            <input type="text" name="noKamar" value={formData.noKamar} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="Masukkan no kamar" />
+            <label className="block text-gray-700">Kamar</label>
+            <select name="roomId" value={formData.roomId} onChange={handleChange} className="w-full border rounded px-3 py-2">
+              <option value="">Pilih Kamar</option>
+              {rooms.length > 0 ? (
+                rooms.map((room: any) => (
+                  <option key={room.id} value={room.id}>
+                    {room.name}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  Tidak ada kamar tersedia
+                </option>
+              )}
+            </select>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Tanggal</label>
@@ -88,14 +153,14 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Isi Ajuan</label>
-            <textarea name="isiAjuan" value={formData.isiAjuan} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="Masukkan keluhanmu"></textarea>
+            <textarea name="isiAjuan" value={formData.isiAjuan} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="Masukkan keluhanmu" />
           </div>
           <div className="flex justify-end">
-            <button type="button" className="mr-2 bg-gray-200 px-4 py-2 rounded" onClick={onClose}>
+            <button type="button" className="mr-2 bg-gray-200 px-4 py-2 rounded" onClick={onClose} disabled={loading}>
               Batal
             </button>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-              Kirim
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded" disabled={loading}>
+              {loading ? "Mengirim..." : "Kirim"}
             </button>
           </div>
         </form>
