@@ -8,7 +8,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ icon, title, description }) => {
   return (
-    <div className="bg-default rounded-lg shadow-xl py-7 px-9 text-center max-w-[406px]">
+    <div className="bg-default rounded-lg shadow-xl py-7 px-9 text-center w-full">
       <div className="flex items-center justify-center w-16 h-16 bg-primary rounded-full mx-auto mb-4">
         <i className="text-default text-3xl">{icon}</i>
       </div>

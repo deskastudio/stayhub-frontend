@@ -14,7 +14,7 @@ module.exports = {
           bgprimary: "#F2F4F7",
         },
         secondary: {
-          DEFAULT: "#ffed4a", // Warna utama
+          DEFAULT: "#227DCD", // Warna utama
           light: "#fff382", // Versi warna lebih terang
           dark: "#f9c846", // Versi warna lebih gelap
         },
