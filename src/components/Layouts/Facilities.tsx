@@ -12,7 +12,7 @@ const Facilities: React.FC = () => {
         <div className="py-2.5 text-center mb-10">
           <h1 className="font-bold font-main text-primary text-5xl">Fasilitas Utama</h1>
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-10">
           <Card
             icon={<FaSignal />}
             title="Fasilitas Internet Berkecepatan Tinggi"

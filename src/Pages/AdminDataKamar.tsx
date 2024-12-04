@@ -120,10 +120,6 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
-  const filteredRooms = activeTab === 'all'
-    ? roomData
-    : roomData.filter((room) => room.type?.id === activeTab);
-
   console.log(`Active Tab: ${activeTab}`);
   console.log(`Filtered Rooms:`, filteredRooms);
 
