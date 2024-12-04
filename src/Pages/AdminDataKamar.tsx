@@ -1,12 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
 import ProfileAdmin from '../components/Fragments/ProfileAdmin';
 import TabPilihan from '../components/Fragments/TabPilihan';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahKamar from '../components/Fragments/PopupTambahKamar';
 import PopupEditKamar from '../components/Fragments/PopupEditKamar';
 import Button from '../components/Elements/Button';
+import React, { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
 
+// Interface data room
 interface Room {
   id: string;
   name: string;
@@ -18,6 +19,7 @@ interface Room {
   images: { url: string; filename: string }[];
 }
 
+// Interface data type kamar
 interface TypeKamar {
   id: string;
   name: string;
@@ -39,7 +41,7 @@ const AdminDataKamar: React.FC = () => {
 
   const fetchData = useCallback(async () => {
     if (!token) {
-      alert('Token is missing!');
+      alert('Unauthorized!');
       return;
     }
 
@@ -56,15 +58,13 @@ const AdminDataKamar: React.FC = () => {
         }),
       ]);
 
-      const formattedRooms = roomResponse.data.data.map((room: any) => ({
+      const formattedRooms = roomResponse.data.data.map((room: Room) => ({
         id: room.id,
         name: room.name,
         type: room.type[0],
         status: room.status,
-        images: room.images || [],
+        images: room.images,
       }));
-
-      console.log('data room', formattedRooms);
 
       const formattedTypeKamar = typeKamarResponse.data.data.map(
         (type: any) => ({
@@ -88,7 +88,7 @@ const AdminDataKamar: React.FC = () => {
       // Ensure activeTab is valid
       if (activeTab !== 'all') {
         const isValidTab = formattedTypeKamar.some(
-          (type) => type.id === activeTab
+          (room) => room.type === activeTab
         );
         if (!isValidTab) {
           setActiveTab('all'); // Reset to 'all' if the current tab is invalid
@@ -120,22 +120,18 @@ const AdminDataKamar: React.FC = () => {
         });
         fetchData();
         alert('Kamar berhasil dihapus!');
-      } catch (error: any) {
+      } catch (error) {
         console.error('Error deleting room:', error);
         alert(error.response?.data?.message || 'Gagal menghapus kamar.');
       }
     }
   };
 
-  console.log(`Active Tab: ${activeTab}`);
-  console.log(`Filtered Rooms:`, filteredRooms);
-
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
-
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
       'Nama Kamar': room.name,
-      'Tipe Kamar': room.type.name,
+      'Tipe Kamar': room.type?.name,
       Status: room.status === 'available' ? 'Tersedia' : 'Tidak Tersedia',
       Gambar: (
         <div className='flex gap-2'>
