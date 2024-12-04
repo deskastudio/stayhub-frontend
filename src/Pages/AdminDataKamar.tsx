@@ -1,5 +1,3 @@
-// src/pages/AdminDataKamar.tsx
-
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import ProfileAdmin from '../components/Fragments/ProfileAdmin';
@@ -47,7 +45,12 @@ const AdminDataKamar: React.FC = () => {
 
     try {
       setLoading(true);
-
+      const roomResponse = await axios.get('http://localhost:8000/room', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
       const [roomResponse, typeKamarResponse] = await Promise.all([
         axios.get("http://localhost:8000/room", {
           headers: { Authorization: `Bearer ${token}` },
@@ -67,13 +70,12 @@ const AdminDataKamar: React.FC = () => {
         images: room.images || [],
       }));
 
-      const formattedTypeKamar = typeKamarResponse.data.data.map((type: any) => ({
-        id: type.id,
-        name: type.name,
-        facility: type.facility.map((fasilitas: any) => ({ name: fasilitas.name })),
-        description: type.description,
-        cost: type.cost,
-      }));
+      const typeKamarResponse = await axios.get('http://localhost:8000/type', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
 
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
@@ -85,7 +87,6 @@ const AdminDataKamar: React.FC = () => {
           setActiveTab('all'); // Reset to 'all' if the current tab is invalid
         }
       }
-
     } catch (error) {
       console.error('Error fetching data:', error);
       alert('Gagal memuat data.');
@@ -118,13 +119,16 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
+  console.log(`Active Tab: ${activeTab}`);
+  console.log(`Filtered Rooms:`, filteredRooms);
+
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
 
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
-      "Nama Kamar": room.name,
-      "Tipe Kamar": room.type.name,
-      Status: room.status === "Tersedia" ? "Tersedia" : "Tidak Tersedia",
+      'Nama Kamar': room.name,
+      'Tipe Kamar': room.type.name,
+      Status: room.status === 'Tersedia' ? 'Tersedia' : 'Tidak Tersedia',
       Gambar: (
         <div className="flex gap-2">
           {room.images.map((image, index) => (
@@ -169,7 +173,7 @@ const AdminDataKamar: React.FC = () => {
             label: type.name,
             value: type.id,
             variant: 'secondary',
-          }))
+          })),
         ]}
         activeTab={activeTab}
         onTabClick={setActiveTab}
