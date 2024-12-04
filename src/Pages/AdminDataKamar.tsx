@@ -29,7 +29,7 @@ interface TypeKamar {
 }
 
 const AdminDataKamar: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('all'); // Initialize with 'all' for All tab
+  const [activeTab, setActiveTab] = useState<string>('all');
   const [roomData, setRoomData] = useState<Room[]>([]);
   const [typeKamarData, setTypeKamarData] = useState<TypeKamar[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,20 +40,21 @@ const AdminDataKamar: React.FC = () => {
   const token = sessionStorage.getItem('token');
 
   const fetchData = useCallback(async () => {
+    if (!token) {
+      alert('Token is missing!');
+      return;
+    }
+
     try {
       setLoading(true);
 
       const [roomResponse, typeKamarResponse] = await Promise.all([
         axios.get("http://localhost:8000/room", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
         axios.get("http://localhost:8000/type", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
       ]);
@@ -61,7 +62,7 @@ const AdminDataKamar: React.FC = () => {
       const formattedRooms = roomResponse.data.data.map((room: any) => ({
         id: room.id,
         name: room.name,
-        type: room.type || { id: "unknown", name: "Unknown" }, // Provide default type if missing
+        type: room.type || { id: "unknown", name: "Unknown" },
         status: room.status || 'Tersedia',
         images: room.images || [],
       }));
@@ -74,19 +75,14 @@ const AdminDataKamar: React.FC = () => {
         cost: type.cost,
       }));
 
-      console.log("Formatted Rooms:", formattedRooms);
-      console.log("Formatted Type Kamar:", formattedTypeKamar);
-
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
 
-      // If activeTab is 'all', do nothing
-      // Otherwise, ensure activeTab is valid
+      // Ensure activeTab is valid
       if (activeTab !== 'all') {
         const isValidTab = formattedTypeKamar.some(type => type.id === activeTab);
-        if (!isValidTab && formattedTypeKamar.length > 0) {
-          setActiveTab(formattedTypeKamar[0].id);
-          console.log(`Active tab was invalid. Resetting to first type: ${formattedTypeKamar[0].id}`);
+        if (!isValidTab) {
+          setActiveTab('all'); // Reset to 'all' if the current tab is invalid
         }
       }
 
@@ -102,13 +98,15 @@ const AdminDataKamar: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
+  const filteredRooms = activeTab === 'all'
+    ? roomData
+    : roomData.filter(room => room.type.id === activeTab);
+
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
       try {
         await axios.delete(`http://localhost:8000/room/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
         fetchData();
@@ -120,9 +118,6 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
-  console.log(`Active Tab: ${activeTab}`);
-  console.log(`Filtered Rooms:`, filteredRooms);
-
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
 
   const formatTableData = (data: Room[]) =>
@@ -131,21 +126,21 @@ const AdminDataKamar: React.FC = () => {
       "Tipe Kamar": room.type.name,
       Status: room.status === "Tersedia" ? "Tersedia" : "Tidak Tersedia",
       Gambar: (
-        <div className='flex gap-2'>
+        <div className="flex gap-2">
           {room.images.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:8000/${image.url}`} // Ensure URL aligns with static serving
+              src={`http://localhost:8000/${image.url}`}
               alt={`Room ${room.name}`}
-              className='w-10 h-10 object-cover rounded'
+              className="w-10 h-10 object-cover rounded"
             />
           ))}
         </div>
       ),
       Aksi: (
-        <div className='flex items-center justify-center space-x-2'>
+        <div className="flex items-center justify-center space-x-2">
           <Button
-            variant='primary'
+            variant="primary"
             onClick={() => {
               setCurrentRoom(room);
               setIsEditPopupOpen(true);
@@ -153,7 +148,7 @@ const AdminDataKamar: React.FC = () => {
           >
             Edit
           </Button>
-          <Button variant='deleted' onClick={() => handleDelete(room.id)}>
+          <Button variant="deleted" onClick={() => handleDelete(room.id)}>
             Hapus
           </Button>
         </div>
@@ -161,9 +156,9 @@ const AdminDataKamar: React.FC = () => {
     }));
 
   return (
-    <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Data Kamar</h1>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Data Kamar</h1>
         <ProfileAdmin />
       </div>
 
@@ -179,7 +174,7 @@ const AdminDataKamar: React.FC = () => {
         activeTab={activeTab}
         onTabClick={setActiveTab}
         onAddButtonClick={() => setIsPopupOpen(true)}
-        addButtonLabel='Tambah Kamar'
+        addButtonLabel="Tambah Kamar"
       />
 
       {loading ? (
@@ -214,3 +209,4 @@ const AdminDataKamar: React.FC = () => {
 };
 
 export default AdminDataKamar;
+
