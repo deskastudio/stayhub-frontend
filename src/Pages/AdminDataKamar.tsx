@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+// src/pages/AdminDataKamar.tsx
+
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import ProfileAdmin from '../components/Fragments/ProfileAdmin';
 import TabPilihan from '../components/Fragments/TabPilihan';
@@ -15,7 +17,7 @@ interface Room {
     name: string;
   };
   status: string;
-  images: { url: string }[];
+  images: { url: string; filename: string }[];
 }
 
 interface TypeKamar {
@@ -27,7 +29,7 @@ interface TypeKamar {
 }
 
 const AdminDataKamar: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('Silver');
+  const [activeTab, setActiveTab] = useState<string>('all'); // Initialize with 'all' for All tab
   const [roomData, setRoomData] = useState<Room[]>([]);
   const [typeKamarData, setTypeKamarData] = useState<TypeKamar[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,31 +39,32 @@ const AdminDataKamar: React.FC = () => {
 
   const token = sessionStorage.getItem('token');
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
-      const roomResponse = await axios.get("http://localhost:8000/room", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
-  
+      const [roomResponse, typeKamarResponse] = await Promise.all([
+        axios.get("http://localhost:8000/room", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }),
+        axios.get("http://localhost:8000/type", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }),
+      ]);
+
       const formattedRooms = roomResponse.data.data.map((room: any) => ({
         id: room.id,
         name: room.name,
-        type: room.type[0],
+        type: room.type || { id: "unknown", name: "Unknown" }, // Provide default type if missing
         status: room.status || 'Tersedia',
         images: room.images || [],
       }));
-
-      const typeKamarResponse = await axios.get("http://localhost:8000/type", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
 
       const formattedTypeKamar = typeKamarResponse.data.data.map((type: any) => ({
         id: type.id,
@@ -71,19 +74,33 @@ const AdminDataKamar: React.FC = () => {
         cost: type.cost,
       }));
 
+      console.log("Formatted Rooms:", formattedRooms);
+      console.log("Formatted Type Kamar:", formattedTypeKamar);
+
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
+
+      // If activeTab is 'all', do nothing
+      // Otherwise, ensure activeTab is valid
+      if (activeTab !== 'all') {
+        const isValidTab = formattedTypeKamar.some(type => type.id === activeTab);
+        if (!isValidTab && formattedTypeKamar.length > 0) {
+          setActiveTab(formattedTypeKamar[0].id);
+          console.log(`Active tab was invalid. Resetting to first type: ${formattedTypeKamar[0].id}`);
+        }
+      }
+
     } catch (error) {
       console.error('Error fetching data:', error);
       alert('Gagal memuat data.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, activeTab]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
@@ -96,50 +113,15 @@ const AdminDataKamar: React.FC = () => {
         });
         fetchData();
         alert('Kamar berhasil dihapus!');
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error deleting room:', error);
-        alert('Gagal menghapus kamar.');
+        alert(error.response?.data?.message || 'Gagal menghapus kamar.');
       }
     }
   };
 
-
-  const handleAddRoom = async (newRoom: FormData) => {
-    try {
-      await axios.post('http://localhost:8000/room/add', newRoom, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
-      fetchData();
-      alert('Kamar berhasil ditambahkan!');
-    } catch (error) {
-      console.error('Error adding room:', error);
-      alert('Gagal menambahkan kamar.');
-    }
-  };
-
-  const handleEditRoom = async (updatedRoom: Room) => {
-    try {
-      await axios.put(`http://localhost:8000/room/update/${updatedRoom.id}`, updatedRoom, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
-      fetchData();
-      alert('Kamar berhasil diperbarui!');
-    } catch (error) {
-      console.error('Error updating room:', error);
-      alert('Gagal memperbarui kamar.');
-    }
-  };
-
-  const filteredRooms = activeTab
-  ? roomData.filter((room) => room.type?.id === activeTab || room.type?.name?.toLowerCase() === activeTab.toLowerCase())
-  : roomData;
+  console.log(`Active Tab: ${activeTab}`);
+  console.log(`Filtered Rooms:`, filteredRooms);
 
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
 
@@ -153,7 +135,7 @@ const AdminDataKamar: React.FC = () => {
           {room.images.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:8000${image.url}`}
+              src={`http://localhost:8000/${image.url}`} // Ensure URL aligns with static serving
               alt={`Room ${room.name}`}
               className='w-10 h-10 object-cover rounded'
             />
@@ -186,10 +168,14 @@ const AdminDataKamar: React.FC = () => {
       </div>
 
       <TabPilihan
-        buttons={typeKamarData.map((type) => ({
-          label: type.name,
-          variant: 'secondary',
-        }))}
+        buttons={[
+          { label: 'All', value: 'all', variant: 'secondary' },
+          ...typeKamarData.map((type) => ({
+            label: type.name,
+            value: type.id,
+            variant: 'secondary',
+          }))
+        ]}
         activeTab={activeTab}
         onTabClick={setActiveTab}
         onAddButtonClick={() => setIsPopupOpen(true)}
@@ -201,7 +187,7 @@ const AdminDataKamar: React.FC = () => {
       ) : (
         <CustomTable
           columns={roomColumns}
-          data={formatTableData(roomData)}
+          data={formatTableData(filteredRooms)}
           itemsPerPage={5}
         />
       )}
@@ -215,8 +201,12 @@ const AdminDataKamar: React.FC = () => {
 
       <PopupEditKamar
         isOpen={isEditPopupOpen}
-        onClose={() => setIsEditPopupOpen(false)}
+        onClose={() => {
+          setIsEditPopupOpen(false);
+          setCurrentRoom(null);
+        }}
         currentData={currentRoom}
+        onKamarUpdated={fetchData}
         typeKamarData={typeKamarData}
       />
     </div>

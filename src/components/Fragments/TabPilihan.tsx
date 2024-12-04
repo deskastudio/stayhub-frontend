@@ -3,10 +3,11 @@ import Button from "../Elements/Button";
 
 interface ButtonItem {
   label: string;
+  value: string; // Unique identifier for each tab
   variant: "primary" | "secondary" | "add" | "deleted";
 }
 
-// Definisikan props untuk TabPilihan
+// Define props for TabPilihan
 interface TabPilihanProps {
   buttons: ButtonItem[];
   activeTab: string;
@@ -20,17 +21,20 @@ const TabPilihan: React.FC<TabPilihanProps> = ({
   activeTab,
   onTabClick,
   onAddButtonClick,
-  addButtonLabel = "Tambah", // Default label adalah "Tambah"
+  addButtonLabel = "Tambah", // Default label is "Tambah"
 }) => {
+  console.log("TabPilihan Buttons:", buttons);
+  console.log("TabPilihan Active Tab:", activeTab);
+
   return (
     <div className="flex justify-between items-center gap-4">
-      {/* Menampilkan tombol dinamis */}
+      {/* Dynamic Tabs */}
       <div className="flex justify-start items-center mb-8 gap-4">
-        {buttons.map((button, index) => (
+        {buttons.map((button) => (
           <Button
-            key={index}
-            variant={activeTab === button.label ? "primary" : "secondary"}
-            onClick={() => onTabClick(button.label)}
+            key={button.value} // Use 'value' as key for uniqueness
+            variant={activeTab === button.value ? "primary" : "secondary"}
+            onClick={() => onTabClick(button.value)} // Pass 'value' on click
           >
             {button.label}
           </Button>
