@@ -3,7 +3,7 @@ import React from "react";
 const About: React.FC = () => {
   return (
     <>
-      <div id="about" className="container flex py-[100px] justify-between items-center">
+      <div id="about" className="container flex py-[100px] gap-10 justify-between items-center">
         <div>
           <img src="img-about.png" alt="" />
         </div>

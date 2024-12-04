@@ -12,5 +12,5 @@ export interface TestimonialData {
 export interface TestimonialItemProps {
   testimonial: TestimonialData;
   onEdit: () => void;
-  onDelete: () => void;
+  onDelete: (id: string) => void;
 }

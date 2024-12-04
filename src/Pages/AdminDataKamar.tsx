@@ -149,6 +149,7 @@ const AdminDataKamar: React.FC = () => {
     }
   };
 
+<<<<<<< HEAD
   const handleAddRoom = async (newRoom: FormData) => {
     try {
       await axios.post('http://localhost:8000/room/add', newRoom, {
@@ -198,6 +199,8 @@ const AdminDataKamar: React.FC = () => {
       ? roomData
       : roomData.filter((room) => room.type?.id === activeTab);
 
+=======
+>>>>>>> bb9b9ff92dfa680405e331c52856a896a03fa1f5
   console.log(`Active Tab: ${activeTab}`);
   console.log(`Filtered Rooms:`, filteredRooms);
 
