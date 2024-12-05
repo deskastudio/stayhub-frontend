@@ -1,99 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import Input from '../Elements/Input';
-import Button from '../Elements/Button';
-import RatingFormModal from './RatingForm';
-import { TestimonialData } from '../Elements/TestimonialData';
+import React, { useState } from "react";
+import Input from "../Elements/Input";
+import Button from "../Elements/Button";
+import RatingFormModal from "./RatingForm";
+import axios from "axios";
+import { TestimonialData } from "../Elements/TestimonialData";
 
 interface TestimonialFormProps {
-  initialData?: TestimonialData | undefined | null;
-  onSubmit: (data: TestimonialData) => void;
-  onCancel: () => void;
+  roomId: string; // ID kamar yang terkait
+  onSubmit: (data: any) => void; // Callback menerima data setelah berhasil submit
+  onCancel: () => void; // Callback untuk membatalkan
+  editingTestimonial: TestimonialData | null; // Pass the testimonial to be edited
 }
 
 const TestimonialForm: React.FC<TestimonialFormProps> = ({
-  initialData,
+  roomId,
   onSubmit,
   onCancel,
 }) => {
-  const [data, setData] = useState<TestimonialData>({
-    id: '',
-    fullName: '',
-    roomType: '',
-    roomNumber: '',
-    comment: '',
-    rating: 0,
-  });
-
+  const token = sessionStorage.getItem("token");
+  const [comment, setComment] = useState<string>("");
+  const [rating, setRating] = useState<number>(0);
   const [isRatingModalOpen, setRatingModalOpen] = useState(false);
-  const [formError, setFormError] = useState<string>('');
+  const [formError, setFormError] = useState<string>("");
 
-  // Setel data awal saat komponen pertama kali di-mount
-  useEffect(() => {
-    if (initialData) {
-      setData(initialData);
-    }
-  }, [initialData]);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validasi form: semua kolom harus diisi
-    if (!data.fullName || !data.roomType || !data.roomNumber || !data.comment) {
-      setFormError('Semua kolom wajib diisi!');
+    // Cek apakah form telah terisi dengan baik
+    if (!comment || rating === 0) {
+      setFormError("Silakan isi ulasan dan beri rating!");
       return;
     }
 
-    setFormError(''); // Reset error message
-    setRatingModalOpen(true); // Menampilkan modal rating setelah form di-submit
-  };
+    console.log("Mengirim data:", { roomId, comment, rating });
 
-  const handleRatingSubmit = (rating: number) => {
-    if (rating === 0) {
-      // Jika rating belum dipilih, tampilkan pesan error
-      alert('Silakan beri rating terlebih dahulu!');
-      return;
-    }
+    try {
+      // Kirim hanya comment dan rating ke backend
+      const response = await axios.post(
+        `http://localhost:8000/review/${roomId}`,
+        { comment, rating }, // Hanya kirim comment dan rating
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    // Kirim data form lengkap termasuk rating
-    onSubmit({ ...data, rating });
-    setRatingModalOpen(false); // Menutup modal setelah rating terkirim
-  };
+      if (response.status === 201) {
+        console.log("Testimoni berhasil ditambahkan:", response.data);
 
-  const getRoomNumberOptions = (roomType: string) => {
-    switch (roomType) {
-      case 'Silver':
-        return Array.from({ length: 10 }, (_, index) =>
-          (101 + index).toString()
-        );
-      case 'Gold':
-        return Array.from({ length: 10 }, (_, index) =>
-          (201 + index).toString()
-        );
-      case 'Platinum':
-        return Array.from({ length: 10 }, (_, index) =>
-          (301 + index).toString()
-        );
-      default:
-        return [];
+        // Kirimkan data yang sudah ada ke parent (hanya data yang diterima dari server)
+        onSubmit(response.data);
+
+        // Reset form setelah submit sukses
+        setComment("");
+        setRating(0); // Reset rating setelah sukses submit
+        setFormError(""); // Reset error message
+      } else {
+        setFormError("Gagal menambahkan testimoni.");
+      }
+    } catch (error: any) {
+      console.error("Error:", error.response || error);
+      setFormError(
+        error.response?.data?.message || "Terjadi kesalahan saat menambahkan testimoni."
+      );
     }
   };
 
   return (
     <form
-      className='space-y-6 p-6 border rounded-lg shadow-xl bg-white'
+      className="space-y-6 p-6 border rounded-lg shadow-xl bg-white"
       onSubmit={handleFormSubmit}
     >
-      {formError && <div className='text-red-500'>{formError}</div>}
+      {formError && <div className="text-red-500">{formError}</div>}
 
+      <div className="flex flex-col">
+        <Input
+          label="Ulasan"
+          name="comment"
+          type="textarea"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="Tulis ulasan Anda"
       <div className='flex flex-col'>
         <Input
           label='Nama Lengkap'
@@ -118,29 +105,33 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
           onChange={handleChange}
           options={getRoomNumberOptions(data.roomType)}
         />
-        <Input
-          label='Ulasan'
-          name='comment'
-          type='textarea'
-          value={data.comment}
-          onChange={handleChange}
-          placeholder='Tulis ulasan Anda'
-        />
       </div>
 
-      <div className='flex justify-center space-x-4 mt-6'>
-        <Button variant='add' type='submit'>
+      <div className="flex justify-between items-center mt-6">
+        <div className="text-lg">
+          Rating: <span className="font-bold">{rating || "Belum dipilih"}</span>
+        </div>
+        <Button variant="add" type="button" onClick={() => setRatingModalOpen(true)}>
+          Beri Rating
+        </Button>
+      </div>
+
+      <div className="flex justify-end space-x-2 mt-6">
+        <Button variant="add" type="submit">
           Kirim
         </Button>
-        <Button variant='detail' onClick={onCancel}>
+        <Button variant="detail" onClick={onCancel}>
           Batal
         </Button>
       </div>
 
       {isRatingModalOpen && (
         <RatingFormModal
-          onClose={() => setRatingModalOpen(false)} // Menutup modal jika batal
-          onSubmit={handleRatingSubmit} // Kirim rating ke testimonial
+          onClose={() => setRatingModalOpen(false)}
+          onSubmit={(selectedRating) => {
+            setRating(selectedRating); // Update state rating
+            setRatingModalOpen(false); // Tutup modal
+          }}
         />
       )}
     </form>
