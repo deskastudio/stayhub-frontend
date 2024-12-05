@@ -81,6 +81,29 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Tulis ulasan Anda"
+      <div className='flex flex-col'>
+        <Input
+          label='Nama Lengkap'
+          name='fullName'
+          value={data.fullName}
+          onChange={handleChange}
+          placeholder='Nama Lengkap'
+        />
+        <Input
+          label='Type Kamar'
+          name='roomType'
+          type='select'
+          value={data.roomType}
+          onChange={handleChange}
+          options={['Silver', 'Gold', 'Platinum']}
+        />
+        <Input
+          label='No Kamar'
+          name='roomNumber'
+          type='select'
+          value={data.roomNumber}
+          onChange={handleChange}
+          options={getRoomNumberOptions(data.roomType)}
         />
       </div>
 
