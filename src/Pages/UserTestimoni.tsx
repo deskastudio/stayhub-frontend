@@ -66,6 +66,13 @@ const UserTestimoni: React.FC = () => {
     setStep("list");
   };
   
+  const handleEditTestimonial = (testimonial: TestimonialData) => {
+    setStep("form"); // Show the form for editing
+    setEditingTestimonial(testimonial); // Set the testimonial data to be edited
+  };
+  
+  // Track the testimonial being edited
+  const [editingTestimonial, setEditingTestimonial] = useState<TestimonialData | null>(null);
   
 
   const handleDeleteTestimonial = async (id: string) => {
