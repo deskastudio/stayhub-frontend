@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Button from "../components/Elements/Button";
 import UserProfil from "../components/Fragments/ProfileUser";
 import Placeholder from "../components/Fragments/Placeholder";
 import EditAjuanModal from "../components/Fragments/EditAjuanModal"; // Import modal edit
+import { getUserId } from "../utils/auth.utils"; // Mengimpor fungsi untuk mendapatkan ID user
 
 // Menyesuaikan tipe data Ajuan
 export interface Ajuan {
@@ -19,13 +21,55 @@ const UserListAjuan: React.FC = () => {
   const [ajuanList, setAjuanList] = useState<Ajuan[]>([]); // Daftar keluhan
   const [isModalOpen, setIsModalOpen] = useState(false); // Untuk membuka/tutup modal
   const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null); // Ajuan yang dipilih untuk diedit
+  const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah data sedang dimuat
   const navigate = useNavigate(); // Hook untuk navigasi
+  const id = getUserId(); // Mendapatkan ID user dari token
+  const token = sessionStorage.getItem("token"); // Mendapatkan token dari sessionStorage
 
-  // Memuat data keluhan dari localStorage saat halaman di-load
   useEffect(() => {
-    const savedAjuanList = JSON.parse(localStorage.getItem("ajuanList") || "[]");
-    setAjuanList(savedAjuanList); // Menyimpan data ke state
-  }, []);
+    const fetchAjuan = async () => {
+      try {
+        if (!token) {
+          console.error("Token tidak ditemukan");
+          navigate("/login");
+          return;
+        }
+
+        setLoading(true); // Menandakan bahwa data sedang dimuat
+        const response = await axios.get(`http://localhost:8000/complaint/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { userId: id }, // Mengirimkan ID user sebagai parameter
+        });
+
+        // Console log untuk memeriksa respons dari API
+        console.log("Response API:", response.data);
+
+        if (response.data.data) {
+          const ajuanData = response.data.data.map((ajuan: any) => ({
+            id: ajuan.id,
+            perihal: ajuan.title,
+            status: ajuan.status,
+            tanggal: ajuan.createdAt,
+            isiAjuan: ajuan.description,
+          }));
+          setAjuanList(ajuanData);
+          
+        } else {
+          setAjuanList([]); // Set ajuanList kosong jika tidak ada data
+        }
+      } catch (error) {
+        console.error("Error fetching complaints:", error);
+        setAjuanList([]); // Set ajuanList kosong jika terjadi error
+        alert("Gagal mengambil data. Silakan coba lagi.");
+      } finally {
+        setLoading(false); // Setelah data selesai diambil, ubah state loading menjadi false
+      }
+    };
+
+    fetchAjuan();
+  }, [token, id]);
 
   const handleAddAjuan = () => {
     // Navigasi ke halaman user-ajuan untuk menambahkan ajuan
@@ -48,7 +92,6 @@ const UserListAjuan: React.FC = () => {
       // Menghapus ajuan berdasarkan id
       const updatedAjuanList = ajuanList.filter((ajuan) => ajuan.id !== id);
       setAjuanList(updatedAjuanList);
-      localStorage.setItem("ajuanList", JSON.stringify(updatedAjuanList)); // Simpan ke localStorage
     }
   };
 
@@ -58,10 +101,9 @@ const UserListAjuan: React.FC = () => {
   };
 
   const handleSaveAjuan = (updatedAjuan: Ajuan) => {
-    // Update data ajuan di localStorage
+    // Update data ajuan
     const updatedAjuanList = ajuanList.map((ajuan) => (ajuan.id === updatedAjuan.id ? updatedAjuan : ajuan));
     setAjuanList(updatedAjuanList);
-    localStorage.setItem("ajuanList", JSON.stringify(updatedAjuanList)); // Simpan ke localStorage
   };
 
   return (
@@ -72,18 +114,21 @@ const UserListAjuan: React.FC = () => {
       </div>
 
       <div>
-        {ajuanList.length === 0 ? (
+        {loading ? (
+          // Menampilkan pesan loading jika data sedang dimuat
+          <div className="text-center py-4 text-xl text-gray-500">Loading data...</div>
+        ) : ajuanList.length === 0 ? (
           <Placeholder title="Belum ada ajuan" description="Silakan tambahkan ajuan baru." buttonText="Tambah Ajuan" onAdd={handleAddAjuan} />
         ) : (
           <table className="w-full border-collapse border">
             <thead>
               <tr className="bg-primary-dark text-white">
-                <th className="px-4 py-2 ">ID Ajuan</th>
-                <th className="px-4 py-2 ">Tanggal</th>
-                <th className="px-4 py-2 ">Perihal</th>
-                <th className="px-4 py-2 ">Isi Ajuan</th>
-                <th className="px-4 py-2 ">Status</th>
-                <th className="px-4 py-2 ">Aksi</th>
+                <th className="px-4 py-2">ID Ajuan</th>
+                <th className="px-4 py-2">Tanggal</th>
+                <th className="px-4 py-2">Perihal</th>
+                <th className="px-4 py-2">Isi Ajuan</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">Aksi</th>
               </tr>
             </thead>
             <tbody>

@@ -11,7 +11,7 @@ export interface Ajuan {
   status: "Selesai" | "Menunggu";
   createdAt: string;
   description: string;
-  user: { id: number; fullName: string };
+  user: { fullName: string};
   room: { name: string };
 }
 

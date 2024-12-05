@@ -30,13 +30,17 @@ const AjuanDetailModal: React.FC<AjuanDetailModalProps> = ({ data, onClose }) =>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700 font-medium mb-1">Nama Lengkap</label>
-              <input type="text" value={data.user?.fullName} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+              <input 
+              type="text" 
+              value={data.user?.fullName || "tidak tersedia"} 
+              readOnly 
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Nama Lengkap</label>
+              <label className="block text-gray-700 font-medium mb-1">No Kamar</label>
               <input
                 type="text"
-                value={data.room?.name || "Tidak Tersedia"} // Fallback jika data.user.name tidak ada
+                value={data.room?.name || "Tidak Tersedia"} 
                 readOnly
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               />
