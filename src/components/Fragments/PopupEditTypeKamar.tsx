@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import Button from "../Elements/Button";
-import axios from "axios";
 
-// Tipe data untuk tipe kamar
 interface Fasilitas {
   id: string;
   nama: string;
 }
 
 interface TypeKamar {
-  id?: string; // id opsional untuk data yang diedit
+  id?: string;
   namaTipe: string;
   fasilitas: Fasilitas[];
   deskripsi: string;
@@ -21,7 +19,7 @@ interface PopupEditTypeKamarProps {
   onClose: () => void;
   onSubmit: (data: TypeKamar) => void;
   currentData: TypeKamar | null;
-  fasilitasData: Fasilitas[]; // Data fasilitas yang tersedia
+  fasilitasData: Fasilitas[];
 }
 
 const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
@@ -32,11 +30,10 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
   fasilitasData,
 }) => {
   const [namaTipe, setNamaTipe] = useState("");
-  const [fasilitas, setFasilitas] = useState<string[]>([]); // Fasilitas sebagai array of strings
+  const [fasilitas, setFasilitas] = useState<string[]>([]);
   const [deskripsi, setDeskripsi] = useState("");
   const [harga, setHarga] = useState(0);
 
-  // Mengisi state dengan data tipe kamar yang akan diedit
   useEffect(() => {
     if (currentData) {
       setNamaTipe(currentData.namaTipe);
@@ -51,7 +48,6 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
     }
   }, [currentData]);
 
-  // Fungsi untuk toggle fasilitas saat klik
   const toggleFasilitas = (fasilitasNama: string) => {
     setFasilitas((prev) =>
       prev.includes(fasilitasNama)
@@ -60,27 +56,24 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
     );
   };
 
-  // Fungsi submit untuk mengirim data yang telah diubah
-  const handleSubmit = async (data: TypeKamar) => {
-    const payload = {
-      name: data.namaTipe,
-      facility: data.fasilitas.map((f) => f.nama),
-      description: data.deskripsi,
-      cost: data.harga,
-    };
-  
-    try {
-      await axios.put(`http://localhost:8000/type/update/${data.id}`, payload);
-      alert('Tipe kamar berhasil diperbarui!');
-      fetchData(); // Refresh data setelah edit
-    } catch (error) {
-      console.error('Error updating type kamar:', error.response?.data || error.message);
-      alert('Gagal memperbarui tipe kamar.');
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!currentData) {
+      alert("Data tidak tersedia untuk diupdate.");
+      return;
     }
+
+    // Update only the fields that have changed
+    const updatedData: TypeKamar = {
+      id: currentData.id,
+      namaTipe: currentData.namaTipe, // Keep the old 'namaTipe' if it was not changed
+      fasilitas: fasilitasData.filter((f) => fasilitas.includes(f.nama)),
+      deskripsi: deskripsi || currentData.deskripsi, // Update deskripsi only if it's changed
+      harga: harga || currentData.harga, // Update harga only if it's changed
+    };
+
+    onSubmit(updatedData);
   };
-  
-  
-  
 
   if (!isOpen) return null;
 
@@ -104,7 +97,6 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
             />
           </div>
 
-          {/* Fasilitas sebagai tombol */}
           <div className="mb-4">
             <label className="block font-bold mb-2">Fasilitas</label>
             <div className="flex flex-wrap gap-2">
@@ -135,10 +127,11 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
               value={harga}
               onChange={(e) => setHarga(Number(e.target.value))}
               className="w-full px-3 py-2 border rounded-lg"
+              min="0"
             />
           </div>
           <div className="flex justify-end space-x-2">
-            <Button variant="secondary" onClick={onClose}>
+            <Button variant="secondary" onClick={onClose} type="button">
               Cancel
             </Button>
             <Button type="submit" variant="primary">
