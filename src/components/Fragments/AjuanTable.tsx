@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import Button from "../Elements/Button";
 import axios from "axios";
 import DetailModal from "./AjuanDetailModal";
@@ -66,13 +66,18 @@ const AjuanTable: React.FC = () => {
     setBalasModalOpen(false);
   };
 
+  // const formatTanggal = (tanggal: string) => {
+  //   const dateObj = new Date(tanggal);
+  //   if (isNaN(dateObj.getTime())) {
+  //     return "";
+  //   }
+  //   return format(dateObj, "dd/MM/yyyy");
+  // };
   const formatTanggal = (tanggal: string) => {
-    const dateObj = new Date(tanggal);
-    if (isNaN(dateObj.getTime())) {
-      return "";
-    }
-    return format(dateObj, "dd/MM/yyyy");
+    const date = tanggal.split("T")[0];
+    return date; 
   };
+
 
   // Hitung data yang akan ditampilkan berdasarkan halaman
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -97,22 +102,22 @@ const AjuanTable: React.FC = () => {
           <table className="min-w-full bg-white shadow-md rounded-lg border-collapse">
             <thead className="bg-primary-dark text-white">
               <tr>
-                <th className="p-4 text-center">ID Ajuan</th>
                 <th className="p-4 text-center">Tanggal</th>
                 <th className="p-4 text-center">Perihal</th>
                 <th className="p-4 text-center">Status</th>
+                <th className="p-4 text-center">Gambar</th>
                 <th className="p-4 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((ajuan) => (
                 <tr key={ajuan.id} className="border-b">
-                  <td className="p-4 text-center">{ajuan.id}</td>
                   <td className="p-4 text-center">{formatTanggal(ajuan.createdAt)}</td>
                   <td className="p-4 text-center">{ajuan.title}</td>
                   <td className="p-4 text-center">
                     <span className={`px-2 py-1 rounded ${ajuan.status === "Selesai" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{ajuan.status}</span>
                   </td>
+                  <td className="p-4 text-center">Gambar blm bisa</td>
                   <td className="p-4 text-center space-x-2">
                     <Button variant="detail" onClick={() => handleDetailClick(ajuan)}>
                       Detail

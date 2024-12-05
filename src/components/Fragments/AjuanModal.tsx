@@ -12,14 +12,11 @@ interface AjuanModalProps {
 
 const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
-    namaLengkap: "",
-    email: "",
     roomId: "",
-    tanggal: "",
     perihal: "Fasilitas",
     isiAjuan: "",
   });
-
+  // const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // State untuk menyimpan file
   const [rooms, setRooms] = useState([]); // Untuk menyimpan daftar kamar
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -49,43 +46,55 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files) {
+  //     setSelectedFiles(Array.from(e.target.files)); // Menyimpan file yang dipilih
+  //   }
+  // };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const { namaLengkap, email, roomId, tanggal, perihal, isiAjuan } = formData;
+    const { roomId, perihal, isiAjuan } = formData;
 
     // Validasi input form
-    if (!namaLengkap || !email || !roomId || !tanggal || !isiAjuan) {
+    if (!roomId || !isiAjuan) {
       alert("Semua field harus diisi!");
       return;
     }
 
-    const dataToSubmit = {
-      user: id,
-      room: roomId,
-      title: perihal,
-      description: isiAjuan,
-      status: "menunggu", // Default status
-    };
-    console.log("data yang dikirim:d", dataToSubmit);
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append("user", id); // Menambahkan user ID
+    formDataToSubmit.append("room", roomId); // Menambahkan ID kamar
+    formDataToSubmit.append("title", perihal); // Menambahkan judul pengajuan
+    formDataToSubmit.append("description", isiAjuan); // Menambahkan deskripsi pengajuan
+    formDataToSubmit.append("status", "menunggu"); // Status default
+
+    // Menambahkan gambar jika ada
+    // selectedFiles.forEach((file) => {
+    //   formDataToSubmit.append("images", file);
+    // });
+
     try {
       setLoading(true);
-      const response = await axios.post(`http://localhost:8000/complaint/${roomId}`, dataToSubmit, {
+      const response = await axios.post(`http://localhost:8000/complaint/${roomId}`, formDataToSubmit, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json", // Mengirim data sebagai JSON
+          // "Content-Type": "multipart/form-data", // Menggunakan multipart untuk kirim data dan file
         },
       });
-      console.log("Response dari API:", response);
 
       if (response.status === 201) {
         alert("Ajuan berhasil dikirim!");
-        onSubmit(dataToSubmit);
+        onSubmit({
+          user: id,
+          room: roomId,
+          title: perihal,
+          description: isiAjuan,
+          status: "menunggu",
+        });
         setFormData({
-          namaLengkap: "",
-          email: "",
           roomId: "",
-          tanggal: "",
           perihal: "Fasilitas",
           isiAjuan: "",
         });
@@ -113,14 +122,6 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
         <h2 className="text-lg font-bold mb-4">Pengajuan Keluhan</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700">Nama Lengkap</label>
-            <input type="text" name="namaLengkap" value={formData.namaLengkap} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="Masukkan nama lengkap" />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="Masukkan email" />
-          </div>
-          <div className="mb-4">
             <label className="block text-gray-700">Kamar</label>
             <select name="roomId" value={formData.roomId} onChange={handleChange} className="w-full border rounded px-3 py-2">
               <option value="">Pilih Kamar</option>
@@ -138,10 +139,6 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Tanggal</label>
-            <input type="date" name="tanggal" value={formData.tanggal} onChange={handleChange} className="w-full border rounded px-3 py-2" />
-          </div>
-          <div className="mb-4">
             <label className="block text-gray-700">Perihal</label>
             <select name="perihal" value={formData.perihal} onChange={handleChange} className="w-full border rounded px-3 py-2">
               <option value="Fasilitas">Fasilitas</option>
@@ -154,6 +151,10 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
             <label className="block text-gray-700">Isi Ajuan</label>
             <textarea name="isiAjuan" value={formData.isiAjuan} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="Masukkan keluhanmu" />
           </div>
+          {/* <div className="mb-4">
+            <label className="block text-gray-700">Upload Foto (Opsional)</label>
+            <input type="file" name="images" multiple onChange={handleFileChange} className="w-full border rounded px-3 py-2" />
+          </div> */}
           <div className="flex justify-end">
             <button type="button" className="mr-2 bg-gray-200 px-4 py-2 rounded" onClick={onClose} disabled={loading}>
               Batal
