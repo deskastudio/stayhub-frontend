@@ -97,7 +97,7 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
       <div className='flex flex-col'>
         <Input
           label='Nama Lengkap'
-          name='name'
+          name='fullName'
           value={data.fullName}
           onChange={handleChange}
           placeholder='Nama Lengkap'
@@ -120,7 +120,7 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
         />
         <Input
           label='Ulasan'
-          name='review'
+          name='comment'
           type='textarea'
           value={data.comment}
           onChange={handleChange}
