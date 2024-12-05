@@ -10,83 +10,74 @@ import { getUserId } from "../utils/auth.utils";
 const UserTestimoni: React.FC = () => {
   const [step, setStep] = useState<"empty" | "form" | "list">("empty");
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
+  const [roomId, setRoomId] = useState<string>("");
   const pageTitle = "Testimoni Saya";
 
-  // get token and idUser
+  // Get token and idUser
   const token = sessionStorage.getItem("token");
   const id = getUserId();
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
+    const fetchUserAndTestimonials = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/review/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
+        // Fetch user data
+        const userResponse = await axios.get(`http://localhost:8000/user/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.data.data) {
-          const testimonial = response.data.data;
-          setTestimonials([
-            {
-              id: testimonial[0].id,
-              fullName: testimonial[0].user.fullName,
-              roomType: testimonial[0].room.type[0].name,
-              roomNumber: testimonial[0].room.name,
-              comment: testimonial[0].comment,
-              rating: testimonial[0].rating,
-            },
-          ]);
-          setStep("list");
+        const fetchedRoomId = userResponse.data.data.room?.[0];
+        if (fetchedRoomId) {
+          setRoomId(fetchedRoomId);
         } else {
-          setStep("empty");
+          console.warn("User tidak memiliki room yang terkait.");
         }
+
+        // Fetch testimonials
+        const testimonialsResponse = await axios.get(
+          `http://localhost:8000/review/${id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        const testimonialsData = testimonialsResponse.data.data.map((testimonial: any) => ({
+          id: testimonial.id,
+          fullName: testimonial.user?.fullName || "Unknown",
+          roomType: testimonial.room?.type[0]?.name || "Unknown",
+          roomNumber: testimonial.room?.name || "Unknown",
+          comment: testimonial.comment,
+          rating: testimonial.rating,
+        }));
+
+        setTestimonials(testimonialsData);
+        setStep(testimonialsData.length > 0 ? "list" : "empty");
       } catch (error) {
-        console.error("Error fetching testimonials:", error);
+        console.error("Error fetching data:", error);
         setStep("empty");
       }
     };
 
-    fetchTestimonials();
+    fetchUserAndTestimonials();
   }, [token, id]);
 
-  const handleAddTestimonial = () => {
-    setStep("form");
-  };
-
   const handleFormSubmit = (data: TestimonialData) => {
+    // Menambahkan testimonial baru ke dalam state testimonials
+    setTestimonials((prev) => [...prev, data]);
+    
+    // Update step ke "list" agar daftar testimoni ditampilkan
     setStep("list");
   };
+  
+  
 
   const handleDeleteTestimonial = async (id: string) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/review/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-
-      if (response.status === 200) {
-        // Perbarui daftar testimoni setelah berhasil menghapus
-        setTestimonials((prev) => prev.filter((item) => item.id !== id));
-        if (testimonials.length - 1 === 0) {
-          setStep("empty");
-        }
-      } else {
-        console.error("Error deleting testimonial:", response.data.message);
-      }
+      await axios.delete(`http://localhost:8000/review/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTestimonials((prev) => prev.filter((item) => item.id !== id));
+      if (testimonials.length - 1 === 0) setStep("empty");
     } catch (error) {
       console.error("Error deleting testimonial:", error);
     }
-  };
-
-  const handleEditTestimonial = (index: number) => {
-    setStep("form");
   };
 
   return (
@@ -96,32 +87,30 @@ const UserTestimoni: React.FC = () => {
         <UserProfil />
       </div>
       <div>
-        {step === "empty" && testimonials.length === 0 && (
+        {step === "empty" && (
           <Placeholder
             title="Belum ada testimoni"
             description="Silakan tambahkan testimoni baru."
             buttonText="Tambah Testimoni"
-            onAdd={handleAddTestimonial}
+            onAdd={() => setStep("form")}
           />
         )}
-
-        {step === "form" && (
+        {step === "form" && roomId && (
           <TestimoniForm
+            userId={id}
+            roomId={roomId}
             onSubmit={handleFormSubmit}
             onCancel={() => setStep(testimonials.length ? "list" : "empty")}
           />
         )}
-
-        {step === "list" && testimonials.length > 0 && (
+        {step === "list" && (
           <div className="space-y-4">
             {testimonials.map((testimonial) => (
               <TestimonialItem
                 key={testimonial.id}
                 testimonial={testimonial}
-                onEdit={() =>
-                  handleEditTestimonial(testimonials.indexOf(testimonial))
-                }
-                onDelete={() => handleDeleteTestimonial(testimonial.id)} // Kirim ID
+                onEdit={() => console.log("Edit testimonial:", testimonial.id)}
+                onDelete={() => handleDeleteTestimonial(testimonial.id)}
               />
             ))}
           </div>
