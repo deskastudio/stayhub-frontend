@@ -20,7 +20,6 @@ const UserListAjuan: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Untuk membuka/tutup modal
   const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null); // Ajuan yang dipilih untuk diedit
   const navigate = useNavigate(); // Hook untuk navigasi
-  
 
   // Memuat data keluhan dari localStorage saat halaman di-load
   useEffect(() => {

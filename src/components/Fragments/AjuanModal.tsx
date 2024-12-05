@@ -65,9 +65,9 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
       room: roomId,
       title: perihal,
       description: isiAjuan,
-      status: "pending", // Default status
+      status: "menunggu", // Default status
     };
-
+    console.log("data yang dikirim:d", dataToSubmit);
     try {
       setLoading(true);
       const response = await axios.post(`http://localhost:8000/complaint/${roomId}`, dataToSubmit, {
@@ -76,7 +76,6 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
           "Content-Type": "application/json", // Mengirim data sebagai JSON
         },
       });
-
       console.log("Response dari API:", response);
 
       if (response.status === 201) {
