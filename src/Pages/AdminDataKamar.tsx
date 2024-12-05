@@ -126,7 +126,7 @@ const AdminDataKamar: React.FC = () => {
       }
     }
   };
-
+  
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
