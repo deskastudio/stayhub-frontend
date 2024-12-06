@@ -1,43 +1,51 @@
-import React, { useState } from "react";
-import Input from "../Elements/Input";
-import Button from "../Elements/Button";
-import RatingFormModal from "./RatingForm";
-import axios from "axios";
-import { TestimonialData } from "../Elements/TestimonialData";
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import React, { useState } from 'react';
+import Input from '../Elements/Input';
+import Button from '../Elements/Button';
+import RatingFormModal from './RatingForm';
+import Rating from '../Elements/Rating';
+import { TestimonialData } from '../Elements/TestimonialData';
+import { getRoomId } from '../../utils/auth.utils';
 
 interface TestimonialFormProps {
-  roomId: string; // ID kamar yang terkait
-  onSubmit: (data: any) => void; // Callback menerima data setelah berhasil submit
-  onCancel: () => void; // Callback untuk membatalkan
-  editingTestimonial: TestimonialData | null; // Pass the testimonial to be edited
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
+  editingTestimonial: TestimonialData | null;
 }
 
 const TestimonialForm: React.FC<TestimonialFormProps> = ({
-  roomId,
   onSubmit,
   onCancel,
 }) => {
-  const token = sessionStorage.getItem("token");
-  const [comment, setComment] = useState<string>("");
+  const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
   const [isRatingModalOpen, setRatingModalOpen] = useState(false);
-  const [formError, setFormError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string>('');
+  const token = sessionStorage.getItem('token');
+  const roomId = getRoomId();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+
     // Cek apakah form telah terisi dengan baik
     if (!comment || rating === 0) {
-      setFormError("Silakan isi ulasan dan beri rating!");
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Anda belum mengisi form',
+        showConfirmButton: false,
+        timer: 2000,
+      });
       return;
     }
 
-    console.log("Mengirim data:", { roomId, comment, rating });
-
     try {
-      // Kirim hanya comment dan rating ke backend
       const response = await axios.post(
         `http://localhost:8000/review/${roomId}`,
-        { comment, rating }, // Hanya kirim comment dan rating
+        { comment, rating },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -46,86 +54,79 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
       );
 
       if (response.status === 201) {
-        console.log("Testimoni berhasil ditambahkan:", response.data);
+        // Handle success notification
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: 'Terima kasih atas testimoni Anda.',
+          showConfirmButton: false,
+          timer: 2000,
+        });
 
-        // Kirimkan data yang sudah ada ke parent (hanya data yang diterima dari server)
         onSubmit(response.data);
 
         // Reset form setelah submit sukses
-        setComment("");
+        setComment('');
         setRating(0); // Reset rating setelah sukses submit
-        setFormError(""); // Reset error message
-      } else {
-        setFormError("Gagal menambahkan testimoni.");
+        setFormError(''); // Reset error message
+      } else if (response.status === 400) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal',
+          text: 'Terjadi kesalahan saat mengirim testimoni.',
+          showConfirmButton: false,
+          timer: 2000,
+        });
       }
-    } catch (error: any) {
-      console.error("Error:", error.response || error);
-      setFormError(
-        error.response?.data?.message || "Terjadi kesalahan saat menambahkan testimoni."
-      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <form
-      className="space-y-6 p-6 border rounded-lg shadow-xl bg-white"
+      className='space-y-6 p-6 border rounded-lg shadow-xl bg-white'
       onSubmit={handleFormSubmit}
     >
-      {formError && <div className="text-red-500">{formError}</div>}
+      {formError && <div className='text-red-500'>{formError}</div>}
 
-      <div className="flex flex-col">
-        <Input
-          label="Ulasan"
-          name="comment"
-          type="textarea"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="Tulis ulasan Anda"
       <div className='flex flex-col'>
         <Input
-          label='Nama Lengkap'
-          name='fullName'
-          value={data.fullName}
-          onChange={handleChange}
-          placeholder='Nama Lengkap'
+          label='Ulasan'
+          name='comment'
+          type='textarea'
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder='Tulis ulasan Anda'
         />
-        <Input
-          label='Type Kamar'
-          name='roomType'
-          type='select'
-          value={data.roomType}
-          onChange={handleChange}
-          options={['Silver', 'Gold', 'Platinum']}
-        />
-        <Input
-          label='No Kamar'
-          name='roomNumber'
-          type='select'
-          value={data.roomNumber}
-          onChange={handleChange}
-          options={getRoomNumberOptions(data.roomType)}
-        />
+        <Rating rating={rating} onRate={setRating} />
       </div>
 
-      <div className="flex justify-between items-center mt-6">
-        <div className="text-lg">
-          Rating: <span className="font-bold">{rating || "Belum dipilih"}</span>
+      {/* <div className='flex justify-between items-center mt-6'>
+        <div className='text-lg'>
+          Rating: <span className='font-bold'>{rating || 'Belum dipilih'}</span>
         </div>
-        <Button variant="add" type="button" onClick={() => setRatingModalOpen(true)}>
+        <Button
+          variant='add'
+          type='button'
+          onClick={() => setRatingModalOpen(true)}
+        >
           Beri Rating
         </Button>
-      </div>
+      </div> */}
 
-      <div className="flex justify-end space-x-2 mt-6">
-        <Button variant="add" type="submit">
-          Kirim
-        </Button>
-        <Button variant="detail" onClick={onCancel}>
+      <div className='flex justify-end space-x-2 mt-6'>
+        <Button variant='deleted' onClick={onCancel}>
           Batal
         </Button>
+        <Button variant='add' type='submit'>
+          Kirim
+        </Button>
       </div>
 
-      {isRatingModalOpen && (
+      {/* {isRatingModalOpen && (
         <RatingFormModal
           onClose={() => setRatingModalOpen(false)}
           onSubmit={(selectedRating) => {
@@ -133,7 +134,7 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
             setRatingModalOpen(false); // Tutup modal
           }}
         />
-      )}
+      )} */}
     </form>
   );
 };
