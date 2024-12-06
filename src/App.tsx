@@ -20,14 +20,12 @@ import UserTestimoni from './Pages/UserTestimoni';
 
 // Landing Page
 import LandingPage from './Pages/LandingPage';
-import RoomSilver from './Pages/RoomSilver';
-import RoomGold from './Pages/RoomGold';
-import RoomPlatinum from './Pages/RoomPlatinum';
 // import ScrollToTop from "./components/ScrollToTop"; // Tambahkan jika dibutuhkan
 import BookingPage from './Pages/BookingPage';
 import LoginPage from './Pages/LoginPageUser';
 import RegisterPage from './Pages/RegisterPage';
 import ProtectedRoute from './components/Elements/ProtectRouted';
+import RoomType from './Pages/RoomType';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -77,9 +75,8 @@ const AppContent: React.FC = () => {
           <Route path="/user-list-ajuan" element={<ProtectedRoute role='user'><UserListAjuan /></ProtectedRoute>} />
 
           <Route path="/" element={<LandingPage />} />
-          <Route path="/silver" element={<RoomSilver />} />
-          <Route path="/gold" element={<RoomGold />} />
-          <Route path="/platinum" element={<RoomPlatinum />} />
+          <Route path="/room/:id" element={<RoomType />} />
+
           <Route path="/booking" element={<BookingPage />} />
         </Routes>
       </div>

@@ -18,11 +18,11 @@ const UserListAjuan: React.FC = () => {
   const pageTitle = 'List Ajuan';
   const [ajuanList, setAjuanList] = useState<Ajuan[]>([]); // Daftar keluhan
   const [isModalOpen, setIsModalOpen] = useState(false); // Untuk membuka/tutup modal
-  const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null); // Ajuan yang dipilih untuk diedit
+  const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
   const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah data sedang dimuat
-  const navigate = useNavigate(); // Hook untuk navigasi
-  const token = sessionStorage.getItem('token'); // Mendapatkan token dari sessionStorage
-  const id = getUserId(); // Mendapatkan ID user dari token
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem('token');
+  const id = getUserId();
 
   useEffect(() => {
     const fetchAjuan = async () => {
