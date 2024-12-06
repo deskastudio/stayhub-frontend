@@ -33,3 +33,9 @@ export const getUserName = () => {
   const payload = getTokenPayload();
   return payload ? payload.name : 'Guest';
 };
+
+// get roomId
+export const getRoomId = () => {
+  const payload = getTokenPayload();
+  return payload ? payload.roomId : null;
+};
