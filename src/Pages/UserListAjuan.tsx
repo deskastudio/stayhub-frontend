@@ -9,7 +9,7 @@ import { getUserId } from '../utils/auth.utils';
 // Menyesuaikan tipe data Ajuan
 export interface Ajuan {
   perihal: string;
-  status: 'Selesai' | 'Menunggu';
+  status: string;
   tanggal: string;
   isiAjuan: string;
 }

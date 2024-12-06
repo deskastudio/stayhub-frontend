@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Button from "../Elements/Button";
 import { Ajuan } from "./AjuanTable";
 
-
 interface AjuanBalasModalProps {
   data: Ajuan;
   onClose: () => void;

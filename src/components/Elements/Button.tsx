@@ -3,7 +3,7 @@ import React from 'react';
 interface ButtonProps {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
-  variant?: "primary" | "secondary" | "disabled" | "plain" | "underlined" | "tertiary" | "deleted" | "detail" | "add";
+  variant?: "primary" | "secondary" | "disabled" | "plain" | "underlined" | "tertiary" | "deleted" | "detail" | "add" |"succes";
   children: React.ReactNode;
   disabled?: boolean;
 }
@@ -22,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({ type = "button", onClick, variant = "pr
     deleted: "bg-red-800 text-white hover:bg-red-700",
     detail: "bg-gray-500  hover:bg-gray-400 text-white",
     add: "bg-primary-dark text-white hover:bg-primary",
+    succes: "bg-green-600 text-white hover:bg-green-500",
   };
 
   return (

@@ -4,14 +4,15 @@ import Button from "../Elements/Button";
 import axios from "axios";
 import DetailModal from "./AjuanDetailModal";
 import BalasModal from "./AjuanBalasModal";
+import EditStatusModal from "./EditStatusModal";
 
 export interface Ajuan {
   id: number;
   title: string;
-  status: "Selesai" | "Menunggu";
+  status: string;
   createdAt: string;
   description: string;
-  user: { fullName: string};
+  user: { fullName: string };
   room: { name: string };
 }
 
@@ -21,6 +22,7 @@ const AjuanTable: React.FC = () => {
   const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
   const [isBalasModalOpen, setBalasModalOpen] = useState(false);
   const [selectedForBalas, setSelectedForBalas] = useState<Ajuan | null>(null);
+  const [selectedForEdit, setSelectedForEdit] = useState<Ajuan | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
   const [itemsPerPage] = useState(5); // Jumlah item per halaman
@@ -56,28 +58,30 @@ const AjuanTable: React.FC = () => {
     setSelectedAjuan(data);
   };
 
+
   const handleBalasClick = (data: Ajuan) => {
     setSelectedForBalas(data);
     setBalasModalOpen(true);
   };
 
+  const handleEditClick = (ajuan: Ajuan) => {
+    setSelectedForEdit(ajuan);
+  };
+
+   const handleStatusUpdate = (id: number, updatedStatus: string) => {
+     setAjuanList((prevList) => prevList.map((item) => (item.id === id ? { ...item, status: updatedStatus } : item)));
+   };
+
   const closeModal = () => {
     setSelectedAjuan(null);
     setBalasModalOpen(false);
+    setSelectedForEdit(null)
   };
 
-  // const formatTanggal = (tanggal: string) => {
-  //   const dateObj = new Date(tanggal);
-  //   if (isNaN(dateObj.getTime())) {
-  //     return "";
-  //   }
-  //   return format(dateObj, "dd/MM/yyyy");
-  // };
   const formatTanggal = (tanggal: string) => {
     const date = tanggal.split("T")[0];
-    return date; 
+    return date;
   };
-
 
   // Hitung data yang akan ditampilkan berdasarkan halaman
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -114,8 +118,8 @@ const AjuanTable: React.FC = () => {
                 <tr key={ajuan.id} className="border-b">
                   <td className="p-4 text-center">{formatTanggal(ajuan.createdAt)}</td>
                   <td className="p-4 text-center">{ajuan.title}</td>
-                  <td className="p-4 text-center">
-                    <span className={`px-2 py-1 rounded ${ajuan.status === "Selesai" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{ajuan.status}</span>
+                  <td className="p'p-4 text-center w-32">
+                    <span className={`px-2 py-1 rounded text-center w-full inline-block ${ajuan.status === "Selesai" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{ajuan.status}</span>
                   </td>
                   <td className="p-4 text-center">Gambar blm bisa</td>
                   <td className="p-4 text-center space-x-2">
@@ -124,6 +128,9 @@ const AjuanTable: React.FC = () => {
                     </Button>
                     <Button variant="primary" onClick={() => handleBalasClick(ajuan)}>
                       Balas
+                    </Button>
+                    <Button variant="primary" onClick={() => handleEditClick(ajuan)}>
+                      Edit Status
                     </Button>
                   </td>
                 </tr>
@@ -155,6 +162,7 @@ const AjuanTable: React.FC = () => {
 
       {selectedAjuan && <DetailModal data={selectedAjuan} onClose={closeModal} />}
       {isBalasModalOpen && selectedForBalas && <BalasModal data={selectedForBalas} onClose={closeModal} />}
+      {selectedForEdit && <EditStatusModal ajuan={selectedForEdit} onClose={closeModal} onStatusUpdate={handleStatusUpdate} />}
     </div>
   );
 };
