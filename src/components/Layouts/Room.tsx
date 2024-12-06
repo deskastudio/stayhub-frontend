@@ -55,8 +55,8 @@ const TypeCard: React.FC<CardType> = ({ image, type, remaining, price }) => {
   );
 };
 
-// TypeRooms Component
-const TypeRooms: React.FC = () => {
+// TypeRoom Component
+const TypeRoom: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [rooms, setRooms] = useState<RoomType[]>([]);
 
@@ -112,4 +112,4 @@ const TypeRooms: React.FC = () => {
   );
 };
 
-export default TypeRooms;
+export default TypeRoom;
