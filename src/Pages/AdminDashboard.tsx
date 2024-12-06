@@ -8,6 +8,7 @@ import DataTable from '../components/Elements/DataTableBeranda';
 const Dashboard: React.FC = () => {
   const data = [1200000, 1800000, 2000000, 1500000, 1600000, 1900000];
   const labels = ['2017', '2018', '2019', '2020', '2021', '2022'];
+ 
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
