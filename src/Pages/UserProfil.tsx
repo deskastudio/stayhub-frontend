@@ -1,15 +1,120 @@
-import React, { useState } from "react";
 import ProfileUser from "../components/Fragments/ProfileUser";
 import Button from "../components/Elements/Button";
+import axios from "axios";
+import React, { useState, useEffect, FormEvent } from "react";
+
+interface User {
+  id: number;
+  fullName: string;
+  email: string;
+  phone: number;
+  address: string;
+  profileImage?: string;
+  ktpImages?: string;
+}
 
 const UserProfil: React.FC = () => {
-  const [showOldPassword, setShowOldPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [fullName, setFullName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [ktpImages, setKtpImages] = useState<File | null>(null);
 
-  const toggleOldPasswordVisibility = () =>
-    setShowOldPassword(!showOldPassword);
-  const toggleNewPasswordVisibility = () =>
-    setShowNewPassword(!showNewPassword);
+  const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/user/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+        const data = response.data.data;
+        setUser(data);
+        setFullName(data.fullName);
+        setEmail(data.email);
+        setPhone(data.phone);
+        setAddress(data.address);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setError("Gagal memuat data pengguna.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [token]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!fullName || !email) {
+      alert("Nama lengkap dan email harus diisi!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("email", email);
+    formData.append("phone", phone || "");
+    formData.append("address", address || "");
+    if (profileImage) {
+      formData.append("profileImage", profileImage);
+    }
+    if (ktpImages) {
+      formData.append("ktpImages", ktpImages);
+    }
+
+    try {
+      const response = await axios.put(
+        "http://localhost:8000/user/profile/update",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        alert("Profil berhasil diperbarui!");
+        setUser((prev) => ({
+          ...prev!,
+          fullName,
+          email,
+          phone: Number(phone),
+          address,
+          profileImage: profileImage
+            ? URL.createObjectURL(profileImage)
+            : prev?.profileImage,
+          ktpImages: ktpImages
+            ? URL.createObjectURL(ktpImages)
+            : prev?.ktpImages,
+        }));
+      } else {
+        alert("Gagal memperbarui profil.");
+      }
+    } catch (error) {
+      console.error("Error memperbarui profil:", error);
+      alert("Terjadi kesalahan saat memperbarui profil.");
+    }
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <div className="p-8 flex-grow">
@@ -20,19 +125,21 @@ const UserProfil: React.FC = () => {
       <div className="overflow-x-auto w-full">
         <div className="bg-white py-9 px-16 rounded-lg mt-6">
           <h2 className="text-xl font-bold">Profil Pengguna</h2>
-          <form className="mt-5">
+          <form className="mt-5" onSubmit={handleSubmit}>
             <div className="flex items-center gap-5 mb-5">
               <img
-                src="profile.png"
-                alt=""
+                src={user?.profileImage || "profile.png"}
+                alt="Profile"
                 className="w-20 h-20 rounded-full"
               />
               <div className="bg-primary rounded-lg">
                 <input
                   type="file"
                   id="choose-photo"
-                  name="profilePhoto"
                   className="hidden"
+                  onChange={(e) =>
+                    setProfileImage(e.target.files ? e.target.files[0] : null)
+                  }
                 />
                 <label
                   htmlFor="choose-photo"
@@ -42,126 +149,60 @@ const UserProfil: React.FC = () => {
                 </label>
               </div>
             </div>
-            <div className="flex sm:flex-wrap md:flex-nowrap gap-10">
-              <div className="flex flex-col flex-grow justify-between w-1/2 gap-5">
-                <div>
-                  <label className="block mb-3 font-medium text-lg">
-                    Nama Lengkap
-                  </label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    placeholder="Masukan nama lengkap"
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-3 font-medium text-lg">
-                    No Telepon
-                  </label>
-                  <input
-                    type="text"
-                    name="phoneNumber"
-                    placeholder="Masukan no telepon"
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block mb-3 font-medium text-lg">
-                    Password Lama
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showOldPassword ? "text" : "password"}
-                      name="oldPassword"
-                      placeholder="Masukkan password lama"
-                      className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                      required
-                    />
-                    <i
-                      onClick={toggleOldPasswordVisibility}
-                      className="cursor-pointer"
-                    >
-                      <img
-                        className="absolute right-3 top-3"
-                        src={
-                          showOldPassword
-                            ? "icon/eye-off.svg"
-                            : "icon/eye-on.svg"
-                        }
-                        alt="Toggle Password Visibility"
-                      />
-                    </i>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block mb-3 font-medium text-lg">
-                    Password Baru
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showNewPassword ? "text" : "password"}
-                      name="newPassword"
-                      placeholder="Masukkan password baru"
-                      className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                      required
-                    />
-                    <i
-                      onClick={toggleNewPasswordVisibility}
-                      className="cursor-pointer"
-                    >
-                      <img
-                        className="absolute right-3 top-3"
-                        src={
-                          showNewPassword
-                            ? "icon/eye-off.svg"
-                            : "icon/eye-on.svg"
-                        }
-                        alt="Toggle Password Visibility"
-                      />
-                    </i>
-                  </div>
-                </div>
+            <div className="grid grid-cols-2 gap-5">
+              <div>
+                <label className="block mb-2 font-medium">Nama Lengkap</label>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Masukan nama lengkap"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
               </div>
-              <div className="flex flex-col w-1/2 gap-5">
-                <div className="flex flex-col h-1/2">
-                  <label className="block mb-3 font-medium text-lg">
-                    Alamat
-                  </label>
-                  <textarea
-                    name="address"
-                    placeholder="Masukan Alamat"
-                    className="w-full h-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 resize-none"
-                    required
-                  ></textarea>
-                </div>
-                <div className="flex flex-col h-1/2">
-                  <label className="font-medium text-lg block mb-3">
-                    Foto KTP
-                  </label>
-                  <label
-                    htmlFor="uploadKTP"
-                    className="w-full h-full p-3 border rounded-lg mt-1 cursor-pointer flex flex-col items-center justify-center"
-                  >
-                    <img
-                      src="icon/rounded-plus.svg"
-                      alt="Tambah KTP"
-                      width={40}
-                    />
-                    <p>Tambahkan foto KTP</p>
-                  </label>
-                  <input
-                    type="file"
-                    id="uploadKTP"
-                    name="ktpPhoto"
-                    className="hidden"
-                    required
-                  />
-                </div>
+              <div>
+                <label className="block mb-2 font-medium">No Telepon</label>
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Masukan no telepon"
+                  className="w-full p-3 border rounded-lg"
+                />
               </div>
+              <div>
+                <label className="block mb-2 font-medium">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Masukan email"
+                  className="w-full p-3 border rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block mb-2 font-medium">Alamat</label>
+                <textarea
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Masukan alamat"
+                  className="w-full p-3 border rounded-lg resize-none"
+                  required
+                ></textarea>
+              </div>
+            </div>
+            <div className="mt-5">
+              <label className="block mb-3 font-medium">Foto KTP</label>
+              <input
+                type="file"
+                id="ktp-upload"
+                onChange={(e) =>
+                  setKtpImages(e.target.files ? e.target.files[0] : null)
+                }
+                className="w-full"
+              />
             </div>
             <div className="mt-4">
               <Button type="submit" variant="primary">

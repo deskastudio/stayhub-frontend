@@ -1,3 +1,4 @@
+// RoomCard.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -60,4 +61,5 @@ const RoomCard: React.FC<RoomCardProps> = ({
     </div>
   );
 };
+
 export default RoomCard;

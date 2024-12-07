@@ -1,30 +1,35 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../Elements/Input';
 import Button from '../Elements/Button';
-import RatingFormModal from './RatingForm';
 import Rating from '../Elements/Rating';
 import { TestimonialData } from '../Elements/TestimonialData';
 import { getRoomId } from '../../utils/auth.utils';
 
-interface TestimonialFormProps {
+interface TestimoniEditFormProps {
   onSubmit: (data: any) => void;
   onCancel: () => void;
   editingTestimonial: TestimonialData | null;
 }
 
-const TestimonialForm: React.FC<TestimonialFormProps> = ({
+const TestimoniEditForm: React.FC<TestimoniEditFormProps> = ({
   onSubmit,
   onCancel,
+  editingTestimonial,
 }) => {
   const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
-  const [isRatingModalOpen, setRatingModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formError, setFormError] = useState<string>('');
   const token = sessionStorage.getItem('token');
   const roomId = getRoomId();
+
+  useEffect(() => {
+    if (editingTestimonial) {
+      setComment(editingTestimonial.comment);
+      setRating(editingTestimonial.rating);
+    }
+  }, [editingTestimonial]);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,12 +44,13 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
         showConfirmButton: false,
         timer: 2000,
       });
+      setIsLoading(false);
       return;
     }
 
     try {
-      const response = await axios.post(
-        `http://localhost:8000/review/${roomId}`,
+      const response = await axios.put(
+        `http://localhost:8000/review/${editingTestimonial?.id}`,
         { comment, rating },
         {
           headers: {
@@ -53,12 +59,12 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         // Handle success notification
         Swal.fire({
           icon: 'success',
           title: 'Berhasil',
-          text: 'Terima kasih atas testimoni Anda.',
+          text: 'Testimoni Anda telah diperbarui.',
           showConfirmButton: false,
           timer: 2000,
         });
@@ -68,12 +74,11 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
         // Reset form setelah submit sukses
         setComment('');
         setRating(0); // Reset rating setelah sukses submit
-        setFormError(''); // Reset error message
 
         // Refresh halaman setelah delay
         setTimeout(() => {
           window.location.reload(); // Ini akan menyegarkan halaman setelah 2 detik
-        }, 500); // Delay 2000 ms (2 detik)
+        }, 500); // Delay 500 ms
       } else if (response.status === 400) {
         Swal.fire({
           icon: 'error',
@@ -85,6 +90,13 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
       }
     } catch (error) {
       console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Terjadi kesalahan saat mengirim testimoni.',
+        showConfirmButton: false,
+        timer: 2000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -95,8 +107,6 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
       className='space-y-6 p-6 border rounded-lg shadow-xl bg-white'
       onSubmit={handleFormSubmit}
     >
-      {formError && <div className='text-red-500'>{formError}</div>}
-
       <div className='flex flex-col'>
         <Input
           label='Ulasan'
@@ -109,39 +119,16 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
         <Rating rating={rating} onRate={setRating} />
       </div>
 
-      {/* <div className='flex justify-between items-center mt-6'>
-        <div className='text-lg'>
-          Rating: <span className='font-bold'>{rating || 'Belum dipilih'}</span>
-        </div>
-        <Button
-          variant='add'
-          type='button'
-          onClick={() => setRatingModalOpen(true)}
-        >
-          Beri Rating
-        </Button>
-      </div> */}
-
       <div className='flex justify-end space-x-2 mt-6'>
         <Button variant='deleted' onClick={onCancel}>
           Batal
         </Button>
-        <Button variant='add' type='submit'>
-          Kirim
+        <Button variant='add' type='submit' disabled={isLoading}>
+          {isLoading ? 'Mengirim...' : 'Kirim'}
         </Button>
       </div>
-
-      {/* {isRatingModalOpen && (
-        <RatingFormModal
-          onClose={() => setRatingModalOpen(false)}
-          onSubmit={(selectedRating) => {
-            setRating(selectedRating); // Update state rating
-            setRatingModalOpen(false); // Tutup modal
-          }}
-        />
-      )} */}
     </form>
   );
 };
 
-export default TestimonialForm;
+export default TestimoniEditForm;
