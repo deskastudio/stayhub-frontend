@@ -12,6 +12,7 @@ export interface Ajuan {
   status: string;
   createdAt: string;
   description: string;
+  response: string;
   user: { fullName: string };
   room: { name: string };
 }
@@ -20,9 +21,8 @@ const AjuanTable: React.FC = () => {
   const [ajuanList, setAjuanList] = useState<Ajuan[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
-  const [isBalasModalOpen, setBalasModalOpen] = useState(false);
-  const [selectedForBalas, setSelectedForBalas] = useState<Ajuan | null>(null);
   const [selectedForEdit, setSelectedForEdit] = useState<Ajuan | null>(null);
+  const [selectedForBalas, setSelectedForBalas] = useState<Ajuan | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
   const [itemsPerPage] = useState(5); // Jumlah item per halaman
@@ -54,14 +54,13 @@ const AjuanTable: React.FC = () => {
     fetchAjuanList();
   }, [token]);
 
-  const handleDetailClick = (data: Ajuan) => {
-    setSelectedAjuan(data);
+  const handleDetailClick = (ajuan: Ajuan) => {
+    setSelectedAjuan(ajuan);
   };
 
 
-  const handleBalasClick = (data: Ajuan) => {
-    setSelectedForBalas(data);
-    setBalasModalOpen(true);
+  const handleBalasClick = (ajuan: Ajuan) => {
+     setSelectedForBalas(ajuan);
   };
 
   const handleEditClick = (ajuan: Ajuan) => {
@@ -71,10 +70,13 @@ const AjuanTable: React.FC = () => {
    const handleStatusUpdate = (id: number, updatedStatus: string) => {
      setAjuanList((prevList) => prevList.map((item) => (item.id === id ? { ...item, status: updatedStatus } : item)));
    };
+    const handleResponseUpdate = (id: number, updatedResponse: string) => {
+      setAjuanList((prevList) => prevList.map((item) => (item.id === id ? { ...item, response: updatedResponse } : item)));
+    };
 
   const closeModal = () => {
     setSelectedAjuan(null);
-    setBalasModalOpen(false);
+    setSelectedForBalas(null);
     setSelectedForEdit(null)
   };
 
@@ -161,7 +163,7 @@ const AjuanTable: React.FC = () => {
       )}
 
       {selectedAjuan && <DetailModal data={selectedAjuan} onClose={closeModal} />}
-      {isBalasModalOpen && selectedForBalas && <BalasModal data={selectedForBalas} onClose={closeModal} />}
+      {selectedForBalas && <BalasModal ajuan={selectedForBalas} onClose={closeModal} onResponseUpdate={handleResponseUpdate} />}
       {selectedForEdit && <EditStatusModal ajuan={selectedForEdit} onClose={closeModal} onStatusUpdate={handleStatusUpdate} />}
     </div>
   );

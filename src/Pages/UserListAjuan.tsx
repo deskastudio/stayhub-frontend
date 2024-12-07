@@ -12,6 +12,7 @@ export interface Ajuan {
   status: string;
   tanggal: string;
   isiAjuan: string;
+  balasan : string
 }
 
 const UserListAjuan: React.FC = () => {
@@ -49,6 +50,7 @@ const UserListAjuan: React.FC = () => {
             status: ajuan.status,
             tanggal: ajuan.createdAt.split('T')[0],
             isiAjuan: ajuan.description,
+            balasan: ajuan.response,
           }));
           setAjuanList(ajuanData);
         } else {
@@ -85,52 +87,39 @@ const UserListAjuan: React.FC = () => {
   };
 
   return (
-    <div className='p-8 flex-grow'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold'>{pageTitle}</h1>
+    <div className="p-8 flex-grow">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">{pageTitle}</h1>
         <UserProfil />
       </div>
 
       <div>
         {loading ? (
           // Menampilkan pesan loading jika data sedang dimuat
-          <div className='text-center py-4 text-xl text-gray-500'>
-            Loading data...
-          </div>
+          <div className="text-center py-4 text-xl text-gray-500">Loading data...</div>
         ) : ajuanList.length === 0 ? (
-          <Placeholder
-            title='Belum ada ajuan'
-            description='Silakan tambahkan ajuan baru.'
-            buttonText='Tambah Ajuan'
-            onAdd={handleAddAjuan}
-          />
+          <Placeholder title="Belum ada ajuan" description="Silakan tambahkan ajuan baru." buttonText="Tambah Ajuan" onAdd={handleAddAjuan} />
         ) : (
-          <table className='w-full border-collapse border'>
+          <table className="w-full border-collapse border">
             <thead>
-              <tr className='bg-primary-dark text-white'>
-                <th className='px-4 py-2'>Tanggal</th>
-                <th className='px-4 py-2'>Perihal</th>
-                <th className='px-4 py-2'>Isi Ajuan</th>
-                <th className='px-4 py-2'>Status</th>
+              <tr className="bg-primary-dark text-white">
+                <th className="px-4 py-2">Tanggal</th>
+                <th className="px-4 py-2">Perihal</th>
+                <th className="px-4 py-2">Isi Ajuan</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">Balasan</th>
               </tr>
             </thead>
             <tbody>
               {ajuanList.map((ajuan) => (
-                <tr key={ajuan.id} className='text-center'>
-                  <td className='px-4 py-2 border'>{ajuan.tanggal}</td>
-                  <td className='px-4 py-2 border'>{ajuan.perihal}</td>
-                  <td className='px-4 py-2 border'>{ajuan.isiAjuan}</td>
-                  <td className='p-4 text-center w-32'>
-                    <span
-                      className={`px-2 py-1 rounded text-center w-full inline-block ${
-                        ajuan.status === 'Selesai'
-                          ? 'bg-green-200 text-green-700'
-                          : 'bg-red-200 text-red-700'
-                      }`}
-                    >
-                      {ajuan.status}
-                    </span>
+                <tr key={ajuan.id} className="text-center">
+                  <td className="px-4 py-2 border">{ajuan.tanggal}</td>
+                  <td className="px-4 py-2 border">{ajuan.perihal}</td>
+                  <td className="px-4 py-2 border">{ajuan.isiAjuan}</td>
+                  <td className="p-4 text-center w-32">
+                    <span className={`px-2 py-1 rounded text-center w-full inline-block ${ajuan.status === "Selesai" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}>{ajuan.status}</span>
                   </td>
+                  <td className="px-4 py-2 border">{ajuan.balasan}</td>
                 </tr>
               ))}
             </tbody>
@@ -139,14 +128,7 @@ const UserListAjuan: React.FC = () => {
       </div>
 
       {/* Modal untuk Edit Ajuan */}
-      {selectedAjuan && (
-        <EditAjuanModal
-          isOpen={isModalOpen}
-          ajuanData={selectedAjuan}
-          onClose={handleModalClose}
-          onSave={handleSaveAjuan}
-        />
-      )}
+      {selectedAjuan && <EditAjuanModal isOpen={isModalOpen} ajuanData={selectedAjuan} onClose={handleModalClose} onSave={handleSaveAjuan} />}
     </div>
   );
 };

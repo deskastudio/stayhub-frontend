@@ -156,10 +156,10 @@ const AjuanModal: React.FC<AjuanModalProps> = ({ isOpen, onClose, onSubmit }) =>
             <input type="file" name="images" multiple onChange={handleFileChange} className="w-full border rounded px-3 py-2" />
           </div> */}
           <div className="flex justify-end">
-            <button type="button" className="mr-2 bg-gray-200 px-4 py-2 rounded" onClick={onClose} disabled={loading}>
+            <button type="button" className="mr-2 bg-gray-500  hover:bg-gray-400 text-white px-4 py-2 rounded" onClick={onClose} disabled={loading}>
               Batal
             </button>
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded" disabled={loading}>
+            <button type="submit" className="bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded" disabled={loading}>
               {loading ? "Mengirim..." : "Kirim"}
             </button>
           </div>

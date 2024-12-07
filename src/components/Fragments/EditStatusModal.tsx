@@ -30,7 +30,7 @@ const EditStatusModal: React.FC<EditStatusModalProps> = ({ ajuan, onClose, onSta
           withCredentials: true,
         }
       );
-      alert("Status berhasil diperbarui", status);
+      alert("Status berhasil diperbarui");
       onStatusUpdate(ajuan.id, status); 
       onClose(); 
       
