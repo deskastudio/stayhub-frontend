@@ -16,14 +16,21 @@ interface RoomType {
 }
 
 interface CardType {
+  id: string;
   image: string;
   type: string;
-  remaining: string;
+  description: string;
   price: string;
 }
 
 // TypeCard Component
-const TypeCard: React.FC<CardType> = ({ image, type, remaining, price }) => {
+const TypeCard: React.FC<CardType> = ({
+  id,
+  image,
+  type,
+  description,
+  price,
+}) => {
   return (
     <div className='bg-default rounded-lg shadow-md overflow-hidden'>
       <img
@@ -34,7 +41,7 @@ const TypeCard: React.FC<CardType> = ({ image, type, remaining, price }) => {
       <div className='py-5 px-7 border border-black rounded-b-lg'>
         <div className='flex flex-col justify-between items-start mb-8'>
           <h2 className='text-xl font-bold font-main'>{type}</h2>
-          <span className='text-gray-500'>Sisa {remaining} kamar</span>
+          <span className='text-gray-500'>{description}</span>
         </div>
         <div className='flex flex-col items-center justify-between'>
           <div className='flex'>
@@ -43,7 +50,7 @@ const TypeCard: React.FC<CardType> = ({ image, type, remaining, price }) => {
             </div>
           </div>
           <div>
-            <Link to='/details'>
+            <Link to={`/room/type/${id}`}>
               <button className='py-2.5 px-2.5 border font-main font-bold text-sm border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition duration-300'>
                 Lihat Detail
               </button>
@@ -55,13 +62,13 @@ const TypeCard: React.FC<CardType> = ({ image, type, remaining, price }) => {
   );
 };
 
-// TypeRoom Component
-const TypeRoom: React.FC = () => {
+// Component
+const RoomType: React.FC = () => {
   const [loading, setLoading] = useState(true);
-  const [rooms, setRooms] = useState<RoomType[]>([]);
+  const [type, setType] = useState<RoomType[]>([]);
 
   useEffect(() => {
-    const fetchRoom = async () => {
+    const fetchTypeRoom = async () => {
       try {
         setLoading(true);
 
@@ -76,7 +83,7 @@ const TypeRoom: React.FC = () => {
           cost: type.cost,
         }));
 
-        setRooms(data);
+        setType(data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -84,7 +91,7 @@ const TypeRoom: React.FC = () => {
       }
     };
 
-    fetchRoom();
+    fetchTypeRoom();
   }, []);
 
   // Component
@@ -98,13 +105,14 @@ const TypeRoom: React.FC = () => {
         Pilih Tipe Kamar
       </h1>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-        {rooms.map((room) => (
+        {type.map((type) => (
           <TypeCard
-            key={room.id}
+            key={type.id}
+            id={type.id}
             image='/silver.png'
-            type={room.name}
-            remaining={rooms.length.toString()}
-            price={`Rp. ${room.cost.toLocaleString()} / Bulan`}
+            type={type.name}
+            description={type.description}
+            price={`Rp. ${type.cost.toLocaleString()} / Bulan`}
           />
         ))}
       </div>
@@ -112,4 +120,4 @@ const TypeRoom: React.FC = () => {
   );
 };
 
-export default TypeRoom;
+export default RoomType;
