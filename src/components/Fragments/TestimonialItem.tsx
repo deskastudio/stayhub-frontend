@@ -41,7 +41,7 @@ const TestimonialItem: React.FC<TestimonialItemProps> = ({
         <Button variant='deleted' onClick={() => onDelete(id)}>
           Hapus
         </Button>
-        <Button variant='detail' onClick={onEdit}>
+        <Button variant='detail' onClick={() => onEdit()}>
           Edit
         </Button>
       </div>
