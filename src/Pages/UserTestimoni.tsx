@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react';
 import UserProfil from '../components/Fragments/ProfileUser';
 import Placeholder from '../components/Fragments/Placeholder';
 import TestimoniForm from '../components/Fragments/TestimoniForm';
+import TestimoniEditForm from '../components/Fragments/TestimoniEditForm'; // Import the edit form
 import TestimonialItem from '../components/Fragments/TestimonialItem';
 import { TestimonialData } from '../components/Elements/TestimonialData';
 import { getUserId, getRoomId } from '../utils/auth.utils';
 
 const UserTestimoni: React.FC = () => {
-  const [step, setStep] = useState<'empty' | 'form' | 'list'>('empty');
+  const [step, setStep] = useState<'empty' | 'form' | 'list' | 'edit'>('empty');
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
+  const [editingTestimonial, setEditingTestimonial] = useState<TestimonialData | null>(null);
   const pageTitle = 'Testimoni';
 
   // Get data user
@@ -56,13 +58,17 @@ const UserTestimoni: React.FC = () => {
   };
 
   const handleEditTestimonial = (testimonial: TestimonialData) => {
-    setStep('form'); // Show the form for editing
-    setEditingTestimonial(testimonial); // Set the testimonial data to be edited
+    setEditingTestimonial(testimonial);
+    setStep('edit'); // Show the edit form
   };
 
-  // Track the testimonial being edited
-  const [editingTestimonial, setEditingTestimonial] =
-    useState<TestimonialData | null>(null);
+  const handleUpdateTestimonial = (updatedTestimonial: TestimonialData) => {
+    setTestimonials((prev) =>
+      prev.map((item) => (item.id === updatedTestimonial.id ? updatedTestimonial : item))
+    );
+    setEditingTestimonial(null);
+    setStep('list'); // Go back to the list view
+  };
 
   const handleDeleteTestimonial = async (id: string) => {
     try {
@@ -99,13 +105,23 @@ const UserTestimoni: React.FC = () => {
             onCancel={() => setStep(testimonials.length ? 'list' : 'empty')}
           />
         )}
+        {step === 'edit' && editingTestimonial && (
+          <TestimoniEditForm
+            onSubmit={handleUpdateTestimonial}
+            onCancel={() => {
+              setEditingTestimonial(null);
+              setStep('list');
+            }}
+            editingTestimonial={editingTestimonial }
+        />
+        )}
         {step === 'list' && (
           <div className='space-y-4'>
             {testimonials.map((testimonial) => (
               <TestimonialItem
                 key={testimonial.id}
                 testimonial={testimonial}
-                onEdit={() => console.log('Edit testimonial:', testimonial.id)}
+                onEdit={() => handleEditTestimonial(testimonial)}
                 onDelete={() => handleDeleteTestimonial(testimonial.id)}
               />
             ))}
