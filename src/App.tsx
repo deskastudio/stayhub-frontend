@@ -29,7 +29,7 @@ import BookingPage from './Pages/BookingPage';
 import LoginPage from './Pages/LoginPageUser';
 import RegisterPage from './Pages/RegisterPage';
 import ProtectedRoute from './components/Elements/ProtectRouted';
-import Room from './Pages/RoomType';
+import Room from './Pages/Room';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
