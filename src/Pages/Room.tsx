@@ -5,7 +5,13 @@ import Navbar from '../components/Layouts/Navbar';
 import Footer from '../components/Layouts/Footer';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
-import { FaCalculator } from 'react-icons/fa';
+import {
+  FaCalculator,
+  FaChevronLeft,
+  FaChevronRight,
+  FaCircle,
+  FaRegCircle,
+} from 'react-icons/fa';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import { IoBedOutline } from 'react-icons/io5';
 import { MdOutlineKitchen } from 'react-icons/md';
@@ -215,22 +221,20 @@ const Room: React.FC = () => {
         <p className='text-gray-500 mb-6 font-medium text-lg'>
           Dago Giri, Kabupaten Bandung
         </p>
-        <div className='flex flex-col md:flex-row'>
-          <div className='w-full md:w-2/3 pr-4'>
-            <h1 className='font-medium text-lg'>{room?.name}</h1>
+        <div className='flex flex-col md:flex-row justify-between gap-4'>
+          <div className='w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between mt-8 md:mt-0 items-center'>
+            <h1 className='font-medium text-lg pb-6'>{room?.name}</h1>
             {/* Gambar Thumbnail */}
-            <div className='grid grid-cols-4 gap-2'>
-              {currentImage.length > 0
-                ? currentImage.map((images, index) => (
-                    <img
-                      key={index}
-                      src={images}
-                      alt={`Thumbnail ${index + 1}`}
-                      className='w-full h-full object-cover'
-                    />
-                  ))
-                : null}
-            </div>
+            {currentImage.length > 0
+              ? currentImage.map((images, index) => (
+                  <img
+                    key={index}
+                    src={`http://localhost:8000/${images}`}
+                    alt={`images${index + 1}`}
+                    className='w-3/4 h-3/4 rounded-lg object-cover'
+                  />
+                ))
+              : null}
           </div>
 
           {/* Booking Form */}
