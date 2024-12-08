@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import Navbar from '../components/Layouts/Navbar';
 import Footer from '../components/Layouts/Footer';
 import RoomImages from '../components/Fragments/RoomImages';
+import Adress from '../components/Rooms/Adress';
 import BookingForm from '../components/Rooms/BookingForm';
 import Facilities from '../components/Rooms/Facilities';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -212,7 +213,6 @@ const Room: React.FC = () => {
           <div className='w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between mt-8 md:mt-0 items-center'>
             <h1 className='font-medium text-lg pb-6'>{room?.name}</h1>
 
-            {/* Images */}
             <RoomImages
               images={currentImage}
               currentIndex={currentIndex}
@@ -222,7 +222,6 @@ const Room: React.FC = () => {
             />
           </div>
 
-          {/* Booking Form */}
           <BookingForm
             cost={currentType?.cost}
             availableRooms={availableRooms}
@@ -256,24 +255,8 @@ const Room: React.FC = () => {
           </div>
         </div>
 
-        {/* Facilities */}
         <Facilities facilities={currentType?.facility || []} />
-
-        {/* Maps */}
-        <div className='py-16'>
-          <h2 className='text-4xl font-bold text-primary mb-8'>Alamat</h2>
-          <div className='w-full h-96 overflow-hidden rounded-lg shadow-lg'>
-            <iframe
-              src='https://www.google.com/maps/embed?... '
-              width='100%'
-              height='100%'
-              style={{ border: 0 }}
-              allowFullScreen={true}
-              loading='lazy'
-              title='Google Maps Location'
-            ></iframe>
-          </div>
-        </div>
+        <Adress />
       </div>
       <Footer />
     </>
