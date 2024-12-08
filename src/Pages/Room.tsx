@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Navbar from '../components/Layouts/Navbar';
@@ -7,99 +8,30 @@ import RoomImages from '../components/Rooms/RoomImages';
 import Adress from '../components/Rooms/Adress';
 import BookingForm from '../components/Rooms/BookingForm';
 import Facilities from '../components/Rooms/Facilities';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useFetchRoom } from '../hooks/useFetchRoom';
 import { GoArrowLeft } from 'react-icons/go';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import { FaCalculator } from 'react-icons/fa';
 
 // Interfaces
-interface Facility {
-  name: string;
-}
 interface Images {
   url: string;
 }
+
 interface Room {
   id: string;
   name: string[];
   images: Images[];
   status: string;
 }
-interface RoomType {
-  id: string;
-  name: string;
-  facility: Facility[];
-  description: string;
-  cost: number;
-}
 
 const Room: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const [room, setRoom] = useState<Room | null>(null);
-  const [currentType, setCurrentType] = useState<RoomType | null>(null);
-  const [currentImage, setCurrentImage] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedRoomNumber, setSelectedRoomNumber] = useState('');
-  const [availableRooms, setAvailableRooms] = useState<
-    { id: string; name: string }[]
-  >([]);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchRoom = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch data room by type
-        const response = await axios.get(
-          `http://localhost:8000/room/type/${id}`
-        );
-
-        // Collect first data
-        const roomList = response.data.data;
-        if (roomList.length > 0) {
-          const room = roomList[0];
-          const type = room.type[0];
-
-          // Set data room
-          setRoom({
-            id: room.id,
-            name: room.name,
-            images: room.images || [],
-            status: room.status,
-          });
-
-          // Set data type room
-          setCurrentType({
-            id: type._id,
-            name: type.name,
-            facility: type.facility || [],
-            description: type.description,
-            cost: type.cost,
-          });
-
-          // Set first image
-          const images = roomList.map((room: Room) => room.images[0]?.url);
-          setCurrentImage(images);
-        }
-
-        // Set available rooms
-        setAvailableRooms(
-          roomList.map((room: Room) => ({ id: room.id, name: room.name }))
-        );
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Show data if id is defined
-    if (id) {
-      fetchRoom();
-    }
-  }, [id]);
+  const { room, currentType, availableRooms, currentImage, loading } =
+    useFetchRoom(id || '');
 
   /* Booking Room */
   const handleBooking = async () => {
