@@ -3,21 +3,16 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Navbar from '../components/Layouts/Navbar';
 import Footer from '../components/Layouts/Footer';
+import RoomImages from '../components/Fragments/RoomImages';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
-import {
-  FaCalculator,
-  FaChevronLeft,
-  FaChevronRight,
-  FaCircle,
-  FaRegCircle,
-} from 'react-icons/fa';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import { IoBedOutline } from 'react-icons/io5';
 import { MdOutlineKitchen } from 'react-icons/md';
 import { LiaBathSolid } from 'react-icons/lia';
 import { FaWifi } from 'react-icons/fa6';
 import { TbAirConditioning } from 'react-icons/tb';
+import { FaCalculator } from 'react-icons/fa';
 
 // Interfaces
 interface Facility {
@@ -144,12 +139,10 @@ const Room: React.FC = () => {
       return;
     }
 
-    // const userId = getUserId();
     const roomId = selectedRoomNumber;
     try {
       const response = await axios.post(
         `http://localhost:8000/transaction/callback/${roomId}`,
-        // { userId },
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
@@ -198,21 +191,21 @@ const Room: React.FC = () => {
     );
   }
 
-  // Images selector
+  /* Images selector */
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? currentImage.length - 1 : prevIndex - 1
     );
   };
 
-  // Images selector
+  /* Images selector */
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === currentImage.length - 1 ? 0 : prevIndex + 1
     );
   };
 
-  // Images selector
+  /* Images selector */
   const selectImage = () => {
     setCurrentIndex((index) => index);
   };
@@ -243,47 +236,15 @@ const Room: React.FC = () => {
         <div className='flex flex-col md:flex-row justify-between gap-4'>
           <div className='w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between mt-8 md:mt-0 items-center'>
             <h1 className='font-medium text-lg pb-6'>{room?.name}</h1>
-            {/* Gambar Thumbnail */}
-            {currentImage.length > 0 && (
-              <div className='relative w-full h-80 flex items-center justify-center'>
-                <button
-                  onClick={handlePrevious}
-                  className='absolute left-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
-                >
-                  <FaChevronLeft size={20} />
-                </button>
-                <img
-                  src={`http://localhost:8000/${currentImage[currentIndex]}`}
-                  alt={`images${currentIndex + 1}`}
-                  className='w-3/4 h-full rounded-lg object-cover'
-                />
-                <button
-                  onClick={handleNext}
-                  className='absolute right-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
-                >
-                  <FaChevronRight size={20} />
-                </button>
-              </div>
-            )}
 
-            {/* Indikator Bulan */}
-            {currentImage.length > 0 && (
-              <div className='flex justify-center gap-2 mt-4'>
-                {currentImage.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => selectImage()}
-                    className='focus:outline-none'
-                  >
-                    {index === currentIndex ? (
-                      <FaCircle size={12} />
-                    ) : (
-                      <FaRegCircle size={12} />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* Images */}
+            <RoomImages
+              images={currentImage}
+              currentIndex={currentIndex}
+              onPrevious={handlePrevious}
+              onNext={handleNext}
+              onSelect={selectImage}
+            />
           </div>
 
           {/* Booking Form */}
@@ -344,7 +305,7 @@ const Room: React.FC = () => {
           </div>
         </div>
 
-        {/* Deskripsi */}
+        {/* Description */}
         <div className='py-16'>
           <h2 className='text-4xl font-bold text-primary mb-4'>Deskripsi</h2>
           <p className='mb-4 text-lg'>
@@ -367,6 +328,8 @@ const Room: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* Facilities */}
         <div className='mt-5'>
           <h2 className='text-4xl font-bold text-primary mb-8'>Fasilitas</h2>
           <div className='flex flex-wrap gap-4 justify-start'>
@@ -389,6 +352,8 @@ const Room: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Maps */}
         <div className='py-16'>
           <h2 className='text-4xl font-bold text-primary mb-8'>Alamat</h2>
           <div className='w-full h-96 overflow-hidden rounded-lg shadow-lg'>
