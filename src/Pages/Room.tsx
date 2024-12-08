@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import Navbar from '../components/Layouts/Navbar';
 import Footer from '../components/Layouts/Footer';
 import RoomImages from '../components/Fragments/RoomImages';
+import BookingForm from '../components/Rooms/BookingForm';
 import Facilities from '../components/Rooms/Facilities';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
@@ -222,61 +223,13 @@ const Room: React.FC = () => {
           </div>
 
           {/* Booking Form */}
-          <div className='w-full md:w-1/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between mt-8 md:mt-0'>
-            <div className='space-y-8'>
-              <div className='space-y-3'>
-                <h2 className='font-medium text-2xl'>Pesan Sekarang</h2>
-                <h2 className='font-bold text-2xl text-primary'>
-                  Rp. {currentType?.cost?.toLocaleString('id-ID') || '0'} /
-                  Bulan
-                </h2>
-              </div>
-              <div className='space-y-4'>
-                <label className='block mb-3 font-medium text-lg'>
-                  Pilih Nomor Kamar
-                </label>
-                <div className='relative'>
-                  <select
-                    className='w-full p-3 border rounded-lg appearance-none focus:outline-none focus:ring focus:ring-blue-300'
-                    value={selectedRoomNumber}
-                    onChange={(e) => setSelectedRoomNumber(e.target.value)}
-                  >
-                    {/* Default */}
-                    <option
-                      className='text-yellow-300'
-                      value=''
-                      disabled
-                      hidden
-                    >
-                      Pilih kamar kamu
-                    </option>
-
-                    {/* Room exist */}
-                    {availableRooms.length > 0 ? (
-                      availableRooms.map((room, index) => (
-                        <option key={index} value={room.id}>
-                          {room.name}
-                        </option>
-                      ))
-                    ) : (
-                      <option>Tidak ada kamar tersedia</option>
-                    )}
-                  </select>
-                  <span className='absolute top-1/4 right-4 flex items-center pointer-events-none'>
-                    ▼
-                  </span>
-                </div>
-              </div>
-              <div>
-                <button
-                  onClick={handleBooking}
-                  className='bg-primary text-white w-full py-3 rounded-lg font-bold'
-                >
-                  Pesan
-                </button>
-              </div>
-            </div>
-          </div>
+          <BookingForm
+            cost={currentType?.cost}
+            availableRooms={availableRooms}
+            selectedRoomNumber={selectedRoomNumber}
+            onRoomSelect={setSelectedRoomNumber}
+            onBooking={handleBooking}
+          />
         </div>
 
         {/* Description */}
