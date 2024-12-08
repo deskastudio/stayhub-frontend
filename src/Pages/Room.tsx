@@ -45,6 +45,7 @@ const Room: React.FC = () => {
   const [room, setRoom] = useState<Room | null>(null);
   const [currentType, setCurrentType] = useState<RoomType | null>(null);
   const [currentImage, setCurrentImage] = useState<string[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedRoomNumber, setSelectedRoomNumber] = useState('');
   const [availableRooms, setAvailableRooms] = useState<
     { id: string; name: string }[]
@@ -109,7 +110,6 @@ const Room: React.FC = () => {
 
           // Set first image
           const images = roomList.map((room: Room) => room.images[0]?.url);
-          console.log('images:', images);
           setCurrentImage(images);
         }
 
@@ -198,6 +198,25 @@ const Room: React.FC = () => {
     );
   }
 
+  // Images selector
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? currentImage.length - 1 : prevIndex - 1
+    );
+  };
+
+  // Images selector
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === currentImage.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  // Images selector
+  const selectImage = () => {
+    setCurrentIndex((index) => index);
+  };
+
   return (
     <>
       <Navbar />
@@ -225,16 +244,46 @@ const Room: React.FC = () => {
           <div className='w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between mt-8 md:mt-0 items-center'>
             <h1 className='font-medium text-lg pb-6'>{room?.name}</h1>
             {/* Gambar Thumbnail */}
-            {currentImage.length > 0
-              ? currentImage.map((images, index) => (
-                  <img
+            {currentImage.length > 0 && (
+              <div className='relative w-full h-80 flex items-center justify-center'>
+                <button
+                  onClick={handlePrevious}
+                  className='absolute left-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+                >
+                  <FaChevronLeft size={20} />
+                </button>
+                <img
+                  src={`http://localhost:8000/${currentImage[currentIndex]}`}
+                  alt={`images${currentIndex + 1}`}
+                  className='w-3/4 h-full rounded-lg object-cover'
+                />
+                <button
+                  onClick={handleNext}
+                  className='absolute right-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+                >
+                  <FaChevronRight size={20} />
+                </button>
+              </div>
+            )}
+
+            {/* Indikator Bulan */}
+            {currentImage.length > 0 && (
+              <div className='flex justify-center gap-2 mt-4'>
+                {currentImage.map((_, index) => (
+                  <button
                     key={index}
-                    src={`http://localhost:8000/${images}`}
-                    alt={`images${index + 1}`}
-                    className='w-3/4 h-3/4 rounded-lg object-cover'
-                  />
-                ))
-              : null}
+                    onClick={() => selectImage()}
+                    className='focus:outline-none'
+                  >
+                    {index === currentIndex ? (
+                      <FaCircle size={12} />
+                    ) : (
+                      <FaRegCircle size={12} />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Booking Form */}
