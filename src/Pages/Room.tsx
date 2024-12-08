@@ -4,14 +4,10 @@ import Swal from 'sweetalert2';
 import Navbar from '../components/Layouts/Navbar';
 import Footer from '../components/Layouts/Footer';
 import RoomImages from '../components/Fragments/RoomImages';
+import Facilities from '../components/Rooms/Facilities';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
-import { IoBedOutline } from 'react-icons/io5';
-import { MdOutlineKitchen } from 'react-icons/md';
-import { LiaBathSolid } from 'react-icons/lia';
-import { FaWifi } from 'react-icons/fa6';
-import { TbAirConditioning } from 'react-icons/tb';
 import { FaCalculator } from 'react-icons/fa';
 
 // Interfaces
@@ -47,28 +43,6 @@ const Room: React.FC = () => {
   >([]);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  const getFacilityIcon = (facilityName: string) => {
-    switch (facilityName.toLowerCase()) {
-      case '1 kasur':
-      case '1 bed':
-        return <IoBedOutline />;
-      case 'dapur bersama':
-      case 'kitchen':
-        return <MdOutlineKitchen />;
-      case 'kamar mandi':
-      case 'bathroom':
-        return <LiaBathSolid />;
-      case 'wifi':
-      case 'wifi cepat':
-        return <FaWifi />;
-      case 'air conditioning':
-      case 'ac tersedia':
-        return <TbAirConditioning />;
-      default:
-        return null;
-    }
-  };
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -330,28 +304,7 @@ const Room: React.FC = () => {
         </div>
 
         {/* Facilities */}
-        <div className='mt-5'>
-          <h2 className='text-4xl font-bold text-primary mb-8'>Fasilitas</h2>
-          <div className='flex flex-wrap gap-4 justify-start'>
-            {currentType?.facility?.length ? (
-              currentType.facility.map((facility, index) => (
-                <div
-                  key={index}
-                  className='flex items-center bg-blue-100 px-5 py-2 rounded-xl'
-                >
-                  <i className='text-primary text-3xl mr-2'>
-                    {getFacilityIcon(facility.name)}
-                  </i>
-                  <span className='text-primary font-main'>
-                    {facility.name}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p className='text-center'>Fasilitas tidak tersedia.</p>
-            )}
-          </div>
-        </div>
+        <Facilities facilities={currentType?.facility || []} />
 
         {/* Maps */}
         <div className='py-16'>
