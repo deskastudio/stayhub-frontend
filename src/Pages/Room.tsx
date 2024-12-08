@@ -5,7 +5,13 @@ import Navbar from '../components/Layouts/Navbar';
 import Footer from '../components/Layouts/Footer';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GoArrowLeft } from 'react-icons/go';
-import { FaCalculator } from 'react-icons/fa';
+import {
+  FaCalculator,
+  FaChevronLeft,
+  FaChevronRight,
+  FaCircle,
+  FaRegCircle,
+} from 'react-icons/fa';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import { IoBedOutline } from 'react-icons/io5';
 import { MdOutlineKitchen } from 'react-icons/md';
@@ -39,6 +45,7 @@ const Room: React.FC = () => {
   const [room, setRoom] = useState<Room | null>(null);
   const [currentType, setCurrentType] = useState<RoomType | null>(null);
   const [currentImage, setCurrentImage] = useState<string[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedRoomNumber, setSelectedRoomNumber] = useState('');
   const [availableRooms, setAvailableRooms] = useState<
     { id: string; name: string }[]
@@ -103,7 +110,6 @@ const Room: React.FC = () => {
 
           // Set first image
           const images = roomList.map((room: Room) => room.images[0]?.url);
-          console.log('images:', images);
           setCurrentImage(images);
         }
 
@@ -192,6 +198,25 @@ const Room: React.FC = () => {
     );
   }
 
+  // Images selector
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? currentImage.length - 1 : prevIndex - 1
+    );
+  };
+
+  // Images selector
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === currentImage.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  // Images selector
+  const selectImage = () => {
+    setCurrentIndex((index) => index);
+  };
+
   return (
     <>
       <Navbar />
@@ -215,22 +240,50 @@ const Room: React.FC = () => {
         <p className='text-gray-500 mb-6 font-medium text-lg'>
           Dago Giri, Kabupaten Bandung
         </p>
-        <div className='flex flex-col md:flex-row'>
-          <div className='w-full md:w-2/3 pr-4'>
-            <h1 className='font-medium text-lg'>{room?.name}</h1>
+        <div className='flex flex-col md:flex-row justify-between gap-4'>
+          <div className='w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between mt-8 md:mt-0 items-center'>
+            <h1 className='font-medium text-lg pb-6'>{room?.name}</h1>
             {/* Gambar Thumbnail */}
-            <div className='grid grid-cols-4 gap-2'>
-              {currentImage.length > 0
-                ? currentImage.map((images, index) => (
-                    <img
-                      key={index}
-                      src={images}
-                      alt={`Thumbnail ${index + 1}`}
-                      className='w-full h-full object-cover'
-                    />
-                  ))
-                : null}
-            </div>
+            {currentImage.length > 0 && (
+              <div className='relative w-full h-80 flex items-center justify-center'>
+                <button
+                  onClick={handlePrevious}
+                  className='absolute left-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+                >
+                  <FaChevronLeft size={20} />
+                </button>
+                <img
+                  src={`http://localhost:8000/${currentImage[currentIndex]}`}
+                  alt={`images${currentIndex + 1}`}
+                  className='w-3/4 h-full rounded-lg object-cover'
+                />
+                <button
+                  onClick={handleNext}
+                  className='absolute right-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-200 focus:outline-none'
+                >
+                  <FaChevronRight size={20} />
+                </button>
+              </div>
+            )}
+
+            {/* Indikator Bulan */}
+            {currentImage.length > 0 && (
+              <div className='flex justify-center gap-2 mt-4'>
+                {currentImage.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => selectImage()}
+                    className='focus:outline-none'
+                  >
+                    {index === currentIndex ? (
+                      <FaCircle size={12} />
+                    ) : (
+                      <FaRegCircle size={12} />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Booking Form */}

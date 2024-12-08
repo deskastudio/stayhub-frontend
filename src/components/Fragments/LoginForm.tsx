@@ -1,13 +1,12 @@
-// fragments/LoginForm.tsx
 import React, { useState } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import Button from '../Elements/Button';
 import Image from '../Elements/Image';
 import Input from '../Elements/Input';
 import ForgotPasswordLink from '../Elements/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { getUserId, getUserRole, getUserName } from '../../utils/auth.utils';
-import Swal from 'sweetalert2';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -20,6 +19,7 @@ const LoginForm: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Post data login
       const response = await axios.post('http://localhost:8000/auth/signin', {
         email,
         password,
@@ -31,7 +31,7 @@ const LoginForm: React.FC = () => {
         // Set token in session storage
         sessionStorage.setItem('token', token);
 
-        // Pop-up berhasil login
+        // Alert success
         const name = getUserName();
         Swal.fire({
           icon: 'success',
@@ -47,6 +47,7 @@ const LoginForm: React.FC = () => {
           const roomId = JSON.parse(pendingBooking).roomId;
           const userId = getUserId();
 
+          // Post transaction
           const response = await axios.post(
             `http://localhost:8000/transaction/callback/${roomId}`,
             { userId },
@@ -57,10 +58,10 @@ const LoginForm: React.FC = () => {
             }
           );
 
-          // Remove pending booking
+          // Remove pending booking in local storage
           localStorage.removeItem('_pendingBooking');
 
-          // Check if the response status is 201
+          // Check if the response status is 201 (success)
           if (response.status === 201) {
             // Set midtrans in local storage
             localStorage.setItem('midtrans', JSON.stringify(response.data));
@@ -69,8 +70,6 @@ const LoginForm: React.FC = () => {
             // Redirect to midtrans
             if (midtrans) {
               const midtransRedirect = JSON.parse(midtrans).data.redirect_url;
-
-              // Redirect to midtrans
               window.location.href = midtransRedirect;
             }
             return;
@@ -86,10 +85,9 @@ const LoginForm: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error(error);
       // Error handling for different types of errors
       if (axios.isAxiosError(error) && error.response) {
-        // Jika ada respons error dari server
+        // Error response from the server
         Swal.fire({
           icon: 'error',
           title: 'Login Failed!',
@@ -97,7 +95,7 @@ const LoginForm: React.FC = () => {
         });
       }
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
 
@@ -105,7 +103,7 @@ const LoginForm: React.FC = () => {
     <form onSubmit={handleLogin} className='space-y-4'>
       <div className='text-center mb-4'>
         <Image
-          src='/stayhubLogin.png' // Use relative path
+          src='/stayhubLogin.png'
           alt='Login Image'
           className='w-1/2 mx-auto mb-10'
         />
@@ -113,7 +111,7 @@ const LoginForm: React.FC = () => {
       <div>
         <Input
           label='Email'
-          name='email' // Consistent with label
+          name='email'
           type='text'
           id='email'
           placeholder='Masukkan Email'
