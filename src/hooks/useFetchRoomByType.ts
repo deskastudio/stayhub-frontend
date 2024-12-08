@@ -29,7 +29,7 @@ interface UseFetchRoomResult {
   loading: boolean;
 }
 
-export const useFetchRoom = (id: string): UseFetchRoomResult => {
+export const useFetchRoomByType = (id: string): UseFetchRoomResult => {
   const [room, setRoom] = useState<Room | null>(null);
   const [currentType, setCurrentType] = useState<RoomType | null>(null);
   const [availableRooms, setAvailableRooms] = useState<

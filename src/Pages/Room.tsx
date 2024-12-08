@@ -8,30 +8,18 @@ import RoomImages from '../components/Rooms/RoomImages';
 import Adress from '../components/Rooms/Adress';
 import BookingForm from '../components/Rooms/BookingForm';
 import Facilities from '../components/Rooms/Facilities';
-import { useFetchRoom } from '../hooks/useFetchRoom';
+import { useFetchRoomByType } from '../hooks/useFetchRoomByType';
 import { GoArrowLeft } from 'react-icons/go';
 import { IoChatbubbleEllipses } from 'react-icons/io5';
 import { FaCalculator } from 'react-icons/fa';
-
-// Interfaces
-interface Images {
-  url: string;
-}
-
-interface Room {
-  id: string;
-  name: string[];
-  images: Images[];
-  status: string;
-}
 
 const Room: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedRoomNumber, setSelectedRoomNumber] = useState('');
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { room, currentType, availableRooms, currentImage, loading } =
-    useFetchRoom(id || '');
+    useFetchRoomByType(id || '');
+  const navigate = useNavigate();
 
   /* Booking Room */
   const handleBooking = async () => {
