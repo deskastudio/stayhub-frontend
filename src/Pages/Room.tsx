@@ -3,7 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Navbar from '../components/Layouts/Navbar';
 import Footer from '../components/Layouts/Footer';
-import RoomImages from '../components/Fragments/RoomImages';
+import RoomImages from '../components/Rooms/RoomImages';
 import Adress from '../components/Rooms/Adress';
 import BookingForm from '../components/Rooms/BookingForm';
 import Facilities from '../components/Rooms/Facilities';
