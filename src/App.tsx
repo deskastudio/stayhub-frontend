@@ -26,7 +26,7 @@ import UserTestimoni from './Pages/UserTestimoni';
 // Landing Page
 import LandingPage from './Pages/LandingPage';
 import BookingPage from './Pages/BookingPage';
-import LoginPage from './Pages/LoginPageUser';
+import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import ProtectedRoute from './components/Elements/ProtectRouted';
 import Room from './Pages/Room';
