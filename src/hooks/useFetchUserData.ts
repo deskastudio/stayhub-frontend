@@ -14,36 +14,36 @@ interface User {
 interface UseResult {
   user: User | null;
   loading: boolean;
+  fetchUsers: () => void;
 }
 
 export const useFetchUsers = (): UseResult => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const token = sessionStorage.getItem('token');
+
+  const fetchUsers = async () => {
+    const token = sessionStorage.getItem('token');
+    setLoading(true);
+
+    try {
+      const response = await axios.get('http://localhost:8000/list/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+
+      setUser(response.data.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-
-        const response = await axios.get('http://localhost:8000/list/user', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
-
-        setUser(response.data.data);
-        console.log('Data user:', response.data.data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
-  }, [token]);
+  }, []);
 
-  return { user, loading };
+  return { fetchUsers, user, loading };
 };
