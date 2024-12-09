@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
 import Sidebar from './components/Fragments/Sidebar';
 
@@ -180,9 +175,14 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <UserProvider>
-      <Router>
+      <BrowserRouter
+        future={{
+          v7_relativeSplatPath: true,
+          v7_startTransition: true,
+        }}
+      >
         <AppContent />
-      </Router>
+      </BrowserRouter>
     </UserProvider>
   );
 };
