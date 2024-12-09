@@ -12,13 +12,13 @@ interface User {
 }
 
 interface UseResult {
-  user: User | null;
+  user: User[] | null;
   loading: boolean;
   fetchUsers: () => void;
 }
 
 export const useFetchUsers = (): UseResult => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUsers = async () => {
