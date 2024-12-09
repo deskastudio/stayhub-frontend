@@ -1,9 +1,8 @@
-// fragments/Sidebar.tsx
 import React from 'react';
-import SidebarItem from '../Elements/SidebarItem';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getUserRole } from '../../utils/auth.utils';
+import SidebarItem from '../Elements/SidebarItem';
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
@@ -94,9 +93,9 @@ const Sidebar: React.FC = () => {
       'http://localhost:8000/auth/logout',
       {},
       { withCredentials: true }
-    ); // Lakukan logout di server
+    );
 
-    navigate('/login'); // Redirect ke halaman login
+    navigate('/login');
   };
 
   return (

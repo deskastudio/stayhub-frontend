@@ -3,7 +3,6 @@ import Swal from 'sweetalert2';
 import React, { useState } from 'react';
 import Input from '../Elements/Input';
 import Button from '../Elements/Button';
-import RatingFormModal from './RatingForm';
 import Rating from '../Elements/Rating';
 import { TestimonialData } from '../Elements/TestimonialData';
 import { getRoomId } from '../../utils/auth.utils';
@@ -20,7 +19,6 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
 }) => {
   const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
-  const [isRatingModalOpen, setRatingModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<string>('');
   const token = sessionStorage.getItem('token');
@@ -72,8 +70,8 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
 
         // Refresh halaman setelah delay
         setTimeout(() => {
-          window.location.reload(); // Ini akan menyegarkan halaman setelah 2 detik
-        }, 500); // Delay 2000 ms (2 detik)
+          window.location.reload();
+        }, 500);
       } else if (response.status === 400) {
         Swal.fire({
           icon: 'error',

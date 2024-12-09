@@ -1,11 +1,10 @@
 import React from 'react';
-import AuthLayout from '../components/Layouts/AuthLayout';
 import LoginForm from '../components/Fragments/LoginForm';
 import ImageCarousel from '../components/Fragments/ImageCarousel';
 
 const LoginPage: React.FC = () => {
   return (
-    <AuthLayout>
+    <div className='min-h-screen flex justify-center items-center bg-gray-100'>
       <div className='flex h-screen w-full bg-white'>
         <div className='w-2/3'>
           <ImageCarousel />
@@ -16,7 +15,7 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </AuthLayout>
+    </div>
   );
 };
 
