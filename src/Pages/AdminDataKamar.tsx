@@ -1,4 +1,5 @@
-import ProfileAdmin from '../components/Fragments/ProfileAdmin';
+import SectionHeader from '../components/Elements/SectionHeader';
+import Profile from '../components/Fragments/Profile';
 import TabPilihan from '../components/Fragments/TabPilihan';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahKamar from '../components/Fragments/PopupTambahKamar';
@@ -126,7 +127,7 @@ const AdminDataKamar: React.FC = () => {
       }
     }
   };
-  
+
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
@@ -165,10 +166,9 @@ const AdminDataKamar: React.FC = () => {
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Data Kamar</h1>
-        <ProfileAdmin />
-      </div>
+      <SectionHeader title='Data Kamar'>
+        <Profile />
+      </SectionHeader>
 
       <TabPilihan
         buttons={[

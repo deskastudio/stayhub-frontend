@@ -1,21 +1,19 @@
-// src/components/Dashboard.tsx
 import React from 'react';
 import CardContainerBeranda from '../components/Fragments/CardContainerBeranda';
-import ProfileAdmin from '../components/Fragments/ProfileAdmin';
+import Profile from '../components/Fragments/Profile';
 import StatisticsCard from '../components/Fragments/StatisticsChart';
 import DataTable from '../components/Elements/DataTableBeranda';
 
 const Dashboard: React.FC = () => {
   const data = [1200000, 1800000, 2000000, 1500000, 1600000, 1900000];
   const labels = ['2017', '2018', '2019', '2020', '2021', '2022'];
- 
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
       {/* Header */}
       <div className='flex justify-between items-center mb-8'>
         <h1 className='text-3xl font-bold text-gray-800'>Dashboard</h1>
-        <ProfileAdmin />
+        <Profile />
       </div>
 
       {/* Card Section - Menggunakan grid untuk lebar penuh */}

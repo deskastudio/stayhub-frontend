@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import UserProfil from '../components/Fragments/ProfileUser';
+import SectionHeader from '../components/Elements/SectionHeader';
+import Profile from '../components/Fragments/Profile';
 import Placeholder from '../components/Fragments/Placeholder';
 import TestimoniForm from '../components/Fragments/TestimoniForm';
 import TestimoniEditForm from '../components/Fragments/TestimoniEditForm'; // Import the edit form
@@ -11,8 +12,8 @@ import { getUserId, getRoomId } from '../utils/auth.utils';
 const UserTestimoni: React.FC = () => {
   const [step, setStep] = useState<'empty' | 'form' | 'list' | 'edit'>('empty');
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
-  const [editingTestimonial, setEditingTestimonial] = useState<TestimonialData | null>(null);
-  const pageTitle = 'Testimoni';
+  const [editingTestimonial, setEditingTestimonial] =
+    useState<TestimonialData | null>(null);
 
   // Get data user
   const token = sessionStorage.getItem('token');
@@ -64,7 +65,9 @@ const UserTestimoni: React.FC = () => {
 
   const handleUpdateTestimonial = (updatedTestimonial: TestimonialData) => {
     setTestimonials((prev) =>
-      prev.map((item) => (item.id === updatedTestimonial.id ? updatedTestimonial : item))
+      prev.map((item) =>
+        item.id === updatedTestimonial.id ? updatedTestimonial : item
+      )
     );
     setEditingTestimonial(null);
     setStep('list'); // Go back to the list view
@@ -84,10 +87,10 @@ const UserTestimoni: React.FC = () => {
 
   return (
     <div className='p-8 flex-grow'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold'>{pageTitle}</h1>
-        <UserProfil />
-      </div>
+      <SectionHeader title='Testimoni'>
+        <Profile />
+      </SectionHeader>
+
       <div>
         {step === 'empty' && (
           <Placeholder
@@ -112,8 +115,8 @@ const UserTestimoni: React.FC = () => {
               setEditingTestimonial(null);
               setStep('list');
             }}
-            editingTestimonial={editingTestimonial }
-        />
+            editingTestimonial={editingTestimonial}
+          />
         )}
         {step === 'list' && (
           <div className='space-y-4'>

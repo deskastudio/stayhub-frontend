@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Button from '../components/Elements/Button';
-import ProfileUser from '../components/Fragments/ProfileUser';
+import ProfileUser from '../components/Fragments/Profile';
 import BookingModal from '../components/Fragments/BookingModal';
 import { format, add } from 'date-fns';
 import { id } from 'date-fns/locale';

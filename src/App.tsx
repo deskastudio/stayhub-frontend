@@ -1,12 +1,16 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { UserProvider } from './contexts/UserContext';
 import Sidebar from './components/Fragments/Sidebar';
+
+// Landing Page
+import LandingPage from './Pages/LandingPage';
+import LoginPage from './Pages/LoginPage';
+import RegisterPage from './Pages/RegisterPage';
+import ProtectedRoute from './components/Elements/ProtectRouted';
+import Room from './Pages/Room';
+
+// Admin Pages
 import AdminDashboard from './Pages/AdminDashboard';
 import DataUser from './Pages/AdminDataUser';
 import DataPembayaran from './Pages/AdminDataPembayaran';
@@ -22,14 +26,6 @@ import UserListAjuan from './Pages/UserListAjuan';
 import UserProfil from './Pages/UserProfil';
 import UserPembayaran from './Pages/UserPembayaran';
 import UserTestimoni from './Pages/UserTestimoni';
-
-// Landing Page
-import LandingPage from './Pages/LandingPage';
-import BookingPage from './Pages/BookingPage';
-import LoginPage from './Pages/LoginPage';
-import RegisterPage from './Pages/RegisterPage';
-import ProtectedRoute from './components/Elements/ProtectRouted';
-import Room from './Pages/Room';
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -60,6 +56,8 @@ const AppContent: React.FC = () => {
       <div className='flex-1 p-4'>
         {/* <ScrollToTop /> Uncomment this if you want to scroll to top on route change */}
         <Routes>
+          <Route path='/' element={<LandingPage />} />
+          <Route path='/room/type/:id' element={<Room />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
 
@@ -168,11 +166,6 @@ const AppContent: React.FC = () => {
               </ProtectedRoute>
             }
           />
-
-          <Route path='/' element={<LandingPage />} />
-          <Route path='/room/type/:id' element={<Room />} />
-
-          <Route path='/booking' element={<BookingPage />} />
         </Routes>
       </div>
     </div>
@@ -182,9 +175,14 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <UserProvider>
-      <Router>
+      <BrowserRouter
+        future={{
+          v7_relativeSplatPath: true,
+          v7_startTransition: true,
+        }}
+      >
         <AppContent />
-      </Router>
+      </BrowserRouter>
     </UserProvider>
   );
 };

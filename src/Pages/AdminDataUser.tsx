@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import ProfileAdmin from '../components/Fragments/ProfileAdmin';
+import SectionHeader from '../components/Elements/SectionHeader';
+import Profile from '../components/Fragments/Profile';
 import PopupEditUser from '../components/Fragments/PopupEditUser';
 import Button from '../components/Elements/Button';
 import { useFetchUsers } from '../hooks/useFetchUserData';
@@ -54,10 +55,9 @@ const AdminDataUser: React.FC = () => {
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Penghuni Kost</h1>
-        <ProfileAdmin />
-      </div>
+      <SectionHeader title='Penghuni Kost'>
+        <Profile />
+      </SectionHeader>
 
       <div className='bg-white border border-gray-200 rounded-lg shadow-md p-4 w-full'>
         <table className='w-full'>
