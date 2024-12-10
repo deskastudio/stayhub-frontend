@@ -77,16 +77,6 @@ const Room: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className='container py-20'>
-        <h1 className='text-5xl font-bold font-main text-center text-primary mb-12'>
-          Loading...
-        </h1>
-      </div>
-    );
-  }
-
   /* Images selector */
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
@@ -105,6 +95,16 @@ const Room: React.FC = () => {
   const selectImage = () => {
     setCurrentIndex((index) => index);
   };
+
+  if (loading) {
+    return (
+      <div className='container py-20'>
+        <h1 className='text-5xl font-bold font-main text-center text-primary mb-12'>
+          Loading...
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <>
