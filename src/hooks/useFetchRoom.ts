@@ -45,15 +45,15 @@ export const useFetchRoom = (): UseFetchRoomResult => {
 
       try {
         const response = await axios.get(`http://localhost:8000/room/`);
-        const roomList = response.data.data;
 
-        if (roomList.length > 0) {
-          setRoom(roomList.map((room: Room) => room));
-          setCurrentType(roomList.type);
+        const data = response.data.data;
+        if (data.length > 0) {
+          setRoom(data.map((room: Room) => room));
+          setCurrentType(data.type);
           setAvailableRooms(
-            roomList.map((room: Room) => ({ id: room.id, name: room.name }))
+            data.map((room: Room) => ({ id: room.id, name: room.name }))
           );
-          setCurrentImage(roomList.map((room: Room) => room.images[0]?.url));
+          setCurrentImage(data.map((room: Room) => room.images[0]?.url));
         } else {
           setRoom(null);
           setCurrentType(null);
