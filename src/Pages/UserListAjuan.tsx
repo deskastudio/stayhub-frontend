@@ -1,152 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import UserProfil from '../components/Fragments/ProfileUser';
-import Placeholder from '../components/Fragments/Placeholder';
-import EditAjuanModal from '../components/Fragments/EditAjuanModal';
-import { getUserId } from '../utils/auth.utils';
+import React from 'react';
+// import { useNavigate } from 'react-router-dom';
+import Profile from '../components/Fragments/Profile';
+import SectionHeader from '../components/Elements/SectionHeader';
+// import Placeholder from '../components/Fragments/Placeholder';
+// import EditAjuanModal from '../components/Fragments/EditAjuanModal';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
+import { useFetchComplaint } from '../hooks/useFetchComplaint';
 
-// Menyesuaikan tipe data Ajuan
-export interface Ajuan {
-  perihal: string;
-  status: 'Selesai' | 'Menunggu';
-  tanggal: string;
-  isiAjuan: string;
+interface Complaint {
+  title: string;
+  description: string;
+  status: string;
+  createdAt: string;
 }
 
 const UserListAjuan: React.FC = () => {
-  const pageTitle = 'List Ajuan';
-  const [ajuanList, setAjuanList] = useState<Ajuan[]>([]); // Daftar keluhan
-  const [isModalOpen, setIsModalOpen] = useState(false); // Untuk membuka/tutup modal
-  const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
-  const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah data sedang dimuat
-  const navigate = useNavigate();
-  const token = sessionStorage.getItem('token');
-  const id = getUserId();
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
+  // const navigate = useNavigate();
+  const { complaint, loading } = useFetchComplaint();
+  console.log('complaint:', complaint);
 
-  useEffect(() => {
-    const fetchAjuan = async () => {
-      try {
-        if (!token) {
-          console.error('Token tidak ditemukan');
-          navigate('/login');
-          return;
-        }
+  // const handleAddAjuan = () => {
+  //   navigate('/user-ajuan');
+  // };
 
-        setLoading(true);
-        const response = await axios.get(
-          `http://localhost:8000/complaint/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  // const handleModalClose = () => {
+  //   setIsModalOpen(false);
+  //   setSelectedAjuan(null);
+  // };
 
-        if (response.data.data) {
-          const ajuanData = response.data.data.map((ajuan: any) => ({
-            perihal: ajuan.title,
-            status: ajuan.status,
-            tanggal: ajuan.createdAt.split('T')[0],
-            isiAjuan: ajuan.description,
-          }));
-          setAjuanList(ajuanData);
-        } else {
-          setAjuanList([]); // Set ajuanList kosong jika tidak ada data
-        }
-      } catch (error) {
-        console.error('Error fetching complaints:', error);
-        setAjuanList([]); // Set ajuanList kosong jika terjadi error
-        alert('Gagal mengambil data. Silakan coba lagi.');
-      } finally {
-        setLoading(false); // Setelah data selesai diambil, ubah state loading menjadi false
-      }
-    };
+  // const handleSaveAjuan = (updatedAjuan: Ajuan) => {
+  //   // Update data ajuan
+  //   const updatedAjuanList = ajuanList.map((ajuan) =>
+  //     ajuan.id === updatedAjuan.id ? updatedAjuan : ajuan
+  //   );
+  //   setAjuanList(updatedAjuanList);
+  // };
 
-    fetchAjuan();
-  }, [token, id]);
-
-  const handleAddAjuan = () => {
-    // Navigasi ke halaman user-ajuan untuk menambahkan ajuan
-    navigate('/user-ajuan');
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false); // Menutup modal edit
-    setSelectedAjuan(null); // Reset data ajuan yang sedang diedit
-  };
-
-  const handleSaveAjuan = (updatedAjuan: Ajuan) => {
-    // Update data ajuan
-    const updatedAjuanList = ajuanList.map((ajuan) =>
-      ajuan.id === updatedAjuan.id ? updatedAjuan : ajuan
+  if (loading) {
+    return (
+      <div className='container py-20'>
+        <h1 className='text-5xl font-bold font-main text-center text-primary mb-12'>
+          Loading...
+        </h1>
+      </div>
     );
-    setAjuanList(updatedAjuanList);
-  };
+  }
 
   return (
     <div className='p-8 flex-grow'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold'>{pageTitle}</h1>
-        <UserProfil />
-      </div>
+      <SectionHeader title='List Ajuan'>
+        <Profile />
+      </SectionHeader>
 
       <div>
-        {loading ? (
-          // Menampilkan pesan loading jika data sedang dimuat
-          <div className='text-center py-4 text-xl text-gray-500'>
-            Loading data...
-          </div>
-        ) : ajuanList.length === 0 ? (
-          <Placeholder
-            title='Belum ada ajuan'
-            description='Silakan tambahkan ajuan baru.'
-            buttonText='Tambah Ajuan'
-            onAdd={handleAddAjuan}
-          />
-        ) : (
-          <table className='w-full border-collapse border'>
-            <thead>
-              <tr className='bg-primary-dark text-white'>
-                <th className='px-4 py-2'>Tanggal</th>
-                <th className='px-4 py-2'>Perihal</th>
-                <th className='px-4 py-2'>Isi Ajuan</th>
-                <th className='px-4 py-2'>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ajuanList.map((ajuan) => (
-                <tr key={ajuan.id} className='text-center'>
-                  <td className='px-4 py-2 border'>{ajuan.tanggal}</td>
-                  <td className='px-4 py-2 border'>{ajuan.perihal}</td>
-                  <td className='px-4 py-2 border'>{ajuan.isiAjuan}</td>
-                  <td className='p-4 text-center w-32'>
+        <table className='w-full border-collapse border'>
+          <thead>
+            <tr className='bg-primary-dark text-white'>
+              <th className='px-4 py-2'>Tanggal</th>
+              <th className='px-4 py-2'>Perihal</th>
+              <th className='px-4 py-2'>Isi Ajuan</th>
+              <th className='px-4 py-2'>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {complaint && complaint.length > 0 ? (
+              complaint.map((data: Complaint) => (
+                <tr className='text-center'>
+                  <td className='px-4 py-2 border'>
+                    {data.createdAt &&
+                      format(new Date(data.createdAt), 'dd MMMM yyyy', {
+                        locale: id,
+                      })}
+                  </td>
+                  <td className='px-4 py-2 border'>{data.title}</td>
+                  <td className='px-4 py-2 border'>{data.description}</td>
+                  <td className='px-4 py-2 border'>
                     <span
                       className={`px-2 py-1 rounded text-center w-full inline-block ${
-                        ajuan.status === 'Selesai'
+                        data.status === 'resolved'
                           ? 'bg-green-200 text-green-700'
                           : 'bg-red-200 text-red-700'
                       }`}
                     >
-                      {ajuan.status}
+                      {data.status}
                     </span>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className='text-center py-4'>
+                  Belum ada complaint
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-
-      {/* Modal untuk Edit Ajuan */}
-      {selectedAjuan && (
-        <EditAjuanModal
-          isOpen={isModalOpen}
-          ajuanData={selectedAjuan}
-          onClose={handleModalClose}
-          onSave={handleSaveAjuan}
-        />
-      )}
     </div>
   );
 };

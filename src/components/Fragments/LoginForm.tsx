@@ -1,18 +1,17 @@
-// fragments/LoginForm.tsx
 import React, { useState } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import Button from '../Elements/Button';
 import Image from '../Elements/Image';
 import Input from '../Elements/Input';
 import ForgotPasswordLink from '../Elements/ForgotPassword';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { getUserRole, getUserName } from '../../utils/auth.utils';
-import Swal from 'sweetalert2';
+import { getUserId, getUserRole, getUserName } from '../../utils/auth.utils';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Track loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -20,6 +19,7 @@ const LoginForm: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Post data login
       const response = await axios.post('http://localhost:8000/auth/signin', {
         email,
         password,
@@ -31,45 +31,71 @@ const LoginForm: React.FC = () => {
         // Set token in session storage
         sessionStorage.setItem('token', token);
 
-        // Pop-up berhasil login
+        // Alert success
         const name = getUserName();
         Swal.fire({
           icon: 'success',
-          title: 'Login Successful!',
-          text: `Welcome, ${name}!`,
+          title: 'Berhasil',
+          text: `Halo ${name}!`,
           showConfirmButton: false,
           timer: 2000,
         });
 
-        // Redirect based on role
-        const { role } = getUserRole();
-        if (role === 'admin') {
-          navigate('/beranda'); // Admin dashboard
-        } else {
-          navigate('/user-dashboard'); // User dashboard
+        // Check if there's a pending booking
+        const pendingBooking = localStorage.getItem('_pendingBooking');
+        if (pendingBooking) {
+          const roomId = JSON.parse(pendingBooking).roomId;
+          const userId = getUserId();
+
+          // Post transaction
+          const response = await axios.post(
+            `http://localhost:8000/transaction/callback/${roomId}`,
+            { userId },
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+              },
+            }
+          );
+
+          // Remove pending booking in local storage
+          localStorage.removeItem('_pendingBooking');
+
+          // Check if the response status is 201 (success)
+          if (response.status === 201) {
+            // Set midtrans in local storage
+            localStorage.setItem('midtrans', JSON.stringify(response.data));
+            const midtrans = localStorage.getItem('midtrans');
+
+            // Redirect to midtrans
+            if (midtrans) {
+              const midtransRedirect = JSON.parse(midtrans).data.redirect_url;
+              window.location.href = midtransRedirect;
+            }
+            return;
+          }
+        } else if (pendingBooking === null) {
+          // Redirect based on role
+          const { role } = getUserRole();
+          if (role === 'admin') {
+            navigate('/beranda'); // Admin dashboard
+          } else {
+            navigate('/user-dashboard'); // User dashboard
+          }
         }
       }
     } catch (error) {
-      console.error('Error logging in:', error);
-
       // Error handling for different types of errors
       if (axios.isAxiosError(error) && error.response) {
-        // Jika ada respons error dari server
+        // Error response from the server
         Swal.fire({
           icon: 'error',
           title: 'Login Failed!',
           text: error.response.data.message || 'Invalid email or password.',
         });
-      } else {
-        // Error jaringan atau error lain
-        Swal.fire({
-          icon: 'error',
-          title: 'Network Error!',
-          text: 'Please check your internet connection and try again.',
-        });
       }
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
 
@@ -77,7 +103,7 @@ const LoginForm: React.FC = () => {
     <form onSubmit={handleLogin} className='space-y-4'>
       <div className='text-center mb-4'>
         <Image
-          src='/stayhubLogin.png' // Use relative path
+          src='/stayhubLogin.png'
           alt='Login Image'
           className='w-1/2 mx-auto mb-10'
         />
@@ -85,7 +111,7 @@ const LoginForm: React.FC = () => {
       <div>
         <Input
           label='Email'
-          name='email' // Consistent with label
+          name='email'
           type='text'
           id='email'
           placeholder='Masukkan Email'

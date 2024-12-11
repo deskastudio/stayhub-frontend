@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface FAQItemProps {
   question: string;
@@ -14,20 +14,20 @@ const FAQItem: React.FC<FAQItemProps> = ({
   onClick,
 }) => {
   return (
-    <div className="mb-4">
+    <div className='mb-4'>
       <button
-        className="w-full max-w-[1012px] text-left bg-primary text-white p-4 rounded-xl flex justify-between items-center"
+        className='w-full max-w-[1012px] text-left bg-primary text-white p-4 rounded-xl flex justify-between items-center'
         onClick={onClick}
       >
         {question}
-        <span>{isOpen ? "▲" : "▼"}</span>
+        <span>{isOpen ? '▲' : '▼'}</span>
       </button>
       <div
         className={`w-full max-w-[1012px] bg-default overflow-hidden rounded-b-lg shadow-md transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-[500px] opacity-100 p-4" : "max-h-0 opacity-0 p-0"
+          isOpen ? 'max-h-[500px] opacity-100 p-4' : 'max-h-0 opacity-0 p-0'
         }`}
       >
-        <p className="text-primary font-medium">{answer}</p>
+        {answer}
       </div>
     </div>
   );
