@@ -35,7 +35,7 @@ const Testimonial = () => {
         <h1 className="text-5xl font-bold font-main mx-auto text-center text-primary mb-12 max-w-[530px]">
           Kata Mereka Tentang Stayhub
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard key={index} testimonial={testimonial} />
           ))}
