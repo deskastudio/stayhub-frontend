@@ -15,15 +15,16 @@ import { FaCalculator } from 'react-icons/fa';
 
 const Room: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedRoomNumber, setSelectedRoomNumber] = useState('');
+  const [selectedRoom, setSelectedRoom] = useState('');
+  const [selectedRoomName, setSelectedRoomName] = useState('');
   const { id } = useParams<{ id: string }>();
-  const { room, currentType, availableRooms, currentImage, loading } =
+  const { currentType, availableRooms, currentImage, loading } =
     useFetchRoomByType(id || '');
   const navigate = useNavigate();
 
   /* Booking Room */
   const handleBooking = async () => {
-    if (!selectedRoomNumber) {
+    if (!selectedRoom) {
       // Alert to select room
       Swal.fire({
         icon: 'error',
@@ -35,10 +36,9 @@ const Room: React.FC = () => {
       return;
     }
 
-    const roomId = selectedRoomNumber;
     try {
       const response = await axios.post(
-        `http://localhost:8000/transaction/callback/${roomId}`,
+        `http://localhost:8000/transaction/callback/${selectedRoom}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
@@ -58,7 +58,7 @@ const Room: React.FC = () => {
           localStorage.setItem(
             '_pendingBooking',
             JSON.stringify({
-              roomId,
+              id: selectedRoom,
             })
           );
 
@@ -96,6 +96,17 @@ const Room: React.FC = () => {
     setCurrentIndex((index) => index);
   };
 
+  const handleRoomSelect = (roomId: string) => {
+    const selectedRoom = availableRooms.find((room) => room.id === roomId);
+    if (selectedRoom) {
+      setSelectedRoom(selectedRoom.id);
+      setSelectedRoomName(selectedRoom.name);
+    }
+  };
+
+  // Handle jika kamar yang dipilih tidak ada
+  // const images = selectedRoom ? selectedRoom.images : [];
+
   if (loading) {
     return (
       <div className='container py-20'>
@@ -131,7 +142,9 @@ const Room: React.FC = () => {
         </p>
         <div className='flex flex-col md:flex-row justify-between gap-4'>
           <div className='w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between mt-8 md:mt-0 items-center'>
-            <h1 className='font-medium text-lg pb-6'>{room?.name}</h1>
+            {selectedRoomName && (
+              <h1 className='font-medium text-lg pb-6'>{selectedRoomName}</h1>
+            )}
 
             <RoomImages
               images={currentImage}
@@ -145,8 +158,8 @@ const Room: React.FC = () => {
           <BookingForm
             cost={currentType?.cost}
             availableRooms={availableRooms}
-            selectedRoomNumber={selectedRoomNumber}
-            onRoomSelect={setSelectedRoomNumber}
+            selectedRoom={selectedRoom}
+            onRoomSelect={handleRoomSelect}
             onBooking={handleBooking}
           />
         </div>
