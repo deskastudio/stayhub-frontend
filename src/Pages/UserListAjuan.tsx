@@ -5,7 +5,7 @@ import SectionHeader from '../components/Elements/SectionHeader';
 // import EditAjuanModal from '../components/Fragments/EditAjuanModal';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { useFetchComplaint } from '../hooks/useFetchComplaint';
+// import { useFetchComplaint } from '../hooks/useFetchComplaint';
 
 interface Complaint {
   title: string;
@@ -18,8 +18,8 @@ const UserListAjuan: React.FC = () => {
   // const [isModalOpen, setIsModalOpen] = useState(false);
   // const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
   // const navigate = useNavigate();
-  const { complaint, loading } = useFetchComplaint();
-  console.log('complaint:', complaint);
+  // const { complaint, loading } = useFetchComplaint();
+  // console.log('complaint:', complaint);
 
   // const handleAddAjuan = () => {
   //   navigate('/user-ajuan');
