@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for components/Elements/Button.tsx</title>
+    <title>Code coverage report for components/Elements/ButtonLanding.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">components/Elements</a> Button.tsx</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">components/Elements</a> ButtonLanding.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
@@ -98,9 +98,9 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,23 +109,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,36 +133,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">interface ButtonProps {
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Link } from "react-router-dom";
+&nbsp;
+interface ButtonProps {
+  custom: string;
+  children: React.ReactNode;
   type?: "button" | "submit" | "reset";
   onClick?: () =&gt; void;
-  variant?: "primary" | "secondary" | "disabled" | "plain" | "underlined" | "tertiary" | "deleted" | "detail" | "add";
-  children: React.ReactNode;
-  disabled?: boolean;
+  to?: string;
 }
 &nbsp;
-const Button: React.FC&lt;ButtonProps&gt; = ({ type = "button", onClick, variant = "primary", children}) =&gt; {
-  const baseClass = "py-2 px-4 rounded font-semibold";
-  
-  // Variants with specific styles
-  const variantClass = {
-    primary: "bg-primary text-white hover:bg-primary-dark",
-    secondary: "bg-transparent border border-primary-dark text-[#515151] text-sm",
-    disabled: "bg-gray-300 text-gray-700 cursor-not-allowed",
-    plain: "bg-transparent text-blue-500 border border-blue-500 hover:bg-blue-100",
-    underlined: "bg-transparent text-blue-500 underline hover:text-blue-700 text-primary-dark", // Use underline for text
-    tertiary: "bg-white text-primary-dark hover:text-primary-dark",
-    deleted: "bg-red-800 text-white hover:bg-red-700",
-    detail: "bg-gray-500  hover:bg-gray-400 text-white",
-    add: "bg-primary-dark text-white hover:bg-primary",
-  };
+const Button: React.FC&lt;ButtonProps&gt; = ({
+  custom,
+  children,
+  type = "button",
+  onClick,
+  to
+}) =&gt; {
+  if (to) {
+    return (
+      &lt;Link to={to} className={`px-7 font-semibold font-main rounded-lg ${custom}`}&gt;{children}&lt;/Link&gt;
+    )
+  }
 &nbsp;
-  return (
+<span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;button
       type={type}
-      onClick={variant !== "disabled" ? onClick : undefined} // Disable onClick for disabled button
-      className={`${baseClass} ${variantClass[variant]}`}
-      disabled={variant === "disabled"} // Disable the button when "disabled"
+      onClick={onClick} // Pastikan onClick disertakan di sini
+      className={`px-7 font-semibold font-main rounded-lg ${custom}`}
     &gt;
       {children}
     &lt;/button&gt;
