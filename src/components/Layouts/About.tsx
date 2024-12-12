@@ -1,11 +1,11 @@
 const About: React.FC = () => {
   return (
     <>
-      <div id="about" className="container flex py-[100px] gap-10 justify-between items-center">
+      <div id="about" className="container flex pb-40 md:py-[100px] gap-10 justify-between flex-wrap-reverse md:flex-nowrap md:items-center">
         <div>
           <img src="img-about.png" alt="" />
         </div>
-        <div className="flex flex-col gap-8 w-[700px]">
+        <div className="flex flex-col gap-8 md:w-[600px] lg:w-[700px]">
           <h1 className="text-4xl font-bold font-main leading-normal">
             Tentang <span className="text-secondary">Stayhub</span>
           </h1>
