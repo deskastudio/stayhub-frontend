@@ -3,13 +3,13 @@ import ImageCarousel from '../components/Fragments/ImageCarousel';
 
 const LoginPage: React.FC = () => {
   return (
-    <div className='min-h-screen flex justify-center items-center bg-gray-100'>
-      <div className='flex h-screen w-full bg-white'>
-        <div className='w-2/3'>
+    <div className="min-h-screen flex justify-center items-center bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 h-full w-full bg-white">
+        <div className="">
           <ImageCarousel />
         </div>
-        <div className='w-full flex items-center justify-center'>
-          <div className='w-full max-w-md'>
+        <div className="flex items-center justify-center">
+          <div className="w-full max-w-md px-6">
             <LoginForm />
           </div>
         </div>
