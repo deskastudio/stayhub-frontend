@@ -1,6 +1,6 @@
 // src/pages/AdminTypeKamar.tsx
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahTypeKamar from '../components/Fragments/PopupTambahTypeKamar';

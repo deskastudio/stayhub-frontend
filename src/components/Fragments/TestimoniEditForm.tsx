@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '../Elements/Input';
 import Button from '../Elements/Button';
 import Rating from '../Elements/Rating';

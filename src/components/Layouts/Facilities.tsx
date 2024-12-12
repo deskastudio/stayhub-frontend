@@ -1,4 +1,4 @@
-import React from "react";
+
 import Card from "../Fragments/Card";
 import { FaSignal } from "react-icons/fa";
 import { TbAirConditioning } from "react-icons/tb";

@@ -1,5 +1,5 @@
 // src/components/elements/BarChartElement.tsx
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,

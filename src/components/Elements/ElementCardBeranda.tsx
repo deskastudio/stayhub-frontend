@@ -1,5 +1,4 @@
-// src/components/elements/ElementCard.tsx
-import React from 'react';
+
 
 interface ElementCardProps {
   imageSrc: string;

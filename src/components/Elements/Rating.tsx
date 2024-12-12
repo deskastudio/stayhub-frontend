@@ -1,5 +1,3 @@
-// components/elements/Rating.tsx
-import React from 'react';
 
 interface RatingProps {
   rating: number;
