@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { IoMdStar, IoMdStarOutline } from 'react-icons/io';
 
 interface StarRatingProps {

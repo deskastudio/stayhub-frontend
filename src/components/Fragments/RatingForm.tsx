@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Rating from "../Elements/Rating";
 import Button from "../Elements/Button";
 

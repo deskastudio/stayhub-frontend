@@ -1,4 +1,3 @@
-import React from 'react';
 // import { useNavigate } from 'react-router-dom';
 import Profile from '../components/Fragments/Profile';
 import SectionHeader from '../components/Elements/SectionHeader';

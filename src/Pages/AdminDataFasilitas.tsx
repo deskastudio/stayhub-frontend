@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahFasilitas from '../components/Fragments/PopupTambahFasilitas';

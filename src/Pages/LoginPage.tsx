@@ -1,4 +1,3 @@
-import React from 'react';
 import LoginForm from '../components/Fragments/LoginForm';
 import ImageCarousel from '../components/Fragments/ImageCarousel';
 

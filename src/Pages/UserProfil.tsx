@@ -2,7 +2,7 @@ import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';
 import Button from '../components/Elements/Button';
 import axios from 'axios';
-import React, { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 
 interface User {
   id: number;

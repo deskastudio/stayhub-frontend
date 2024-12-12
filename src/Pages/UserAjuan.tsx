@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from '../components/Elements/Button';
 import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';

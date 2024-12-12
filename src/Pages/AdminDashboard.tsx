@@ -1,4 +1,3 @@
-import React from 'react';
 import CardContainerBeranda from '../components/Fragments/CardContainerBeranda';
 import Profile from '../components/Fragments/Profile';
 import DataTable from '../components/Elements/DataTableBeranda';

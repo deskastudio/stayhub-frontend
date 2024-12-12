@@ -1,4 +1,3 @@
-import React from 'react';
 import AdminLayout from '../components/Layouts/AdminLayout';
 
 const AdminPage: React.FC = () => (
