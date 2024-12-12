@@ -107,7 +107,7 @@ const RegisterForm: React.FC = () => {
     <form onSubmit={handleRegister} method='post' className='space-y-4'>
       <div className='text-center mb-4'>
         <Image
-          src='./public/stayhubLogin.png'
+          src='./public/stayhub-logo2.png'
           alt='Login Image'
           className='w-1/2 mx-auto mb-10'
         />
