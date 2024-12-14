@@ -1,146 +1,125 @@
-
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import ProfileAdmin from '../components/Fragments/ProfileAdmin';
-import TabPilihan from '../components/Fragments/TabPilihan';
-import PopupTambahUser from '../components/Fragments/PopupTambahUser';
-import CustomTable from '../components/Elements/CustomTable';
+import Swal from 'sweetalert2';
+import SectionHeader from '../components/Elements/SectionHeader';
+import Profile from '../components/Fragments/Profile';
+import PopupEditUser from '../components/Fragments/PopupEditUser';
+import Button from '../components/Elements/Button';
+import { useFetchUsers } from '../hooks/useFetchUserData';
 
 interface User {
   id: string;
   fullName: string;
   phone: number;
   email: string;
+  verified: boolean;
   status: string;
   role: string;
 }
 
 const AdminDataUser: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('Member');
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [members, setMembers] = useState<User[]>([]);
-  const [admins, setAdmins] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const { user, fetchUsers } = useFetchUsers();
 
-  // Fetch data user dari backend
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get('http://localhost:8000/list/user', {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
-        withCredentials: true,
-      });
-
-      const users = response.data.data;
-      setMembers(users.filter((user: User) => user.role === 'user'));
-      console.log(users);
-
-      setMembers(users.filter((user: User) => user.role === 'Member'));
-      setAdmins(users.filter((user: User) => user.role === 'Admin'));
-
-    } catch (err) {
-      console.error('Error fetching user data:', err);
-      setError('Gagal mengambil data user.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUserAdded = () => {
+  const handleUserEdited = () => {
     fetchUsers();
-    setIsPopupOpen(false);
+    setIsEditPopupOpen(false);
   };
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus user ini?')) {
       try {
-        await axios.delete(`http://localhost:8000/user/${id}`, {
+        await axios.delete(`http://localhost:8000/delete/user/${id}`, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
           withCredentials: true,
         });
+
+        // Alert success
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: 'Data berhasil dihapus',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+
+        // fetch data user
         fetchUsers();
-        alert('User berhasil dihapus!');
-      } catch (err) {
-        console.error('Error deleting user:', err);
-        setError('Gagal menghapus user.');
+      } catch (error) {
+        console.error('Error deleting user:', error);
       }
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []); // Hanya dipanggil sekali saat komponen pertama kali dimuat
-
-  const columns = ['Nama', 'No Hp', 'Email', 'Status', 'Aksi'];
-
-  const formatTableData = (data: User[]) =>
-    data.map((user) => ({
-      Nama: user.fullName,
-      'No Hp': user.phone,
-      Email: user.email,
-      Status: (
-        <span
-          className={`px-2 py-1 rounded ${
-            user.status === 'Active'
-              ? 'bg-green-200 text-green-700'
-              : 'bg-gray-200 text-gray-700'
-          }`}
-        >
-          {user.status}
-        </span>
-      ),
-      Aksi: (
-        <div className='flex items-center justify-center space-x-2'>
-          <button className='text-yellow-500 hover:text-yellow-700'>
-            <i className='fas fa-edit'></i>
-          </button>
-          <button
-            className='text-red-500 hover:text-red-700'
-            onClick={() => handleDelete(user.id)}
-          >
-            <i className='fas fa-trash'></i>
-          </button>
-        </div>
-      ),
-    }));
-
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Penghuni Kost</h1>
-        <ProfileAdmin />
+      <SectionHeader title='Penghuni Kost'>
+        <Profile />
+      </SectionHeader>
+
+      <div className='bg-white border border-gray-200 rounded-lg shadow-md p-4 w-full'>
+        <table className='w-full'>
+          <thead className='text-center'>
+            <tr className='text-gray-500 text-sm border-b'>
+              <th className='py-2'>Nama</th>
+              <th className='py-2'>Nomor Hp</th>
+              <th className='py-2'>Email</th>
+              <th className='py-2'>Status</th>
+              <th className='py-2'>Aksi</th>
+            </tr>
+          </thead>
+          <tbody className='text-center'>
+            {user?.map((user: User) => (
+              <tr className='text-gray-700'>
+                <td className='py-2'>{user.fullName}</td>
+                <td className='py-2'>{user.phone}</td>
+                <td className='py-2'>{user.email}</td>
+                <td className='py-2'>
+                  <span
+                    className={`px-2 py-1 rounded-full text-sm ${
+                      user.verified === true
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
+                  >
+                    {user.verified === true ? 'Aktif' : 'Belum Verifikasi'}
+                  </span>
+                </td>
+                <td className='py-2 space-x-2'>
+                  {/* Button delete */}
+                  <Button
+                    variant='deleted'
+                    onClick={() => handleDelete(user.id)}
+                  >
+                    Hapus
+                  </Button>
+
+                  {/* Button edit */}
+                  <Button
+                    variant='add'
+                    onClick={() => {
+                      // setCurrentUser(user);
+                      setIsEditPopupOpen(true);
+                    }}
+                  >
+                    Edit
+                  </Button>
+
+                  {/* Popup edit data */}
+                  <PopupEditUser
+                    isOpen={isEditPopupOpen}
+                    onClose={() => setIsEditPopupOpen(false)}
+                    user={user}
+                    onUserEdited={handleUserEdited}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <TabPilihan
-        buttons={[
-          { label: 'Member', variant: 'primary' },
-          { label: 'Admin', variant: 'secondary' },
-        ]}
-        activeTab={activeTab}
-        onTabClick={setActiveTab}
-        onAddButtonClick={() => setIsPopupOpen(true)}
-        addButtonLabel='Tambah User'
-      />
-      <PopupTambahUser
-        isOpen={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
-        onUserAdded={handleUserAdded}
-      />
-      {loading ? (
-        <p>Loading data...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <CustomTable
-          columns={columns}
-          data={formatTableData(activeTab === 'Member' ? members : admins)}
-        />
-      )}
     </div>
   );
 };

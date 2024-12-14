@@ -33,7 +33,7 @@ const Footer = () => {
   return (
     <>
       <div id="contact" className="container py-24">
-        <div className="flex justify-between gap-12 border-t-2 py-10">
+        <div className="flex justify-between gap-12 border-t-2 py-10 flex-wrap">
           <div className="">
             <img
               src="/stayhub-logo2.png"

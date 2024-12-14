@@ -1,4 +1,3 @@
-// BookingModal.tsx
 import React from "react";
 import Button from "../Elements/ButtonLanding";
 import PaymentSuccessModal from "./PaymentSuccessModal";

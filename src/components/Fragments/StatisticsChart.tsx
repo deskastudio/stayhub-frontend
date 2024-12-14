@@ -1,5 +1,4 @@
-// src/components/fragments/StatisticsCard.tsx
-import React from 'react';
+
 import BarChartElement from '../Elements/BarChart';
 
 interface StatisticsCardProps {

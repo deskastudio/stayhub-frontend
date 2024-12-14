@@ -1,12 +1,12 @@
 // src/pages/AdminTypeKamar.tsx
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import CustomTable from "../components/Elements/CustomTable";
-import PopupTambahTypeKamar from "../components/Fragments/PopupTambahTypeKamar";
-import PopupEditTypeKamar from "../components/Fragments/PopupEditTypeKamar";
-import ProfileInfo from "../components/Elements/ProfileInfo";
-import Button from "../components/Elements/Button";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import CustomTable from '../components/Elements/CustomTable';
+import PopupTambahTypeKamar from '../components/Fragments/PopupTambahTypeKamar';
+import PopupEditTypeKamar from '../components/Fragments/PopupEditTypeKamar';
+import ProfileInfo from '../components/Elements/ProfileInfo';
+import Button from '../components/Elements/Button';
 
 interface Fasilitas {
   id: string;
@@ -25,7 +25,7 @@ const AdminTypeKamar: React.FC = () => {
   const [typeKamarData, setTypeKamarData] = useState<TypeKamar[]>([]);
   const [fasilitasData, setFasilitasData] = useState<Fasilitas[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Popup states
   const [isTambahPopupOpen, setIsTambahPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
@@ -37,7 +37,7 @@ const AdminTypeKamar: React.FC = () => {
   const fetchFasilitas = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/facility", {
+      const response = await axios.get('http://localhost:8000/facility', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -48,9 +48,9 @@ const AdminTypeKamar: React.FC = () => {
         nama: item.name,
       }));
       setFasilitasData(fasilitasTransformed);
-      console.log("Data fasilitas berhasil diambil:", fasilitasTransformed);
+      console.log('Data fasilitas berhasil diambil:', fasilitasTransformed);
     } catch (error) {
-      console.error("Error fetching fasilitas data:", error);
+      console.error('Error fetching fasilitas data:', error);
     } finally {
       setLoading(false);
     }
@@ -64,13 +64,13 @@ const AdminTypeKamar: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/type", {
+      const response = await axios.get('http://localhost:8000/type', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
-      console.log("Respons dari backend:", response.data);
+      console.log('Respons dari backend:', response.data);
 
       const transformedData = response.data.data.map((item: any) => ({
         id: item.id,
@@ -82,10 +82,10 @@ const AdminTypeKamar: React.FC = () => {
         deskripsi: item.description,
         harga: item.cost,
       }));
-      console.log("Data yang sudah ditransformasi:", transformedData);
+      console.log('Data yang sudah ditransformasi:', transformedData);
       setTypeKamarData(transformedData);
     } catch (error) {
-      console.error("Error fetching type kamar data:", error);
+      console.error('Error fetching type kamar data:', error);
     } finally {
       setLoading(false);
     }
@@ -104,28 +104,31 @@ const AdminTypeKamar: React.FC = () => {
       cost: data.harga,
     };
 
-    console.log("Payload yang dikirim ke backend:", payload);
+    console.log('Payload yang dikirim ke backend:', payload);
 
     try {
-      await axios.post("http://localhost:8000/type/add", payload, {
+      await axios.post('http://localhost:8000/type/add', payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       });
       fetchData();
-      alert("Tipe kamar berhasil ditambahkan!");
+      alert('Tipe kamar berhasil ditambahkan!');
       setIsTambahPopupOpen(false);
     } catch (error: any) {
-      console.error("Error adding type kamar:", error.response?.data || error.message);
-      alert(error.response?.data.message || "Gagal menambahkan tipe kamar.");
+      console.error(
+        'Error adding type kamar:',
+        error.response?.data || error.message
+      );
+      alert(error.response?.data.message || 'Gagal menambahkan tipe kamar.');
     }
   };
 
   // Handle Edit Type Kamar
   const handleUpdateTypeKamar = async (data: TypeKamar) => {
     if (!data.id) {
-      alert("ID tidak ditemukan.");
+      alert('ID tidak ditemukan.');
       return;
     }
 
@@ -136,7 +139,7 @@ const AdminTypeKamar: React.FC = () => {
       cost: data.harga,
     };
 
-    console.log("Payload yang dikirim untuk update:", payload);
+    console.log('Payload yang dikirim untuk update:', payload);
 
     try {
       await axios.put(`http://localhost:8000/type/update/${data.id}`, payload, {
@@ -146,12 +149,15 @@ const AdminTypeKamar: React.FC = () => {
         withCredentials: true,
       });
       fetchData();
-      alert("Tipe kamar berhasil diperbarui!");
+      alert('Tipe kamar berhasil diperbarui!');
       setIsEditPopupOpen(false);
       setCurrentData(null);
     } catch (error: any) {
-      console.error("Error updating type kamar:", error.response?.data || error.message);
-      alert(error.response?.data.message || "Gagal memperbarui tipe kamar.");
+      console.error(
+        'Error updating type kamar:',
+        error.response?.data || error.message
+      );
+      alert(error.response?.data.message || 'Gagal memperbarui tipe kamar.');
     }
   };
 
@@ -168,7 +174,10 @@ const AdminTypeKamar: React.FC = () => {
         alert('Tipe kamar berhasil dihapus!');
         fetchData();
       } catch (error: any) {
-        console.error('Error deleting type kamar:', error.response?.data || error.message);
+        console.error(
+          'Error deleting type kamar:',
+          error.response?.data || error.message
+        );
         alert(error.response?.data.message || 'Gagal menghapus tipe kamar.');
       }
     }
@@ -180,20 +189,30 @@ const AdminTypeKamar: React.FC = () => {
     setIsEditPopupOpen(true);
   };
 
-  const columns = ['Nama Tipe Kamar', 'Fasilitas', 'Deskripsi', 'Harga', 'Aksi'];
+  const columns = [
+    'Nama Tipe Kamar',
+    'Fasilitas',
+    'Deskripsi',
+    'Harga',
+    'Aksi',
+  ];
 
   const formatTableData = (data: TypeKamar[]) =>
     data.map((item) => ({
       'Nama Tipe Kamar': item.namaTipe,
-      Fasilitas: item.fasilitas.map((f) => f.nama).join(', ') || 'Tidak ada fasilitas',
+      Fasilitas:
+        item.fasilitas.map((f) => f.nama).join(', ') || 'Tidak ada fasilitas',
       Deskripsi: item.deskripsi || 'Tidak ada deskripsi',
       Harga: `Rp ${item.harga.toLocaleString()}`,
       Aksi: (
-        <div className="flex gap-2">
-          <Button variant="primary" onClick={() => handleEditTypeKamar(item)}>
+        <div className='flex gap-2'>
+          <Button variant='primary' onClick={() => handleEditTypeKamar(item)}>
             Edit
           </Button>
-          <Button variant="deleted" onClick={() => handleDeleteTypeKamar(item.id)}>
+          <Button
+            variant='deleted'
+            onClick={() => handleDeleteTypeKamar(item.id)}
+          >
             Hapus
           </Button>
         </div>
@@ -201,14 +220,14 @@ const AdminTypeKamar: React.FC = () => {
     }));
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Data Tipe Kamar</h1>
+    <div className='p-6 bg-gray-100 min-h-screen'>
+      <div className='flex justify-between items-center mb-8'>
+        <h1 className='text-3xl font-bold text-gray-800'>Data Tipe Kamar</h1>
         <ProfileInfo />
       </div>
-      <div className="flex justify-end mb-4">
+      <div className='flex justify-end mb-4'>
         <Button
-          variant="add"
+          variant='add'
           onClick={() => {
             setCurrentData(null);
             setIsTambahPopupOpen(true);

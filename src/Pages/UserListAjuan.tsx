@@ -1,93 +1,104 @@
-import React, { useState } from "react";
-import UserProfil from "../components/Fragments/ProfileUser";
-import Placeholder from "../components/Fragments/Placeholder";
-import PopupFormAjuan from "../components/Fragments/PopupFormAjuan";
+// import { useNavigate } from 'react-router-dom';
+import Profile from '../components/Fragments/Profile';
+import SectionHeader from '../components/Elements/SectionHeader';
+// import Placeholder from '../components/Fragments/Placeholder';
+// import EditAjuanModal from '../components/Fragments/EditAjuanModal';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
+// import { useFetchComplaint } from '../hooks/useFetchComplaint';
 
-interface Ajuan {
-  id: number;
-  perihal: string;
+interface Complaint {
+  title: string;
+  description: string;
   status: string;
-  tanggal: string;
-  aksi: string;
+  createdAt: string;
 }
 
 const UserListAjuan: React.FC = () => {
-  const pageTitle = "List Ajuan";
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
+  // const navigate = useNavigate();
+  // const { complaint, loading } = useFetchComplaint();
+  // console.log('complaint:', complaint);
 
-  const [ajuanList, setAjuanList] = useState<Ajuan[]>([]); // State untuk menyimpan list ajuan
-  const [isPopupOpen, setPopupOpen] = useState(false); // State untuk mengontrol pop-up
+  // const handleAddAjuan = () => {
+  //   navigate('/user-ajuan');
+  // };
 
-  const handleAddAjuan = () => {
-    setPopupOpen(true); // Buka pop-up ketika tombol ditekan
-  };
+  // const handleModalClose = () => {
+  //   setIsModalOpen(false);
+  //   setSelectedAjuan(null);
+  // };
 
-  const handleClosePopup = () => {
-    setPopupOpen(false); // Tutup pop-up
-  };
+  // const handleSaveAjuan = (updatedAjuan: Ajuan) => {
+  //   // Update data ajuan
+  //   const updatedAjuanList = ajuanList.map((ajuan) =>
+  //     ajuan.id === updatedAjuan.id ? updatedAjuan : ajuan
+  //   );
+  //   setAjuanList(updatedAjuanList);
+  // };
 
-  const handleFormSubmit = (formData: Omit<Ajuan, "id">) => {
-    // Tambahkan data baru ke dalam list ajuan dengan menambahkan `id` secara manual
-    const newAjuan: Ajuan = {
-      ...formData,
-      id: ajuanList.length + 1, // Generate id berdasarkan panjang array
-    };
-    setAjuanList((prev) => [...prev, newAjuan]);
-    handleClosePopup(); // Tutup pop-up setelah data ditambahkan
-  };
+  if (loading) {
+    return (
+      <div className='container py-20'>
+        <h1 className='text-5xl font-bold font-main text-center text-primary mb-12'>
+          Loading...
+        </h1>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-8 flex-grow">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{pageTitle}</h1>
-        <UserProfil />
-      </div>
+    <div className='p-8 flex-grow'>
+      <SectionHeader title='List Ajuan'>
+        <Profile />
+      </SectionHeader>
 
       <div>
-        {ajuanList.length === 0 ? (
-          <Placeholder
-            title="Belum ada ajuan"
-            description="Silakan tambahkan ajuan baru."
-            buttonText="Tambah Ajuan"
-            onAdd={handleAddAjuan}
-          />
-        ) : (
-          <div>
-            <table className="w-full border-collapse border">
-              <thead>
-                <tr className="bg-primary-dark text-white">
-                  <th className="px-4 py-2 border">Perihal</th>
-                  <th className="px-4 py-2 border">Status</th>
-                  <th className="px-4 py-2 border">Tanggal</th>
-                  <th className="px-4 py-2 border">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ajuanList.map((ajuan) => (
-                  <tr key={ajuan.id} className="text-center">
-                    <td className="px-4 py-2 border">{ajuan.perihal}</td>
-                    <td
-                      className={`px-4 py-2 border ${
-                        ajuan.status === "Selesai"
-                          ? "text-green-600"
-                          : "text-red-600"
+        <table className='w-full border-collapse border'>
+          <thead>
+            <tr className='bg-primary-dark text-white'>
+              <th className='px-4 py-2'>Tanggal</th>
+              <th className='px-4 py-2'>Perihal</th>
+              <th className='px-4 py-2'>Isi Ajuan</th>
+              <th className='px-4 py-2'>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {complaint && complaint.length > 0 ? (
+              complaint.map((data: Complaint) => (
+                <tr className='text-center'>
+                  <td className='px-4 py-2 border'>
+                    {data.createdAt &&
+                      format(new Date(data.createdAt), 'dd MMMM yyyy', {
+                        locale: id,
+                      })}
+                  </td>
+                  <td className='px-4 py-2 border'>{data.title}</td>
+                  <td className='px-4 py-2 border'>{data.description}</td>
+                  <td className='px-4 py-2 border'>
+                    <span
+                      className={`px-2 py-1 rounded text-center w-full inline-block ${
+                        data.status === 'resolved'
+                          ? 'bg-green-200 text-green-700'
+                          : 'bg-red-200 text-red-700'
                       }`}
                     >
-                      {ajuan.status}
-                    </td>
-                    <td className="px-4 py-2 border">{ajuan.tanggal}</td>
-                    <td className="px-4 py-2 border">{ajuan.aksi}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                      {data.status}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className='text-center py-4'>
+                  Belum ada complaint
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-
-      {/* Pop-up untuk formulir */}
-      {isPopupOpen && (
-        <PopupFormAjuan onClose={handleClosePopup} onSubmit={handleFormSubmit} />
-      )}
     </div>
   );
 };

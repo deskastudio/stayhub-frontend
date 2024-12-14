@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css'; 
@@ -19,7 +19,7 @@ const ImageCarousel: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-full bg-[#F3F9FB]">
+    <div className="flex flex-col justify-center items-center h-full bg-[#F3F9FB] mb-20">
       <Slider {...settings} className="w-full max-w-xl">
         <div className="w-full h-96">
           <Image src="./public/imageCarousel/image1.svg" alt="Image 1" className="w-full h-full" />
@@ -31,7 +31,7 @@ const ImageCarousel: React.FC = () => {
         <Image src="./public/imageCarousel/image3.svg" alt="Image 3" className="w-full h-full" />
         </div>
       </Slider>
-      <div className="text-center mt-8">
+      <div className="text-center mt-8 hidden md:block">
         <h2 className="text-3xl font-bold text-primary-dark">Kosku, Rumahku</h2>
         <p className="text-black py-4 px-20">Menciptakan Platform Pengelolaan Kos yang Memudahkan dan Meningkatkan Kepercayaan!</p>
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useUser } from '../../hooks/useUser';
 
 const SwitchUserType: React.FC = () => {

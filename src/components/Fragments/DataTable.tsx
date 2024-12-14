@@ -1,4 +1,4 @@
-import React from "react";
+
 import AjuanTable from "../Elements/AjuanTable";
 
 const AdminDataAjuan: React.FC = () => {

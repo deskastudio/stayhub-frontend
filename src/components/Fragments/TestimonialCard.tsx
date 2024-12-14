@@ -1,4 +1,4 @@
-import React from "react";
+
 import StarRating from "../Elements/StarRating";
 
 interface Testimonial {

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 
 interface RoomCardProps {
@@ -60,4 +60,5 @@ const RoomCard: React.FC<RoomCardProps> = ({
     </div>
   );
 };
+
 export default RoomCard;

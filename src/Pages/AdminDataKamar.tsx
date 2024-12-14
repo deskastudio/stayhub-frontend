@@ -1,14 +1,14 @@
-// src/pages/AdminDataKamar.tsx
-
-import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
-import ProfileAdmin from '../components/Fragments/ProfileAdmin';
+import SectionHeader from '../components/Elements/SectionHeader';
+import Profile from '../components/Fragments/Profile';
 import TabPilihan from '../components/Fragments/TabPilihan';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahKamar from '../components/Fragments/PopupTambahKamar';
 import PopupEditKamar from '../components/Fragments/PopupEditKamar';
 import Button from '../components/Elements/Button';
+import { useEffect, useState, useCallback } from 'react';
+import axios from 'axios';
 
+// Interface data room
 interface Room {
   id: string;
   name: string;
@@ -20,6 +20,7 @@ interface Room {
   images: { url: string; filename: string }[];
 }
 
+// Interface data type kamar
 interface TypeKamar {
   id: string;
   name: string;
@@ -29,7 +30,7 @@ interface TypeKamar {
 }
 
 const AdminDataKamar: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('all'); // Initialize with 'all' for All tab
+  const [activeTab, setActiveTab] = useState<string>('all');
   const [roomData, setRoomData] = useState<Room[]>([]);
   const [typeKamarData, setTypeKamarData] = useState<TypeKamar[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,56 +41,60 @@ const AdminDataKamar: React.FC = () => {
   const token = sessionStorage.getItem('token');
 
   const fetchData = useCallback(async () => {
+    if (!token) {
+      alert('Unauthorized!');
+      return;
+    }
+
     try {
       setLoading(true);
-
       const [roomResponse, typeKamarResponse] = await Promise.all([
-        axios.get("http://localhost:8000/room", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        axios.get('http://localhost:8000/room', {
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
-        axios.get("http://localhost:8000/type", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        axios.get('http://localhost:8000/type', {
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
       ]);
 
-      const formattedRooms = roomResponse.data.data.map((room: any) => ({
+      const formattedRooms = roomResponse.data.data.map((room: Room) => ({
         id: room.id,
         name: room.name,
-        type: room.type || { id: "unknown", name: "Unknown" }, // Provide default type if missing
-        status: room.status || 'Tersedia',
-        images: room.images || [],
+        type: room.type[0],
+        status: room.status,
+        images: room.images,
       }));
 
-      const formattedTypeKamar = typeKamarResponse.data.data.map((type: any) => ({
-        id: type.id,
-        name: type.name,
-        facility: type.facility.map((fasilitas: any) => ({ name: fasilitas.name })),
-        description: type.description,
-        cost: type.cost,
-      }));
+      const formattedTypeKamar = typeKamarResponse.data.data.map(
+        (type: any) => ({
+          id: type.id,
 
-      console.log("Formatted Rooms:", formattedRooms);
-      console.log("Formatted Type Kamar:", formattedTypeKamar);
+          name: type.name,
+
+          facility: type.facility.map((fasilitas: any) => ({
+            name: fasilitas.name,
+          })),
+
+          description: type.description,
+
+          cost: type.cost,
+        })
+      );
 
       setRoomData(formattedRooms);
       setTypeKamarData(formattedTypeKamar);
 
-      // If activeTab is 'all', do nothing
-      // Otherwise, ensure activeTab is valid
+      // Ensure activeTab is valid
       if (activeTab !== 'all') {
-        const isValidTab = formattedTypeKamar.some(type => type.id === activeTab);
-        if (!isValidTab && formattedTypeKamar.length > 0) {
-          setActiveTab(formattedTypeKamar[0].id);
-          console.log(`Active tab was invalid. Resetting to first type: ${formattedTypeKamar[0].id}`);
+        const isValidTab = formattedTypeKamar.some(
+          (room) => room.type === activeTab
+        );
+        if (!isValidTab) {
+          setActiveTab('all'); // Reset to 'all' if the current tab is invalid
         }
       }
-
     } catch (error) {
       console.error('Error fetching data:', error);
       alert('Gagal memuat data.');
@@ -102,44 +107,39 @@ const AdminDataKamar: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
+  const filteredRooms =
+    activeTab === 'all'
+      ? roomData
+      : roomData.filter((room) => room.type.id === activeTab);
+
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
       try {
         await axios.delete(`http://localhost:8000/room/delete/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
         fetchData();
         alert('Kamar berhasil dihapus!');
-      } catch (error: any) {
+      } catch (error) {
         console.error('Error deleting room:', error);
         alert(error.response?.data?.message || 'Gagal menghapus kamar.');
       }
     }
   };
 
-  const filteredRooms = activeTab === 'all'
-    ? roomData
-    : roomData.filter((room) => room.type?.id === activeTab);
-
-  console.log(`Active Tab: ${activeTab}`);
-  console.log(`Filtered Rooms:`, filteredRooms);
-
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
-
   const formatTableData = (data: Room[]) =>
     data.map((room) => ({
-      "Nama Kamar": room.name,
-      "Tipe Kamar": room.type.name,
-      Status: room.status === "Tersedia" ? "Tersedia" : "Tidak Tersedia",
+      'Nama Kamar': room.name,
+      'Tipe Kamar': room.type?.name,
+      Status: room.status === 'available' ? 'Tersedia' : 'Tidak Tersedia',
       Gambar: (
         <div className='flex gap-2'>
           {room.images.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:8000/${image.url}`} // Ensure URL aligns with static serving
+              src={`http://localhost:8000/${image.url}`}
               alt={`Room ${room.name}`}
               className='w-10 h-10 object-cover rounded'
             />
@@ -166,10 +166,9 @@ const AdminDataKamar: React.FC = () => {
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Data Kamar</h1>
-        <ProfileAdmin />
-      </div>
+      <SectionHeader title='Data Kamar'>
+        <Profile />
+      </SectionHeader>
 
       <TabPilihan
         buttons={[
@@ -178,7 +177,7 @@ const AdminDataKamar: React.FC = () => {
             label: type.name,
             value: type.id,
             variant: 'secondary',
-          }))
+          })),
         ]}
         activeTab={activeTab}
         onTabClick={setActiveTab}

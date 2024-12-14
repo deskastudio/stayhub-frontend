@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "../Elements/Button";
-import { DataItem } from "./AjuanTable";
+import { Ajuan } from "./AjuanTable";
+
 
 interface AjuanBalasModalProps {
-  data: DataItem;
+  data: Ajuan;
   onClose: () => void;
   onSubmit: (tanggapan: string) => void;
 }
@@ -15,6 +16,15 @@ const AjuanBalasModal: React.FC<AjuanBalasModalProps> = ({ data, onClose, onSubm
   const handleTanggapanChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTanggapan(e.target.value);
   };
+
+  // Fungsi untuk memeriksa dan memformat tanggal
+  // const formatTanggal = (tanggal: string) => {
+  //   const dateObj = new Date(tanggal);
+  //   if (isNaN(dateObj.getTime())) {
+  //     return ""; // Jika tidak valid, kembalikan string kosong
+  //   }
+  //   return format(dateObj, "dd/MM/yyyy"); // Memformat tanggal
+  // };
 
   // Fungsi untuk menangani pengiriman tanggapan
   const handleSubmit = () => {
@@ -30,22 +40,22 @@ const AjuanBalasModal: React.FC<AjuanBalasModalProps> = ({ data, onClose, onSubm
         <button className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-3xl mr-2" onClick={onClose}>
           &times;
         </button>
-        <h2 className="text-xl font-bold mb-6 mt-4">Balas Ajuan</h2>
+        <h2 className="text-xl font-bold  mt-4">Balas Ajuan</h2>
         <form className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div>
+            {/* <div>
               <label className="block text-gray-700 font-medium mb-1">Nama Lengkap</label>
-              <input type="text" value={data.nama} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
-            </div>
-            <div>
+              <input type="text" value={data.user?.fullName} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div> */}
+            {/* <div>
               <label className="block text-gray-700 font-medium mb-1">No Kamar</label>
-              <input type="text" value={data.noKamar} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
-            </div>
+              <input type="text" value={data.room?.name} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+            </div> */}
           </div>
 
           <div>
             <label className="block text-gray-700 font-medium mb-1">Isi Ajuan</label>
-            <textarea value={data.isiAjuan} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" rows={4} />
+            <textarea value={data.description} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" rows={4} />
           </div>
 
           <div>

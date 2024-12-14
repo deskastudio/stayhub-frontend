@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import ProfileAdmin from '../components/Fragments/ProfileAdmin';
+import { useState, useEffect } from 'react';
+import SectionHeader from '../components/Elements/SectionHeader';
+import Profile from '../components/Fragments/Profile';
 import FilterButton from '../components/Elements/FilterButton';
 import PrintButton from '../components/Elements/PrintButton';
 import Pagination from '../components/Elements/Pagination';
@@ -85,10 +86,9 @@ const AdminDataPembayaran: React.FC = () => {
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
-      <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold text-gray-800'>Data Pembayaran</h1>
-        <ProfileAdmin />
-      </div>
+      <SectionHeader title='Data Pembayaran'>
+        <Profile />
+      </SectionHeader>
 
       {/* Card Payment */}
       <div className='mb-6'>

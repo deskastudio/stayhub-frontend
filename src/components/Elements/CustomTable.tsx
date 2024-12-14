@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface CustomTableProps<T> {
   columns: string[]; // Nama kolom tabel
