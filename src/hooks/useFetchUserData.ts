@@ -1,24 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
-interface User {
-  id: string;
-  fullName: string;
-  phone: number;
-  email: string;
-  verified: boolean;
-  status: string;
-  role: string;
-}
+import { IUser } from '../interfaces/models/UserInterface';
 
 interface UseResult {
-  user: User[] | null;
+  user: IUser[] | null;
   loading: boolean;
   fetchUsers: () => void;
 }
 
 export const useFetchUsers = (): UseResult => {
-  const [user, setUser] = useState<User[] | null>(null);
+  const [user, setUser] = useState<IUser[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUsers = async () => {
