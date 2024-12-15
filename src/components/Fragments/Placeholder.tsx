@@ -1,5 +1,5 @@
-import React from "react";
-import Button from "../Elements/Button";
+import React from 'react';
+import Button from '../Elements/Button';
 
 interface PlaceholderProps {
   title?: string;
@@ -9,18 +9,18 @@ interface PlaceholderProps {
 }
 
 const Placeholder: React.FC<PlaceholderProps> = ({
-  title = "Belum ada data",
-  description = "Silakan tambahkan data baru.",
-  buttonText = "Tambah Data",
+  title = 'Belum ada data',
+  description = 'Silakan tambahkan data baru.',
+  buttonText = 'Tambah Data',
   onAdd,
 }) => {
   return (
-    <div className="text-start">
-      <Button variant="add" onClick={onAdd}>
+    <div className='text-start'>
+      <Button variant='add' onClick={onAdd}>
         {buttonText}
       </Button>
-      <div className="bg-white rounded shadow my-10">
-        <p className="bg-primary-dark font-bold text-xl text-white px-4 py-10">
+      <div className='bg-white rounded shadow my-10'>
+        <p className='bg-primary-dark font-bold text-xl text-white px-4 py-10'>
           {title}
         </p>
         <p
@@ -28,7 +28,7 @@ const Placeholder: React.FC<PlaceholderProps> = ({
             e.preventDefault();
             onAdd();
           }}
-          className="text-primary-dark font-bold text-left px-4 py-4 rounded transition cursor-pointer"
+          className='text-primary-dark font-bold text-left px-4 py-4 rounded transition cursor-pointer'
         >
           {description}
         </p>
