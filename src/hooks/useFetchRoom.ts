@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-interface Room {
+// Interface
+interface Transaction {
+  status: string;
+}
+
+interface Facility {
   id: string;
   name: string;
-  images: { url: string }[];
-  type: RoomType[];
-  updatedAt: string;
 }
 
 interface RoomType {
@@ -17,13 +19,17 @@ interface RoomType {
   facility: Facility[];
 }
 
-interface Facility {
+interface Room {
   id: string;
   name: string;
+  images: { url: string }[];
+  type: RoomType[];
+  updatedAt: string;
+  transaction: Transaction[];
 }
 
 interface UseFetchRoomResult {
-  room: Room | null;
+  room: Room[] | null;
   currentType: RoomType | null;
   availableRooms: { id: string; name: string }[];
   currentImage: string[];
@@ -31,7 +37,7 @@ interface UseFetchRoomResult {
 }
 
 export const useFetchRoom = (): UseFetchRoomResult => {
-  const [room, setRoom] = useState<Room | null>(null);
+  const [room, setRoom] = useState<Room[] | null>([]);
   const [currentType, setCurrentType] = useState<RoomType | null>(null);
   const [availableRooms, setAvailableRooms] = useState<
     { id: string; name: string }[]
@@ -44,16 +50,16 @@ export const useFetchRoom = (): UseFetchRoomResult => {
       setLoading(true);
 
       try {
-        const response = await axios.get(`http://localhost:8000/room/`);
-        const roomList = response.data.data;
+        const response = await axios.get('http://localhost:8000/room');
 
-        if (roomList.length > 0) {
-          setRoom(roomList.map((room: Room) => room));
-          setCurrentType(roomList.type);
+        const data = response.data.data;
+        if (data.length > 0) {
+          setRoom(data.map((room: Room) => room));
+          setCurrentType(data.type);
           setAvailableRooms(
-            roomList.map((room: Room) => ({ id: room.id, name: room.name }))
+            data.map((room: Room) => ({ id: room.id, name: room.name }))
           );
-          setCurrentImage(roomList.map((room: Room) => room.images[0]?.url));
+          setCurrentImage(data.map((room: Room) => room.images[0]?.url));
         } else {
           setRoom(null);
           setCurrentType(null);

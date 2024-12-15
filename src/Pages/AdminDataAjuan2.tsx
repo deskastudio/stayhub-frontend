@@ -6,8 +6,7 @@ import Pagination from '../components/Elements/Pagination';
 import AjuanTable from '../components/Fragments/AjuanTable';
 import data from '../json/dataAjuan.json';
 import { DataItem } from '../components/Fragments/AjuanTable';
-import SectionHeader from '../components/Elements/SectionHeader';
-import Profile from '../components/Fragments/Profile';
+import ProfileAdmin from '../components/Fragments/ProfileAdmin';
 
 const AdminDataAjuan = () => {
   const [ajuanData, setAjuanData] = useState<DataItem[]>([]);
@@ -17,6 +16,7 @@ const AdminDataAjuan = () => {
   const itemsPerPage = 5; // Jumlah item per halaman
   const [activePage, setActivePage] = useState<number>(1); // Halaman aktif
   const [filterStatus, setFilterStatus] = useState<string>('Semua'); // Filter status
+  const pageTitle = 'Data Ajuan';
 
   // Menangani data ajuan dari JSON file
   useEffect(() => {
@@ -47,9 +47,10 @@ const AdminDataAjuan = () => {
 
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
-      <SectionHeader title='Data Ajuan'>
-        <Profile />
-      </SectionHeader>
+      <div className='flex justify-between items-center mb-8'>
+        <h1 className='text-3xl font-bold text-gray-800'>{pageTitle}</h1>
+        <ProfileAdmin />
+      </div>
 
       <div className='flex justify-between items-center mb-4'>
         <div className='flex space-x-4'>

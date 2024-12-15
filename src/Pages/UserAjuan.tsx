@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Button from '../components/Elements/Button';
-import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';
 import AjuanModal from '../components/Fragments/AjuanModal';
 import { useNavigate } from 'react-router-dom';
@@ -29,9 +28,13 @@ const UserAjuan: React.FC = () => {
 
   return (
     <div className='p-8 flex-grow'>
-      <SectionHeader title='Ajukan Keluhan'>
+      {/* Header */}
+      <div className='flex justify-between items-start mb-6'>
+        <div className='flex flex-col gap-3'>
+          <h1 className='text-2xl font-bold'>Ajukan Keluhan</h1>
+        </div>
         <Profile />
-      </SectionHeader>
+      </div>
 
       {/* Tombol untuk membuka modal */}
       <div className='mb-10'>
