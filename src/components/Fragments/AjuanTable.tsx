@@ -118,7 +118,6 @@ const AjuanTable: React.FC = () => {
                 <th className='p-4 text-center'>Tanggal</th>
                 <th className='p-4 text-center'>Perihal</th>
                 <th className='p-4 text-center'>Status</th>
-                <th className='p-4 text-center'>Gambar</th>
                 <th className='p-4 text-center'>Aksi</th>
               </tr>
             </thead>
@@ -140,7 +139,6 @@ const AjuanTable: React.FC = () => {
                       {ajuan.status}
                     </span>
                   </td>
-                  <td className='p-4 text-center'>Gambar blm bisa</td>
                   <td className='p-4 text-center space-x-2'>
                     <Button
                       variant='detail'

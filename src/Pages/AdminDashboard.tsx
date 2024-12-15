@@ -4,7 +4,6 @@ import Profile from '../components/Fragments/Profile';
 import DataTable from '../components/Elements/DataTableBeranda';
 
 const Dashboard: React.FC = () => {
-
   return (
     <div className='p-6 bg-gray-100 min-h-screen'>
       {/* Header */}
