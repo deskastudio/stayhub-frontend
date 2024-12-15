@@ -23,11 +23,6 @@ const Sidebar: React.FC = () => {
             iconSrc: '/icon/user-icon.svg',
           },
           {
-            label: 'Data Pembayaran',
-            href: '/data-pembayaran',
-            iconSrc: '/icon/pembayaran-icon.svg',
-          },
-          {
             label: 'Data Fasilitas',
             href: '/data-fasilitas',
             iconSrc: '/icon/fasilitas-icon.svg',
