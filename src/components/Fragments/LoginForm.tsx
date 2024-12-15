@@ -44,7 +44,7 @@ const LoginForm: React.FC = () => {
         // Check if there's a pending booking
         const pendingBooking = localStorage.getItem('_pendingBooking');
         if (pendingBooking) {
-          const roomId = JSON.parse(pendingBooking).roomId;
+          const roomId = JSON.parse(pendingBooking).id;
           const userId = getUserId();
 
           // Post transaction

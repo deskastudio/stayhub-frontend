@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 interface Room {
   id: string;
@@ -46,15 +46,15 @@ export const useFetchRoomByType = (id: string): UseFetchRoomResult => {
         const response = await axios.get(
           `http://localhost:8000/room/type/${id}`
         );
-        const roomList = response.data.data;
 
-        if (roomList.length > 0) {
-          setRoom(roomList[0]);
-          setCurrentType(roomList[0].type[0]);
+        const data = response.data.data;
+        if (data.length > 0) {
+          setRoom(data[0]);
+          setCurrentType(data[0].type[0]);
           setAvailableRooms(
-            roomList.map((room: Room) => ({ id: room.id, name: room.name }))
+            data.map((room: Room) => ({ id: room.id, name: room.name }))
           );
-          setCurrentImage(roomList.map((room: Room) => room.images[0]?.url));
+          setCurrentImage(data.map((room: Room) => room.images[0]?.url));
         } else {
           setRoom(null);
           setCurrentType(null);
