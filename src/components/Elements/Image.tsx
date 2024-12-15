@@ -1,4 +1,3 @@
-// elements/Image.tsx
 import React from 'react';
 
 interface ImageProps {

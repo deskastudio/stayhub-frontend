@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from 'react';
 
 interface PaginationProps {
   totalItems: number; // Total item
@@ -7,7 +7,12 @@ interface PaginationProps {
   setActivePage: Dispatch<SetStateAction<number>>; // Fungsi untuk mengatur halaman aktif
 }
 
-const Pagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, activePage, setActivePage }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  totalItems,
+  itemsPerPage,
+  activePage,
+  setActivePage,
+}) => {
   // Hitung total halaman
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -17,15 +22,15 @@ const Pagination: React.FC<PaginationProps> = ({ totalItems, itemsPerPage, activ
   };
 
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex space-x-1 mb-2">
+    <div className='flex justify-between items-center'>
+      <div className='flex space-x-1 mb-2'>
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
             className={`w-10 px-3 py-2 rounded transition duration-200 ${
               activePage === index + 1
-                ? "bg-primary border text-white" // Ubah teks menjadi putih saat aktif
-                : "bg-white border border-black text-black"
+                ? 'bg-primary border text-white' // Ubah teks menjadi putih saat aktif
+                : 'bg-white border border-black text-black'
             }`}
             onClick={() => handlePageClick(index + 1)} // Mengatur halaman aktif saat diklik
           >

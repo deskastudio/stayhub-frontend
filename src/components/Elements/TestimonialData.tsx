@@ -1,4 +1,3 @@
-// TestimonialData.ts
 export interface TestimonialData {
   id: string;
   roomType: string;
