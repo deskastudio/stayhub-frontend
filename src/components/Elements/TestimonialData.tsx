@@ -1,7 +1,8 @@
 export interface TestimonialData {
   id: string;
-  roomType: string;
-  roomNumber: string;
+  room: string;
+  type: string;
+  name: string;
   comment: string;
   rating: number;
 }
