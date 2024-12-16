@@ -11,7 +11,8 @@ interface User {
   fullName: string;
 }
 
-interface Room{
+interface Room {
+  id: string;
   name: string;
 }
 

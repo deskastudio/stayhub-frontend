@@ -216,6 +216,8 @@ const AjuanTable: React.FC = () => {
           ajuan={selectedForEdit}
           onClose={closeModal}
           onStatusUpdate={handleStatusUpdate}
+          createdAt={''}
+          updatedAt={''}
         />
       )}
     </div>
