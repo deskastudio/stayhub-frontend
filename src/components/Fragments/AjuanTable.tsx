@@ -4,24 +4,19 @@ import axios from 'axios';
 import DetailModal from './AjuanDetailModal';
 import BalasModal from './AjuanBalasModal';
 import EditStatusModal from './EditStatusModal';
-
-export interface Ajuan {
-  id: number;
-  title: string;
-  status: string;
-  createdAt: string;
-  description: string;
-  response: string;
-  user: { fullName: string };
-  room: { name: string };
-}
+import { IRoomComplaint } from '../../interfaces/models/RoomComplaintInterfaces';
 
 const AjuanTable: React.FC = () => {
-  const [ajuanList, setAjuanList] = useState<Ajuan[]>([]);
+  const [ajuanList, setAjuanList] = useState<IRoomComplaint[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null);
-  const [selectedForEdit, setSelectedForEdit] = useState<Ajuan | null>(null);
-  const [selectedForBalas, setSelectedForBalas] = useState<Ajuan | null>(null);
+  const [selectedAjuan, setSelectedAjuan] = useState<IRoomComplaint | null>(
+    null
+  );
+  const [selectedForEdit, setSelectedForEdit] = useState<IRoomComplaint | null>(
+    null
+  );
+  const [selectedForBalas, setSelectedForBalas] =
+    useState<IRoomComplaint | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
   const [itemsPerPage] = useState(5); // Jumlah item per halaman
@@ -53,26 +48,26 @@ const AjuanTable: React.FC = () => {
     fetchAjuanList();
   }, [token]);
 
-  const handleDetailClick = (ajuan: Ajuan) => {
+  const handleDetailClick = (ajuan: IRoomComplaint) => {
     setSelectedAjuan(ajuan);
   };
 
-  const handleBalasClick = (ajuan: Ajuan) => {
+  const handleBalasClick = (ajuan: IRoomComplaint) => {
     setSelectedForBalas(ajuan);
   };
 
-  const handleEditClick = (ajuan: Ajuan) => {
+  const handleEditClick = (ajuan: IRoomComplaint) => {
     setSelectedForEdit(ajuan);
   };
 
-  const handleStatusUpdate = (id: number, updatedStatus: string) => {
+  const handleStatusUpdate = (id: string, updatedStatus: string) => {
     setAjuanList((prevList) =>
       prevList.map((item) =>
         item.id === id ? { ...item, status: updatedStatus } : item
       )
     );
   };
-  const handleResponseUpdate = (id: number, updatedResponse: string) => {
+  const handleResponseUpdate = (id: string, updatedResponse: string) => {
     setAjuanList((prevList) =>
       prevList.map((item) =>
         item.id === id ? { ...item, response: updatedResponse } : item

@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Ajuan } from './AjuanTable';
+// import { Ajuan } from './AjuanTable';
 import Button from '../Elements/Button';
 import { useNavigate } from 'react-router-dom';
+import { IRoomComplaint } from '../../interfaces/models/RoomComplaintInterfaces';
 
 interface EditStatusModalProps {
   isOpen: boolean;
-  ajuan: Ajuan;
+  ajuan: IRoomComplaint;
   onClose: () => void;
-  onStatusUpdate: (id: number, status: string) => void;
+  onStatusUpdate: (id: string, status: string) => void;
 }
 
 const EditStatusModal: React.FC<EditStatusModalProps> = ({

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Button from '../Elements/Button';
-import { Ajuan } from './AjuanTable';
+// import { Ajuan } from './AjuanTable';
 import { useNavigate } from 'react-router-dom';
+import { IRoomComplaint } from '../../interfaces/models/RoomComplaintInterfaces';
 
 interface AjuanBalasModalProps {
-  ajuan: Ajuan;
+  ajuan: IRoomComplaint;
   onClose: () => void;
-  onResponseUpdate: (id: number, response: string) => void;
+  onResponseUpdate: (id: string, response: string) => void;
 }
 
 const AjuanBalasModal: React.FC<AjuanBalasModalProps> = ({
