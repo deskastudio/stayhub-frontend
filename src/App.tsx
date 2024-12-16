@@ -30,7 +30,7 @@ const AppContent: React.FC = () => {
   const location = useLocation();
 
   const routesWithSidebar = [
-    '/beranda',
+    '/admin-dashboard',
     '/data-user',
     '/data-pembayaran',
     '/data-fasilitas',
@@ -59,7 +59,7 @@ const AppContent: React.FC = () => {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route
-            path='/beranda'
+            path='/admin-dashboard'
             element={
               <ProtectedRoute role='admin'>
                 <AdminDashboard />
