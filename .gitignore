@@ -28,3 +28,4 @@ dist-ssr
 
 # Coverage Testing Directory
 coverage
+.vercel
