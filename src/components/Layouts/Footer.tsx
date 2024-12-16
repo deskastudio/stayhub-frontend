@@ -48,7 +48,7 @@ const Footer = () => {
           </div>
           <div className=''>
             <h3 className='text-secondary font-bold mb-4 font-main text-lg'>
-              Stayhub
+              StayHub
             </h3>
             <ul className='text-gray-700 font-medium space-y-3'>
               {ListMenu.map((item) => {
@@ -81,7 +81,7 @@ const Footer = () => {
                   <IoCall />
                 </i>
               </div>
-              <p>+6285156567246</p>
+              <p>+620123456789</p>
             </div>
             <div className='flex gap-4 items-center'>
               <div>
@@ -89,7 +89,7 @@ const Footer = () => {
                   <MdEmail />
                 </i>
               </div>
-              <p>stayhub@gmail.com</p>
+              <a href='mailto:stayhub@zohomail.com'>stayhub@zohomail.com</a>
             </div>
           </div>
           <div className=''>
@@ -126,7 +126,7 @@ const Footer = () => {
         </div>
         <div className='mx-auto px-4 mt-8 text-center'>
           <p className='text-secondary font-main'>
-            Copyright© 2024 | Stayhub Crew
+            Copyright © {new Date().getFullYear()} | Stayhub Team
           </p>
         </div>
       </div>

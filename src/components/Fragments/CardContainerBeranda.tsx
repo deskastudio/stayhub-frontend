@@ -18,13 +18,25 @@ interface Transaction {
   cost: number;
 }
 
-const Card: React.FC<CardProps> = ({ title, count, icon }) => (
-  <div className='flex flex-col items-start p-4 border border-gray-200 rounded-lg shadow-md bg-white w-full'>
-    <img src={icon} alt={title} className='w-8 h-8 mb-2' />
-    <div className='text-gray-600 text-sm font-medium'>{title}</div>
-    <div className='text-gray-900 text-2xl font-semibold'>{count}</div>
-  </div>
-);
+const Card: React.FC<CardProps> = ({ title, count, icon }) => {
+  const isIncome = title === 'Total Pendapatan';
+  const formattedCount = isIncome
+    ? new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+      }).format(count)
+    : count;
+
+  return (
+    <div className='flex flex-col items-start p-4 border border-gray-200 rounded-lg shadow-md bg-white w-full'>
+      <img src={icon} alt={title} className='w-8 h-8 mb-2' />
+      <div className='text-gray-600 text-sm font-medium'>{title}</div>
+      <div className='text-gray-900 text-2xl font-semibold'>
+        {formattedCount}
+      </div>
+    </div>
+  );
+};
 
 const CardContainerBeranda: React.FC = () => {
   const [totalUsers, setTotalUsers] = useState<number>(0);
@@ -107,37 +119,38 @@ const CardContainerBeranda: React.FC = () => {
 
     fetchData();
   }, [token]);
+
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
       <Card
         title='Total Penghuni'
         count={totalUsers}
-        icon='../public/icon/totalPenghuni_icon.svg'
+        icon='/icon/totalPenghuni_icon.svg'
       />
       <Card
         title='Total Kamar'
         count={totalRooms}
-        icon='../public/icon/totalKamar_icon.svg'
+        icon='/icon/totalKamar_icon.svg'
       />
       <Card
         title='Total Fasilitas'
         count={totalFacilities}
-        icon='../public/icon/totalKamar_icon.svg'
+        icon='/icon/totalKamar_icon.svg'
       />
       <Card
         title='Total Pendapatan'
         count={income}
-        icon='../public/icon/totalKamar_icon.svg'
+        icon='/icon/totalKamar_icon.svg'
       />
       <Card
         title='Total Belum Bayar'
         count={totalNotPaid}
-        icon='../public/icon/totalKamar_icon.svg'
+        icon='/icon/totalKamar_icon.svg'
       />
       <Card
         title='Total Sudah Bayar'
         count={totalPaid}
-        icon='../public/icon/totalKamar_icon.svg'
+        icon='/icon/totalKamar_icon.svg'
       />
     </div>
   );
