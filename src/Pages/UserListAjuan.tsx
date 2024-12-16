@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Profile from '../components/Fragments/Profile';
 import Placeholder from '../components/Fragments/Placeholder';
-import EditAjuanModal from '../components/Fragments/EditStatusModal';
 import { getUserId } from '../utils/auth.utils';
 
 // Menyesuaikan tipe data Ajuan
@@ -13,7 +12,7 @@ interface User {
 }
 
 export interface Ajuan {
-  id: number;
+  id: string;
   user: User;
   room: { name: string };
   title: string;
@@ -23,19 +22,17 @@ export interface Ajuan {
   tanggal: string;
   isiAjuan: string;
   balasan: string;
-  createdAt: string;
   response: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const UserListAjuan: React.FC = () => {
-  const pageTitle = 'List Ajuan';
-  const [ajuanList, setAjuanList] = useState<Ajuan[]>([]); // Daftar keluhan
-  const [isModalOpen, setIsModalOpen] = useState(false); // Untuk membuka/tutup modal
-  const [selectedAjuan, setSelectedAjuan] = useState<Ajuan | null>(null); // Ajuan yang dipilih untuk diedit
-  const [loading, setLoading] = useState(true); // State untuk menunjukkan apakah data sedang dimuat
-  const navigate = useNavigate(); // Hook untuk navigasi
-  const token = sessionStorage.getItem('token'); // Mendapatkan token dari sessionStorage
-  const id = getUserId(); // Mendapatkan ID user dari token
+  const [ajuanList, setAjuanList] = useState<Ajuan[]>([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem('token');
+  const id = getUserId();
 
   useEffect(() => {
     const fetchAjuan = async () => {
@@ -58,6 +55,8 @@ const UserListAjuan: React.FC = () => {
 
         if (response.data.data) {
           const ajuanData = response.data.data.map((ajuan: Ajuan) => ({
+            ...ajuan,
+            id: ajuan.id.toString(), // Konversi id ke string
             perihal: ajuan.title,
             status: ajuan.status,
             tanggal: ajuan.createdAt.split('T')[0],
@@ -84,23 +83,10 @@ const UserListAjuan: React.FC = () => {
     navigate('/user-ajuan');
   };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false); // Menutup modal edit
-    setSelectedAjuan(null); // Reset data ajuan yang sedang diedit
-  };
-
-  const handleSaveAjuan = (updatedAjuan: Ajuan) => {
-    // Update data ajuan
-    const updatedAjuanList = ajuanList.map((ajuan) =>
-      ajuan.id === updatedAjuan.id ? updatedAjuan : ajuan
-    );
-    setAjuanList(updatedAjuanList);
-  };
-
   return (
     <div className='p-8 flex-grow'>
       <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold'>{pageTitle}</h1>
+        <h1 className='text-2xl font-bold'>List Ajuan</h1>
         <Profile />
       </div>
 
@@ -152,16 +138,6 @@ const UserListAjuan: React.FC = () => {
           </table>
         )}
       </div>
-
-      {/* Modal untuk Edit Ajuan */}
-      {selectedAjuan && (
-        <EditAjuanModal
-          isOpen={isModalOpen}
-          ajuan={selectedAjuan}
-          onClose={handleModalClose}
-          onSave={handleSaveAjuan}
-        />
-      )}
     </div>
   );
 };

@@ -8,6 +8,8 @@ import { IRoomComplaint } from '../../interfaces/models/RoomComplaintInterfaces'
 interface EditStatusModalProps {
   isOpen: boolean;
   ajuan: IRoomComplaint;
+  createdAt: string;
+  updatedAt: string;
   onClose: () => void;
   onStatusUpdate: (id: string, status: string) => void;
 }
