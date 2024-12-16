@@ -217,6 +217,7 @@ const AjuanTable: React.FC = () => {
       )}
       {selectedForEdit && (
         <EditStatusModal
+          isOpen={true}
           ajuan={selectedForEdit}
           onClose={closeModal}
           onStatusUpdate={handleStatusUpdate}

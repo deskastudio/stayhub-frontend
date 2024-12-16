@@ -9,12 +9,13 @@ import { getUserId } from '../utils/auth.utils';
 // Menyesuaikan tipe data Ajuan
 interface User {
   id: string;
+  fullName: string;
 }
 
 export interface Ajuan {
-  id: string;
+  id: number;
   user: User;
-  room: string;
+  room: { name: string };
   title: string;
   description: string;
   perihal: string;
@@ -156,7 +157,7 @@ const UserListAjuan: React.FC = () => {
       {selectedAjuan && (
         <EditAjuanModal
           isOpen={isModalOpen}
-          ajuanData={selectedAjuan}
+          ajuan={selectedAjuan}
           onClose={handleModalClose}
           onSave={handleSaveAjuan}
         />
