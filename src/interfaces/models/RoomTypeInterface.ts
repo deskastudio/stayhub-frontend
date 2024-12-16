@@ -6,6 +6,6 @@ export interface IRoomType {
   facility: IRoomFacility[];
   description: string;
   cost: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }

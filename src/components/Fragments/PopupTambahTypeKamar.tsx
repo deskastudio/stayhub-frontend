@@ -1,25 +1,14 @@
 import { useState, useEffect } from 'react';
 import Button from '../Elements/Button';
-
-interface Fasilitas {
-  id: string;
-  nama: string;
-}
-
-interface TypeKamar {
-  id?: string;
-  namaTipe: string;
-  fasilitas: Fasilitas[];
-  deskripsi: string;
-  harga: number;
-}
+import { IRoomType } from '../../interfaces/models/RoomTypeInterface';
+import { IRoomFacility } from '../../interfaces/models/RoomFacilityInterface';
 
 interface PopupTambahTypeKamarProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: TypeKamar) => void;
-  currentData: TypeKamar | null;
-  fasilitasData: Fasilitas[]; // Data fasilitas yang tersedia
+  onSubmit: (data: IRoomType) => void;
+  currentData: IRoomType | null;
+  fasilitasData: IRoomFacility[];
 }
 
 const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
@@ -37,10 +26,10 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
   // Set data awal saat popup dibuka
   useEffect(() => {
     if (currentData) {
-      setNamaTipe(currentData.namaTipe);
-      setFasilitas(currentData.fasilitas.map((item) => item.id)); // Gunakan ID fasilitas
-      setDeskripsi(currentData.deskripsi);
-      setHarga(currentData.harga);
+      setNamaTipe(currentData.name);
+      setFasilitas(currentData.facility.map((item) => item.id)); // Gunakan ID fasilitas
+      setDeskripsi(currentData.description);
+      setHarga(currentData.cost);
     } else {
       setNamaTipe('');
       setFasilitas([]);
@@ -66,105 +55,114 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
       return;
     }
 
+    if (!currentData?.id) {
+      alert('ID tipe kamar tidak ditemukan!');
+      return;
+    }
+
     onSubmit({
       id: currentData?.id,
-      namaTipe,
-      fasilitas: fasilitas.map((id) => ({
-        id,
-        nama: fasilitasData.find((item) => item.id === id)?.nama || '',
-      })), // Kirim ID dan nama fasilitas
-      deskripsi,
-      harga,
+      name: namaTipe,
+      facility: fasilitas.map((id) => {
+        const fasilitasItem = fasilitasData.find((item) => item.id === id);
+        return {
+          id,
+          name: fasilitasItem?.name || '',
+          createdAt: fasilitasItem?.createdAt || '',
+          updatedAt: fasilitasItem?.updatedAt || '',
+        };
+      }),
+      description: deskripsi,
+      cost: harga,
+      createdAt: currentData.createdAt,
+      updatedAt: currentData.updatedAt,
     });
+
+    onClose(); // Close the popup after submission
   };
 
-  useEffect(() => {
-    console.log(
-      'Data fasilitas diterima di PopupTambahTypeKamar:',
-      fasilitasData
-    );
-  }, [fasilitasData]);
-
-  if (!isOpen) return null;
-
+  // Return the JSX for the component
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-      <div className='bg-white p-6 rounded-lg shadow-lg w-1/3'>
-        <div className='flex justify-between items-center mb-4'>
-          <h2 className='text-2xl font-bold'>
-            {currentData ? 'Edit' : 'Tambah'} Tipe Kamar
-          </h2>
-          <Button variant='plain' onClick={onClose}>
-            ×
-          </Button>
-        </div>
-        <form onSubmit={handleSubmit}>
-          {/* Nama Tipe Kamar */}
-          <div className='mb-4'>
-            <label className='block font-bold mb-2'>Nama Tipe Kamar</label>
-            <input
-              type='text'
-              value={namaTipe}
-              onChange={(e) => setNamaTipe(e.target.value)}
-              className='w-full px-3 py-2 border rounded-lg'
-            />
-          </div>
-
-          {/* Fasilitas */}
-          <div className='mb-4'>
-            <label className='block font-bold mb-2'>Fasilitas</label>
-            <div className='flex flex-wrap gap-2'>
-              {fasilitasData && fasilitasData.length > 0 ? (
-                fasilitasData.map((fasilitasItem) => (
-                  <Button
-                    key={fasilitasItem.id}
-                    variant={
-                      fasilitas.includes(fasilitasItem.id)
-                        ? 'primary'
-                        : 'secondary'
-                    }
-                    onClick={() => toggleFasilitas(fasilitasItem.id)}
-                  >
-                    {fasilitasItem.nama}{' '}
-                    {/* Gunakan `nama` untuk menampilkan */}
-                  </Button>
-                ))
-              ) : (
-                <p>Fasilitas tidak ditemukan.</p>
-              )}
+    <>
+      {isOpen && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+          <div className='bg-white p-6 rounded-lg shadow-lg w-1/3'>
+            <div className='flex justify-between items-center mb-4'>
+              <h2 className='text-2xl font-bold'>
+                {currentData ? 'Edit' : 'Tambah'} Tipe Kamar
+              </h2>
+              <Button variant='plain' onClick={onClose}>
+                ×
+              </Button>
             </div>
-          </div>
+            <form onSubmit={handleSubmit}>
+              {/* Nama Tipe Kamar */}
+              <div className='mb-4'>
+                <label className='block font-bold mb-2'>Nama Tipe Kamar</label>
+                <input
+                  type='text'
+                  value={namaTipe}
+                  onChange={(e) => setNamaTipe(e.target.value)}
+                  className='w-full px-3 py-2 border rounded-lg'
+                />
+              </div>
 
-          {/* Deskripsi */}
-          <div className='mb-4'>
-            <label className='block font-bold mb-2'>Deskripsi</label>
-            <textarea
-              value={deskripsi}
-              onChange={(e) => setDeskripsi(e.target.value)}
-              className='w-full px-3 py-2 border rounded-lg'
-            />
-          </div>
+              {/* Fasilitas */}
+              <div className='mb-4'>
+                <label className='block font-bold mb-2'>Fasilitas</label>
+                <div className='flex flex-wrap gap-2'>
+                  {fasilitasData && fasilitasData.length > 0 ? (
+                    fasilitasData.map((fasilitasItem) => (
+                      <Button
+                        key={fasilitasItem.id}
+                        variant={
+                          fasilitas.includes(fasilitasItem.id)
+                            ? 'primary'
+                            : 'secondary'
+                        }
+                        onClick={() => toggleFasilitas(fasilitasItem.id)}
+                      >
+                        {fasilitasItem.name}
+                      </Button>
+                    ))
+                  ) : (
+                    <p>Fasilitas tidak ditemukan.</p>
+                  )}
+                </div>
+              </div>
 
-          {/* Harga */}
-          <div className='mb-4'>
-            <label className='block font-bold mb-2'>Harga</label>
-            <input
-              type='number'
-              value={harga}
-              onChange={(e) => setHarga(Number(e.target.value))}
-              className='w-full px-3 py-2 border rounded-lg'
-            />
-          </div>
+              {/* Deskripsi */}
+              <div className='mb-4'>
+                <label className='block font-bold mb-2'>Deskripsi</label>
+                <textarea
+                  value={deskripsi}
+                  onChange={(e) => setDeskripsi(e.target.value)}
+                  className='w-full px-3 py-2 border rounded-lg'
+                />
+              </div>
 
-          {/* Tombol Aksi */}
-          <div className='flex justify-end'>
-            <Button type='submit' variant='primary'>
-              {currentData ? 'Update' : 'Tambah'}
-            </Button>
+              {/* Harga */}
+              <div className='mb-4'>
+                <label className='block font-bold mb-2'>Harga</label>
+                <input
+                  type='number'
+                  value={harga}
+                  onChange={(e) => setHarga(Number(e.target.value))}
+                  className='w-full px-3 py-2 border rounded-lg'
+                />
+              </div>
+
+              {/* Tombol Aksi */}
+              <div className='flex justify-end'>
+                <Button type='submit' variant='primary'>
+                  {currentData ? 'Update' : 'Tambah'}
+                </Button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
