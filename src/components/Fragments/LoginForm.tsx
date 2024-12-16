@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Button from '../Elements/Button';
@@ -13,6 +13,10 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.history.replaceState({}, document.title, '/login');
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
