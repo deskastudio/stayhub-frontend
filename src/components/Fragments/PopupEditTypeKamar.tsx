@@ -1,25 +1,14 @@
 import { useState, useEffect, FormEvent } from 'react';
 import Button from '../Elements/Button';
-
-interface Fasilitas {
-  id: string;
-  nama: string;
-}
-
-interface TypeKamar {
-  id?: string;
-  namaTipe: string;
-  fasilitas: Fasilitas[];
-  deskripsi: string;
-  harga: number;
-}
+import { IRoomType } from '../../interfaces/models/RoomTypeInterface';
+import { IRoomFacility } from '../../interfaces/models/RoomFacilityInterface';
 
 interface PopupEditTypeKamarProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: TypeKamar) => void;
-  currentData: TypeKamar | null;
-  fasilitasData: Fasilitas[];
+  onSubmit: (data: IRoomType) => void;
+  currentData: IRoomType | null;
+  fasilitasData: IRoomFacility[];
 }
 
 const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
@@ -36,10 +25,10 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
 
   useEffect(() => {
     if (currentData) {
-      setNamaTipe(currentData.namaTipe);
-      setFasilitas(currentData.fasilitas.map((item) => item.nama));
-      setDeskripsi(currentData.deskripsi);
-      setHarga(currentData.harga);
+      setNamaTipe(currentData.name);
+      setFasilitas(currentData.facility.map((item) => item.name));
+      setDeskripsi(currentData.description);
+      setHarga(currentData.cost);
     } else {
       setNamaTipe('');
       setFasilitas([]);
@@ -64,12 +53,14 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
     }
 
     // Update only the fields that have changed
-    const updatedData: TypeKamar = {
+    const updatedData: IRoomType = {
       id: currentData.id,
-      namaTipe: currentData.namaTipe, // Keep the old 'namaTipe' if it was not changed
-      fasilitas: fasilitasData.filter((f) => fasilitas.includes(f.nama)),
-      deskripsi: deskripsi || currentData.deskripsi, // Update deskripsi only if it's changed
-      harga: harga || currentData.harga, // Update harga only if it's changed
+      name: namaTipe,
+      facility: fasilitasData.filter((f) => fasilitas.includes(f.name)),
+      description: deskripsi || currentData.description,
+      cost: harga || currentData.cost,
+      createdAt: '',
+      updatedAt: '',
     };
 
     onSubmit(updatedData);
@@ -104,13 +95,13 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
                 <Button
                   key={fasilitasItem.id}
                   variant={
-                    fasilitas.includes(fasilitasItem.nama)
+                    fasilitas.includes(fasilitasItem.name)
                       ? 'primary'
                       : 'secondary'
                   }
-                  onClick={() => toggleFasilitas(fasilitasItem.nama)}
+                  onClick={() => toggleFasilitas(fasilitasItem.name)}
                 >
-                  {fasilitasItem.nama}
+                  {fasilitasItem.name}
                 </Button>
               ))}
             </div>
