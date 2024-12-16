@@ -26,7 +26,7 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
     isiAjuan: '',
   });
   // const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // State untuk menyimpan file
-  const [rooms, setRooms] = useState([]); // Untuk menyimpan daftar kamar
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -70,12 +70,18 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
       return;
     }
 
+    const selectedRoom = rooms.find((room) => room.id === roomId); // Temukan objek Room
+    if (!selectedRoom) {
+      alert('Kamar tidak ditemukan!');
+      return;
+    }
+
     const formDataToSubmit = new FormData();
-    formDataToSubmit.append('user', id); // Menambahkan user ID
-    formDataToSubmit.append('room', roomId); // Menambahkan ID kamar
-    formDataToSubmit.append('title', perihal); // Menambahkan judul pengajuan
-    formDataToSubmit.append('description', isiAjuan); // Menambahkan deskripsi pengajuan
-    formDataToSubmit.append('status', 'menunggu'); // Status default
+    formDataToSubmit.append('user', id);
+    formDataToSubmit.append('room', selectedRoom.id);
+    formDataToSubmit.append('title', perihal);
+    formDataToSubmit.append('description', isiAjuan);
+    formDataToSubmit.append('status', 'menunggu');
 
     try {
       setLoading(true);
@@ -93,7 +99,7 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
         alert('Ajuan berhasil dikirim!');
         onSubmit({
           user: id,
-          room: roomId,
+          room: selectedRoom,
           title: perihal,
           description: isiAjuan,
           status: 'menunggu',
@@ -102,6 +108,7 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
           isiAjuan: '',
           balasan: '',
           createdAt: '',
+          updatedAt: '',
           response: '',
         });
         setFormData({

@@ -13,7 +13,6 @@ interface User {
 
 interface Room {
   id: string;
-  name: string;
 }
 
 export interface Ajuan {
