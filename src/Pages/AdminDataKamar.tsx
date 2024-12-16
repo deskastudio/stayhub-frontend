@@ -7,36 +7,18 @@ import PopupEditKamar from '../components/Fragments/PopupEditKamar';
 import Button from '../components/Elements/Button';
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-
-// Interface data room
-interface Room {
-  id: string;
-  name: string;
-  type: {
-    id: string;
-    name: string;
-  };
-  status: string;
-  images: { url: string; filename: string }[];
-}
-
-// Interface data type kamar
-interface TypeKamar {
-  id: string;
-  name: string;
-  facility: { name: string }[];
-  description: string;
-  cost: number;
-}
+import { IRoomFacility } from '../interfaces/models/RoomFacilityInterface';
+import { IRoomType } from '../interfaces/models/RoomTypeInterface';
+import { IRoom } from '../interfaces/models/RoomInterface';
 
 const AdminDataKamar: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('all');
-  const [roomData, setRoomData] = useState<Room[]>([]);
-  const [typeKamarData, setTypeKamarData] = useState<TypeKamar[]>([]);
+  const [roomData, setRoomData] = useState<IRoom[]>([]);
+  const [typeKamarData, setTypeKamarData] = useState<IRoomType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState<boolean>(false);
-  const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
+  const [currentRoom, setCurrentRoom] = useState<IRoom | null>(null);
 
   const token = sessionStorage.getItem('token');
 
@@ -59,23 +41,23 @@ const AdminDataKamar: React.FC = () => {
         }),
       ]);
 
-      const formattedRooms = roomResponse.data.data.map((room: Room) => ({
+      const formattedRooms = roomResponse.data.data.map((room: IRoom) => ({
         id: room.id,
         name: room.name,
-        type: room.type[0],
+        type: room.type,
         status: room.status,
         images: room.images,
       }));
 
       const formattedTypeKamar = typeKamarResponse.data.data.map(
-        (type: any) => ({
+        (type: IRoomType) => ({
           id: type.id,
 
           name: type.name,
 
-          facility: type.facility.map((fasilitas: any) => ({
+          facility: type.facility.map((fasilitas: IRoomFacility) => ({
             name: fasilitas.name,
-          })),
+          })) as IRoomFacility[],
 
           description: type.description,
 
@@ -89,10 +71,10 @@ const AdminDataKamar: React.FC = () => {
       // Ensure activeTab is valid
       if (activeTab !== 'all') {
         const isValidTab = formattedTypeKamar.some(
-          (room) => room.type === activeTab
+          (type: IRoomType) => type.name === activeTab
         );
         if (!isValidTab) {
-          setActiveTab('all'); // Reset to 'all' if the current tab is invalid
+          setActiveTab('all');
         }
       }
     } catch (error) {
@@ -110,7 +92,7 @@ const AdminDataKamar: React.FC = () => {
   const filteredRooms =
     activeTab === 'all'
       ? roomData
-      : roomData.filter((room) => room.type.id === activeTab);
+      : roomData.filter((room) => room.type[0].id === activeTab);
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
@@ -123,16 +105,15 @@ const AdminDataKamar: React.FC = () => {
         alert('Kamar berhasil dihapus!');
       } catch (error) {
         console.error('Error deleting room:', error);
-        alert(error.response?.data?.message || 'Gagal menghapus kamar.');
       }
     }
   };
 
   const roomColumns = ['Nama Kamar', 'Tipe Kamar', 'Status', 'Gambar', 'Aksi'];
-  const formatTableData = (data: Room[]) =>
+  const formatTableData = (data: IRoom[]) =>
     data.map((room) => ({
       'Nama Kamar': room.name,
-      'Tipe Kamar': room.type?.name,
+      'Tipe Kamar': room.type[0].name,
       Status: room.status === 'available' ? 'Tersedia' : 'Tidak Tersedia',
       Gambar: (
         <div className='flex gap-2'>
@@ -176,7 +157,7 @@ const AdminDataKamar: React.FC = () => {
           ...typeKamarData.map((type) => ({
             label: type.name,
             value: type.id,
-            variant: 'secondary',
+            variant: 'secondary' as const,
           })),
         ]}
         activeTab={activeTab}

@@ -23,9 +23,6 @@ const TabPilihan: React.FC<TabPilihanProps> = ({
   onAddButtonClick,
   addButtonLabel = 'Tambah', // Default label is "Tambah"
 }) => {
-  console.log('TabPilihan Buttons:', buttons);
-  console.log('TabPilihan Active Tab:', activeTab);
-
   return (
     <div className='flex justify-between items-center gap-4'>
       {/* Dynamic Tabs */}

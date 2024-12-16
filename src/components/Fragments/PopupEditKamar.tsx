@@ -1,29 +1,15 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import axios from 'axios';
 import Button from '../Elements/Button';
-
-interface TypeKamar {
-  id: string;
-  name: string;
-}
-
-interface Room {
-  id: string;
-  name: string;
-  type: {
-    id: string;
-    name: string;
-  };
-  status: string;
-  images: { url: string; filename: string }[];
-}
+import { IRoom } from '../../interfaces/models/RoomInterface';
+import { IRoomType } from '../../interfaces/models/RoomTypeInterface';
 
 interface PopupEditKamarProps {
   isOpen: boolean;
   onClose: () => void;
-  currentData: Room | null;
+  currentData: IRoom | null;
   onKamarUpdated: () => void;
-  typeKamarData: TypeKamar[];
+  typeKamarData: IRoomType[];
 }
 
 const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
@@ -48,7 +34,7 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
   useEffect(() => {
     if (currentData) {
       setNoKamar(currentData.name);
-      setTypeKamar(currentData.type.name);
+      setTypeKamar(currentData.name);
       setStatusKamar(
         currentData.status === 'available' ? 'Tersedia' : 'Tidak Tersedia'
       );

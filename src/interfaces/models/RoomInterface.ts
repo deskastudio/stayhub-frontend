@@ -4,7 +4,7 @@ export interface IRoom {
   id: string;
   name: string;
   status: string;
-  type: IRoomType;
+  type: IRoomType[];
   reviews: string;
   complaints: string;
   images: { url: string; filename: string }[];
