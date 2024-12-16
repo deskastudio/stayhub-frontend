@@ -13,7 +13,7 @@ const Sidebar: React.FC = () => {
       ? [
           {
             label: 'Beranda',
-            href: '/beranda',
+            href: '/admin-dasboard',
             iconSrc: '/icon/beranda-icon.svg',
           },
           {
