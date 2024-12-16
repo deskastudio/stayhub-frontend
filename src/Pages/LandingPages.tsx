@@ -7,7 +7,7 @@ import TypeRoom from '../components/Layouts/RoomType';
 import Testimonial from '../components/Layouts/Testimonial';
 import Footer from '../components/Layouts/Footer';
 
-const LandingPage: React.FC = () => {
+const LandingPages: React.FC = () => {
   return (
     <>
       <Navbar />
@@ -22,4 +22,4 @@ const LandingPage: React.FC = () => {
   );
 };
 
-export default LandingPage;
+export default LandingPages;

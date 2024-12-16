@@ -4,7 +4,7 @@ import { UserProvider } from './contexts/UserContext';
 import Sidebar from './components/Fragments/Sidebar';
 
 // Landing Page
-import LandingPage from './Pages/LandingPage';
+import LandingPage from './Pages/LandingPages';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import ProtectedRoute from './components/Elements/ProtectRouted';
