@@ -1,9 +1,9 @@
+import { IRoomComplaint } from '../../interfaces/models/RoomComplaintInterfaces';
 import Button from '../Elements/Button';
-import { Ajuan } from './AjuanTable';
 import { format } from 'date-fns';
 
 interface AjuanDetailModalProps {
-  data: Ajuan;
+  data: IRoomComplaint;
   onClose: () => void;
 }
 
