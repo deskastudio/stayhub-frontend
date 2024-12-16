@@ -1,17 +1,7 @@
 import { useFetchRoom } from '../../hooks/useFetchRoom';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-
-type Room = {
-  name: string;
-  updatedAt: string;
-  type: {
-    cost: number;
-  }[];
-  transaction: {
-    status: string;
-  }[];
-};
+import { IRoom } from '../../interfaces/models/RoomInterface';
 
 const DataTable: React.FC = () => {
   const { room } = useFetchRoom();
@@ -29,7 +19,7 @@ const DataTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {room?.map((room: Room, index: number) => (
+          {room?.map((room: IRoom, index: number) => (
             <tr className='text-gray-700'>
               <td className='py-2'>{index + 1}</td>
               <td className='py-2'>
