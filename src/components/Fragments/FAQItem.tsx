@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface FAQItemProps {
   question: string;
   answer: React.ReactNode;

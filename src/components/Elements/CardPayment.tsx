@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface CardPaymentProps {
   pendapatanBulanan: string;
   bulan: string;

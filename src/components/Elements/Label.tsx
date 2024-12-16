@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface LabelProps {
   htmlFor: string;
   children: React.ReactNode;

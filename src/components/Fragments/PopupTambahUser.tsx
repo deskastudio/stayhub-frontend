@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface PopupTambahUserProps {
   isOpen: boolean; // Untuk menentukan apakah popup terbuka atau tidak

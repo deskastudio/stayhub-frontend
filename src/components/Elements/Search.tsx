@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa'; // Import ikon pencarian
+import { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 interface SearchProps {
   onSearch: (query: string) => void; // Fungsi yang dipanggil ketika melakukan pencarian

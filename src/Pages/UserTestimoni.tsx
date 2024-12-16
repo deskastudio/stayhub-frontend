@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IReview } from '../interfaces/models/ReviewInterface';
 import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface TombolProps {
   label: string;
   onClick?: () => void; // Menambahkan properti onClick agar tombol dapat merespon klik

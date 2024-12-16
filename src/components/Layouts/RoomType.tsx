@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -104,7 +104,7 @@ const RoomType: React.FC = () => {
       <h1 className='text-5xl font-bold font-main text-center text-primary mb-12'>
         Pilih Tipe Kamar
       </h1>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
         {type.map((type) => (
           <TypeCard
             key={type.id}

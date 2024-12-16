@@ -32,7 +32,7 @@ const Footer = () => {
   return (
     <>
       <div id='contact' className='container py-24'>
-        <div className='flex justify-between gap-12 border-t-2 py-10'>
+        <div className='flex justify-between gap-12 border-t-2 py-10 flex-wrap'>
           <div className=''>
             <img
               src='/stayhub-logo2.png'
@@ -48,7 +48,7 @@ const Footer = () => {
           </div>
           <div className=''>
             <h3 className='text-secondary font-bold mb-4 font-main text-lg'>
-              StayHub
+              Stayhub
             </h3>
             <ul className='text-gray-700 font-medium space-y-3'>
               {ListMenu.map((item) => {
@@ -81,7 +81,7 @@ const Footer = () => {
                   <IoCall />
                 </i>
               </div>
-              <p>+628123456789</p>
+              <p>+6285156567246</p>
             </div>
             <div className='flex gap-4 items-center'>
               <div>
@@ -89,7 +89,7 @@ const Footer = () => {
                   <MdEmail />
                 </i>
               </div>
-              <p>stayhub@zohomail.com</p>
+              <p>stayhub@gmail.com</p>
             </div>
           </div>
           <div className=''>
@@ -126,7 +126,7 @@ const Footer = () => {
         </div>
         <div className='mx-auto px-4 mt-8 text-center'>
           <p className='text-secondary font-main'>
-            Copyright © {new Date().getFullYear()} | StayHub Team
+            Copyright© 2024 | Stayhub Crew
           </p>
         </div>
       </div>

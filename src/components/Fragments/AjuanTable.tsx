@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-// import { format } from "date-fns";
+import { useState, useEffect } from 'react';
 import Button from '../Elements/Button';
 import axios from 'axios';
 import DetailModal from './AjuanDetailModal';
