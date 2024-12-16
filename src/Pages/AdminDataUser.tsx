@@ -20,7 +20,7 @@ const AdminDataUser: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus user ini?')) {
       try {
-        await axios.delete(`http://localhost:8000/delete/user/${id}`, {
+        await axios.delete(`https://stayhub-api.vercel.app/delete/user/${id}`, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },

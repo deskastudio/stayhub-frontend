@@ -31,11 +31,11 @@ const AdminDataKamar: React.FC = () => {
     try {
       setLoading(true);
       const [roomResponse, typeKamarResponse] = await Promise.all([
-        axios.get('http://localhost:8000/room', {
+        axios.get('https://stayhub-api.vercel.app/room', {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
-        axios.get('http://localhost:8000/type', {
+        axios.get('https://stayhub-api.vercel.app/type', {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }),
@@ -97,7 +97,7 @@ const AdminDataKamar: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus kamar ini?')) {
       try {
-        await axios.delete(`http://localhost:8000/room/delete/${id}`, {
+        await axios.delete(`https://stayhub-api.vercel.app/room/delete/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         });
@@ -120,7 +120,7 @@ const AdminDataKamar: React.FC = () => {
           {room.images.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:8000/${image.url}`}
+              src={`https://stayhub-api.vercel.app/${image.url}`}
               alt={`Room ${room.name}`}
               className='w-10 h-10 object-cover rounded'
             />

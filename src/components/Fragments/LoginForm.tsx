@@ -20,10 +20,13 @@ const LoginForm: React.FC = () => {
 
     try {
       // Post data login
-      const response = await axios.post('http://localhost:8000/auth/signin', {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        'https://stayhub-api.vercel.app/auth/signin',
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.status === 200) {
         const { token } = response.data;
@@ -49,7 +52,7 @@ const LoginForm: React.FC = () => {
 
           // Post transaction
           const response = await axios.post(
-            `http://localhost:8000/transaction/callback/${roomId}`,
+            `https://stayhub-api.vercel.app/transaction/callback/${roomId}`,
             { userId },
             {
               headers: {

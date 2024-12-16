@@ -45,19 +45,19 @@ const CardContainerBeranda: React.FC = () => {
           facilityResponse,
           transactionResponse,
         ] = await Promise.all([
-          axios.get('http://localhost:8000/list/user', {
+          axios.get('https://stayhub-api.vercel.app/list/user', {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
           }),
-          axios.get('http://localhost:8000/room', {
+          axios.get('https://stayhub-api.vercel.app/room', {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
           }),
-          axios.get('http://localhost:8000/facility', {
+          axios.get('https://stayhub-api.vercel.app/facility', {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
           }),
-          axios.get('http://localhost:8000/transaction/get', {
+          axios.get('https://stayhub-api.vercel.app/transaction/get', {
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true,
           }),

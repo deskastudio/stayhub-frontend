@@ -49,7 +49,7 @@ const UserListAjuan: React.FC = () => {
 
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:8000/complaint/${id}`,
+          `https://stayhub-api.vercel.app/complaint/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

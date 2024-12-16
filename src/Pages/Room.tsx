@@ -38,7 +38,7 @@ const Room: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/transaction/callback/${selectedRoom}`,
+        `https://stayhub-api.vercel.app/transaction/callback/${selectedRoom}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,

@@ -24,12 +24,15 @@ const AdminTypeKamar: React.FC = () => {
   const fetchFasilitas = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/facility', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        'https://stayhub-api.vercel.app/facility',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
       const fasilitasTransformed = response.data.data.map(
         (item: IRoomFacility) => ({
           id: item.id,
@@ -52,7 +55,7 @@ const AdminTypeKamar: React.FC = () => {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/type', {
+      const response = await axios.get('https://stayhub-api.vercel.app/type', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -96,7 +99,7 @@ const AdminTypeKamar: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:8000/type/add', payload, {
+      await axios.post('https://stayhub-api.vercel.app/type/add', payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -130,12 +133,16 @@ const AdminTypeKamar: React.FC = () => {
     }
 
     try {
-      await axios.put(`http://localhost:8000/type/update/${data.id}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      await axios.put(
+        `https://stayhub-api.vercel.app/type/update/${data.id}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
       fetchData();
       alert('Tipe kamar berhasil diperbarui!');
       setIsEditPopupOpen(false);
@@ -149,7 +156,7 @@ const AdminTypeKamar: React.FC = () => {
   const handleDeleteTypeKamar = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus tipe kamar ini?')) {
       try {
-        await axios.delete(`http://localhost:8000/type/delete/${id}`, {
+        await axios.delete(`https://stayhub-api.vercel.app/type/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

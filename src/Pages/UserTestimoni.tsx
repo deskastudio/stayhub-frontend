@@ -26,7 +26,7 @@ const UserTestimoni: React.FC = () => {
       try {
         // Fetch testimonials
         const testimonialsResponse = await axios.get(
-          `http://localhost:8000/review/${id}`,
+          `https://stayhub-api.vercel.app/review/${id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -76,7 +76,7 @@ const UserTestimoni: React.FC = () => {
 
   const handleDeleteTestimonial = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:8000/review/${id}`, {
+      await axios.delete(`https://stayhub-api.vercel.app/review/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTestimonials((prev) => prev.filter((item) => item.id !== id));

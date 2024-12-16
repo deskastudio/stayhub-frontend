@@ -19,12 +19,15 @@ const AdminDataFasilitas: React.FC = () => {
   const fetchFasilitas = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/facility', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        'https://stayhub-api.vercel.app/facility',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
       setFasilitasData(response.data.data);
     } catch (error) {
       console.error('Error fetching fasilitas data:', error);
@@ -47,9 +50,12 @@ const AdminDataFasilitas: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus fasilitas ini?')) {
       try {
-        await axios.delete(`http://localhost:8000/facility/delete/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.delete(
+          `https://stayhub-api.vercel.app/facility/delete/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         fetchFasilitas(); // Refresh data setelah penghapusan
         alert('Fasilitas berhasil dihapus!');
       } catch (error) {

@@ -26,7 +26,7 @@ const UserBeranda: React.FC = () => {
       try {
         // Fetch data room
         const response = await axios.get(
-          `http://localhost:8000/room/${roomId}`,
+          `https://stayhub-api.vercel.app/room/${roomId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
