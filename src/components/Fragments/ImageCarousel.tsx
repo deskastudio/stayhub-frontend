@@ -22,21 +22,21 @@ const ImageCarousel: React.FC = () => {
       <Slider {...settings} className='w-full max-w-xl'>
         <div className='w-full h-96'>
           <Image
-            src='./public/imageCarousel/image1.svg'
+            src='/imageCarousel/image1.svg'
             alt='Image 1'
             className='w-full h-full'
           />
         </div>
         <div className='w-full h-96'>
           <Image
-            src='./public/imageCarousel/image2.svg'
+            src='/imageCarousel/image2.svg'
             alt='Image 2'
             className='w-full h-full'
           />
         </div>
         <div className='w-full h-96'>
           <Image
-            src='./public/imageCarousel/image3.svg'
+            src='/imageCarousel/image3.svg'
             alt='Image 3'
             className='w-full h-full'
           />
