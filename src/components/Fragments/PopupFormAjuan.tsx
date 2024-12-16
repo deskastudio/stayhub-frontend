@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Definisikan tipe untuk form data
 interface FormData {

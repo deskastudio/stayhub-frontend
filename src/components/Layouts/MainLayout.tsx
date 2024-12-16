@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 // Definisikan antarmuka untuk props komponen, termasuk properti `children`
 interface MainLayoutProps {

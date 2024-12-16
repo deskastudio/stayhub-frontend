@@ -1,4 +1,3 @@
-import React from 'react';
 import Button from '../Elements/Button';
 import { TestimonialItemProps } from '../Elements/TestimonialData';
 

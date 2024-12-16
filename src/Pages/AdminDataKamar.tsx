@@ -5,7 +5,7 @@ import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahKamar from '../components/Fragments/PopupTambahKamar';
 import PopupEditKamar from '../components/Fragments/PopupEditKamar';
 import Button from '../components/Elements/Button';
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { IRoomFacility } from '../interfaces/models/RoomFacilityInterface';
 import { IRoomType } from '../interfaces/models/RoomTypeInterface';

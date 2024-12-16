@@ -1,4 +1,3 @@
-import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -43,7 +42,7 @@ const ImageCarousel: React.FC = () => {
           />
         </div>
       </Slider>
-      <div className='text-center mt-8'>
+      <div className='text-center mt-8 hidden md:block'>
         <h2 className='text-3xl font-bold text-primary-dark'>Kosku, Rumahku</h2>
         <p className='text-black py-4 px-20'>
           Menciptakan Platform Pengelolaan Kos yang Memudahkan dan Meningkatkan

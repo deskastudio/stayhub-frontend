@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Profile from '../components/Fragments/Profile';
@@ -11,9 +11,6 @@ interface User {
   id: string;
 }
 
-// interface Room {
-//   id: string;
-// }
 export interface Ajuan {
   id: string;
   user: User;

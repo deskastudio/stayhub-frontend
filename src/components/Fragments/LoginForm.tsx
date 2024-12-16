@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Button from '../Elements/Button';
@@ -103,7 +103,7 @@ const LoginForm: React.FC = () => {
     <form onSubmit={handleLogin} className='space-y-4'>
       <div className='text-center mb-4'>
         <Image
-          src='/stayhubLogin.png'
+          src='/stayhub-logo2.png'
           alt='Login Image'
           className='w-1/2 mx-auto mb-10'
         />

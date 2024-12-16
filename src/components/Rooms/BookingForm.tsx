@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface BookingFormProps {
   cost: number | undefined;
   availableRooms: { id: string; name: string }[];

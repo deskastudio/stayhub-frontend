@@ -1,5 +1,3 @@
-// fragments/ForgotPasswordLink.tsx
-import React from 'react';
 import Button from './Button';
 
 const ForgotPasswordLink: React.FC = () => {

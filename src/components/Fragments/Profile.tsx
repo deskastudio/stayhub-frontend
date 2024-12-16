@@ -1,4 +1,4 @@
-import React from 'react';
+
 import ProfileInfo from '../Elements/Profile';
 import { getUserName, getUserRole } from '../../utils/auth.utils';
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ProfileInfoProps {
   name: string;
   role: string;
