@@ -37,7 +37,6 @@ const AdminTypeKamar: React.FC = () => {
         })
       );
       setFasilitasData(fasilitasTransformed);
-      console.log('Data fasilitas berhasil diambil:', fasilitasTransformed);
     } catch (error) {
       console.error('Error fetching fasilitas data:', error);
     } finally {
@@ -61,15 +60,15 @@ const AdminTypeKamar: React.FC = () => {
       });
 
       const transformedData = response.data.data.map((item: IRoomType) => ({
-        id: item.id,
-        namaTipe: item.name,
-        fasilitas: item.facility.map((data: IRoomFacility) => ({
-          id: data.id,
-          nama: data.name,
-        })),
-        deskripsi: item.description,
-        harga: item.cost,
+        ...item,
+        facility: Array.isArray(item.facility)
+          ? item.facility.map((data: IRoomFacility) => ({
+              id: data.id,
+              name: data.name,
+            }))
+          : [],
       }));
+
       setTypeKamarData(transformedData);
     } catch (error) {
       console.error('Error fetching type kamar data:', error);
@@ -91,7 +90,10 @@ const AdminTypeKamar: React.FC = () => {
       cost: data.cost,
     };
 
-    console.log('Payload yang dikirim ke backend:', payload);
+    if (!data.name || !data.description || !data.cost) {
+      alert('Harap lengkapi semua data tipe kamar.');
+      return;
+    }
 
     try {
       await axios.post('http://localhost:8000/type/add', payload, {
@@ -121,6 +123,11 @@ const AdminTypeKamar: React.FC = () => {
       description: data.description,
       cost: data.cost,
     };
+
+    if (!data.name || !data.description || !data.cost) {
+      alert('Harap lengkapi semua data tipe kamar.');
+      return;
+    }
 
     try {
       await axios.put(`http://localhost:8000/type/update/${data.id}`, payload, {
@@ -173,8 +180,9 @@ const AdminTypeKamar: React.FC = () => {
   const formatTableData = (data: IRoomType[]) =>
     data.map((item) => ({
       'Nama Tipe Kamar': item.name,
-      Fasilitas:
-        item.facility.map((f) => f.name).join(', ') || 'Tidak ada fasilitas',
+      Fasilitas: Array.isArray(item.facility)
+        ? item.facility.map((f) => f.name).join(', ')
+        : 'Tidak ada fasilitas',
       Deskripsi: item.description || 'Tidak ada deskripsi',
       Harga: `Rp ${item.cost.toLocaleString()}`,
       Aksi: (

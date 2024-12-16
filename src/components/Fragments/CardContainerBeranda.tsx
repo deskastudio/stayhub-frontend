@@ -79,7 +79,6 @@ const CardContainerBeranda: React.FC = () => {
 
         // Memproses data transaction untuk status "belum bayar"
         const transactions = transactionResponse.data.data;
-        console.log('transactions', transactions);
         const notPaid = transactions.filter(
           (transaction: Transaction) => transaction.status === 'pending'
         );

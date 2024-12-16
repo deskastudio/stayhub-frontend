@@ -24,10 +24,10 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
   const [statusKamar, setStatusKamar] = useState<'Tersedia' | 'Tidak Tersedia'>(
     'Tersedia'
   );
-  const [gambarKamar, setGambarKamar] = useState<FileList | null>(null); // New images
+  const [gambarKamar, setGambarKamar] = useState<FileList | null>(null);
   const [existingImages, setExistingImages] = useState<
     { url: string; filename: string }[]
-  >([]); // Existing images
+  >([]);
 
   const token = sessionStorage.getItem('token');
 

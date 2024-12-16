@@ -19,7 +19,7 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
   fasilitasData,
 }) => {
   const [namaTipe, setNamaTipe] = useState('');
-  const [fasilitas, setFasilitas] = useState<string[]>([]); // Simpan ID fasilitas
+  const [fasilitas, setFasilitas] = useState<string[]>([]);
   const [deskripsi, setDeskripsi] = useState('');
   const [harga, setHarga] = useState(0);
 
@@ -27,7 +27,7 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
   useEffect(() => {
     if (currentData) {
       setNamaTipe(currentData.name);
-      setFasilitas(currentData.facility.map((item) => item.id)); // Gunakan ID fasilitas
+      setFasilitas(currentData.facility.map((item) => item.id));
       setDeskripsi(currentData.description);
       setHarga(currentData.cost);
     } else {
@@ -40,11 +40,10 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
 
   // Tambah atau hapus fasilitas
   const toggleFasilitas = (fasilitasId: string) => {
-    setFasilitas(
-      (prev) =>
-        prev.includes(fasilitasId)
-          ? prev.filter((id) => id !== fasilitasId) // Hapus ID fasilitas jika sudah ada
-          : [...prev, fasilitasId] // Tambahkan ID fasilitas jika belum ada
+    setFasilitas((prev) =>
+      prev.includes(fasilitasId)
+        ? prev.filter((id) => id !== fasilitasId)
+        : [...prev, fasilitasId]
     );
   };
 
@@ -64,12 +63,10 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
       id: currentData?.id,
       name: namaTipe,
       facility: fasilitas.map((id) => {
-        const fasilitasItem = fasilitasData.find((item) => item.id === id);
+        const data = fasilitasData.find((item) => item.id === id);
         return {
           id,
-          name: fasilitasItem?.name || '',
-          createdAt: fasilitasItem?.createdAt || '',
-          updatedAt: fasilitasItem?.updatedAt || '',
+          name: data?.name || '',
         };
       }),
       description: deskripsi,
@@ -78,10 +75,9 @@ const PopupTambahTypeKamar: React.FC<PopupTambahTypeKamarProps> = ({
       updatedAt: currentData.updatedAt,
     });
 
-    onClose(); // Close the popup after submission
+    onClose();
   };
 
-  // Return the JSX for the component
   return (
     <>
       {isOpen && (
