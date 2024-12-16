@@ -72,15 +72,14 @@ const UserListAjuan: React.FC = () => {
         setAjuanList([]); // Set ajuanList kosong jika terjadi error
         alert('Gagal mengambil data. Silakan coba lagi.');
       } finally {
-        setLoading(false); // Setelah data selesai diambil, ubah state loading menjadi false
+        setLoading(false);
       }
     };
 
     fetchAjuan();
-  }, [token, id]);
+  }, [token, id, navigate]);
 
   const handleAddAjuan = () => {
-    // Navigasi ke halaman user-ajuan untuk menambahkan ajuan
     navigate('/user-ajuan');
   };
 
@@ -130,7 +129,7 @@ const UserListAjuan: React.FC = () => {
             </thead>
             <tbody>
               {ajuanList.map((ajuan) => (
-                <tr key={ajuan} className='text-center'>
+                <tr key={ajuan.id} className='text-center'>
                   <td className='px-4 py-2 border'>{ajuan.tanggal}</td>
                   <td className='px-4 py-2 border'>{ajuan.perihal}</td>
                   <td className='px-4 py-2 border'>{ajuan.isiAjuan}</td>

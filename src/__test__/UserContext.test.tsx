@@ -1,13 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { UserProvider, useUser } from '../contexts/UserContext'; // Sesuaikan pathnya dengan struktur folder Anda
+import { UserProvider } from '../contexts/UserContext';
+import { useUser } from '../contexts/useUser';
 
 // Komponen sementara untuk menguji UserContext
 const TestComponent = () => {
   const { userType, setUserType } = useUser();
-  
+
   return (
     <div>
-      <span data-testid="user-type">{userType}</span>
+      <span data-testid='user-type'>{userType}</span>
       <button onClick={() => setUserType('admin')}>Change to Admin</button>
     </div>
   );

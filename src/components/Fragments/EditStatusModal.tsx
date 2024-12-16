@@ -5,12 +5,14 @@ import Button from '../Elements/Button';
 import { useNavigate } from 'react-router-dom';
 
 interface EditStatusModalProps {
+  isOpen: boolean;
   ajuan: Ajuan;
   onClose: () => void;
   onStatusUpdate: (id: number, status: string) => void;
 }
 
 const EditStatusModal: React.FC<EditStatusModalProps> = ({
+  isOpen,
   ajuan,
   onClose,
   onStatusUpdate,
@@ -73,12 +75,16 @@ const EditStatusModal: React.FC<EditStatusModalProps> = ({
           </select>
         </div>
         <div className='flex justify-end mt-6 space-x-2'>
-          <Button variant='detail' onClick={onClose}>
-            Batal
-          </Button>
-          <Button variant='primary' onClick={handleSave}>
-            Simpan
-          </Button>
+          {isOpen && (
+            <div>
+              <Button variant='detail' onClick={onClose}>
+                Batal
+              </Button>
+              <Button variant='primary' onClick={handleSave}>
+                Simpan
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
