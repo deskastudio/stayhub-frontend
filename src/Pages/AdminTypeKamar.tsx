@@ -1,5 +1,3 @@
-// src/pages/AdminTypeKamar.tsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CustomTable from '../components/Elements/CustomTable';
@@ -7,6 +5,7 @@ import PopupTambahTypeKamar from '../components/Fragments/PopupTambahTypeKamar';
 import PopupEditTypeKamar from '../components/Fragments/PopupEditTypeKamar';
 import ProfileInfo from '../components/Elements/ProfileInfo';
 import Button from '../components/Elements/Button';
+import { IRoomFacility } from '../interfaces/models/RoomFacilityInterface';
 
 interface Fasilitas {
   id: string;
@@ -70,19 +69,17 @@ const AdminTypeKamar: React.FC = () => {
         },
         withCredentials: true,
       });
-      console.log('Respons dari backend:', response.data);
 
       const transformedData = response.data.data.map((item: any) => ({
         id: item.id,
         namaTipe: item.name,
-        fasilitas: item.facility.map((fasilitasItem: any) => ({
-          id: fasilitasItem._id,
-          nama: fasilitasItem.name,
+        fasilitas: item.facility.map((data: IRoomFacility) => ({
+          id: data.id,
+          nama: data.name,
         })),
         deskripsi: item.description,
         harga: item.cost,
       }));
-      console.log('Data yang sudah ditransformasi:', transformedData);
       setTypeKamarData(transformedData);
     } catch (error) {
       console.error('Error fetching type kamar data:', error);
@@ -116,12 +113,8 @@ const AdminTypeKamar: React.FC = () => {
       fetchData();
       alert('Tipe kamar berhasil ditambahkan!');
       setIsTambahPopupOpen(false);
-    } catch (error: any) {
-      console.error(
-        'Error adding type kamar:',
-        error.response?.data || error.message
-      );
-      alert(error.response?.data.message || 'Gagal menambahkan tipe kamar.');
+    } catch (error) {
+      console.error('Error adding type kamar:', error);
     }
   };
 
@@ -139,8 +132,6 @@ const AdminTypeKamar: React.FC = () => {
       cost: data.harga,
     };
 
-    console.log('Payload yang dikirim untuk update:', payload);
-
     try {
       await axios.put(`http://localhost:8000/type/update/${data.id}`, payload, {
         headers: {
@@ -152,12 +143,8 @@ const AdminTypeKamar: React.FC = () => {
       alert('Tipe kamar berhasil diperbarui!');
       setIsEditPopupOpen(false);
       setCurrentData(null);
-    } catch (error: any) {
-      console.error(
-        'Error updating type kamar:',
-        error.response?.data || error.message
-      );
-      alert(error.response?.data.message || 'Gagal memperbarui tipe kamar.');
+    } catch (error) {
+      console.error('Error updating type kamar:', error);
     }
   };
 
@@ -173,12 +160,8 @@ const AdminTypeKamar: React.FC = () => {
         });
         alert('Tipe kamar berhasil dihapus!');
         fetchData();
-      } catch (error: any) {
-        console.error(
-          'Error deleting type kamar:',
-          error.response?.data || error.message
-        );
-        alert(error.response?.data.message || 'Gagal menghapus tipe kamar.');
+      } catch (error) {
+        console.error('Error deleting type kamar:', error);
       }
     }
   };

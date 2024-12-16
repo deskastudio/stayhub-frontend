@@ -13,7 +13,6 @@ import Room from './Pages/Room';
 // Admin Pages
 import AdminDashboard from './Pages/AdminDashboard';
 import DataUser from './Pages/AdminDataUser';
-import DataPembayaran from './Pages/AdminDataPembayaran';
 import DataFasilitas from './Pages/AdminDataFasilitas';
 import DataKamar from './Pages/AdminDataKamar';
 import DataAjuan from './Pages/AdminDataAjuan';
@@ -74,14 +73,6 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute role='admin'>
                 <DataUser />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/data-pembayaran'
-            element={
-              <ProtectedRoute role='admin'>
-                <DataPembayaran />
               </ProtectedRoute>
             }
           />

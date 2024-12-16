@@ -4,6 +4,11 @@ import axios from 'axios';
 import { Ajuan } from '../../Pages/UserListAjuan';
 import { getUserId } from '../../utils/auth.utils';
 
+interface Room {
+  id: string;
+  name: string;
+}
+
 interface AjuanModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -16,14 +21,11 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
   onSubmit,
 }) => {
   const [formData, setFormData] = useState({
-    namaLengkap: '',
-    email: '',
     roomId: '',
-    tanggal: '',
     perihal: 'Fasilitas',
     isiAjuan: '',
   });
-
+  // const [selectedFiles, setSelectedFiles] = useState<File[]>([]); // State untuk menyimpan file
   const [rooms, setRooms] = useState([]); // Untuk menyimpan daftar kamar
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -60,44 +62,50 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const { namaLengkap, email, roomId, tanggal, perihal, isiAjuan } = formData;
+    const { roomId, perihal, isiAjuan } = formData;
 
     // Validasi input form
-    if (!namaLengkap || !email || !roomId || !tanggal || !isiAjuan) {
+    if (!roomId || !isiAjuan) {
       alert('Semua field harus diisi!');
       return;
     }
 
-    const dataToSubmit = {
-      user: id,
-      room: roomId,
-      title: perihal,
-      description: isiAjuan,
-      status: 'menunggu', // Default status
-    };
-    console.log('data yang dikirim:d', dataToSubmit);
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append('user', id); // Menambahkan user ID
+    formDataToSubmit.append('room', roomId); // Menambahkan ID kamar
+    formDataToSubmit.append('title', perihal); // Menambahkan judul pengajuan
+    formDataToSubmit.append('description', isiAjuan); // Menambahkan deskripsi pengajuan
+    formDataToSubmit.append('status', 'menunggu'); // Status default
+
     try {
       setLoading(true);
       const response = await axios.post(
         `http://localhost:8000/complaint/${roomId}`,
-        dataToSubmit,
+        formDataToSubmit,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json', // Mengirim data sebagai JSON
           },
         }
       );
-      console.log('Response dari API:', response);
 
       if (response.status === 201) {
         alert('Ajuan berhasil dikirim!');
-        onSubmit(dataToSubmit);
-        setFormData({
-          namaLengkap: '',
-          email: '',
-          roomId: '',
+        onSubmit({
+          user: id,
+          room: roomId,
+          title: perihal,
+          description: isiAjuan,
+          status: 'menunggu',
+          perihal: '',
           tanggal: '',
+          isiAjuan: '',
+          balasan: '',
+          createdAt: '',
+          response: '',
+        });
+        setFormData({
+          roomId: '',
           perihal: 'Fasilitas',
           isiAjuan: '',
         });
@@ -128,28 +136,6 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
         <h2 className='text-lg font-bold mb-4'>Pengajuan Keluhan</h2>
         <form onSubmit={handleSubmit}>
           <div className='mb-4'>
-            <label className='block text-gray-700'>Nama Lengkap</label>
-            <input
-              type='text'
-              name='namaLengkap'
-              value={formData.namaLengkap}
-              onChange={handleChange}
-              className='w-full border rounded px-3 py-2'
-              placeholder='Masukkan nama lengkap'
-            />
-          </div>
-          <div className='mb-4'>
-            <label className='block text-gray-700'>Email</label>
-            <input
-              type='email'
-              name='email'
-              value={formData.email}
-              onChange={handleChange}
-              className='w-full border rounded px-3 py-2'
-              placeholder='Masukkan email'
-            />
-          </div>
-          <div className='mb-4'>
             <label className='block text-gray-700'>Kamar</label>
             <select
               name='roomId'
@@ -159,7 +145,7 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
             >
               <option value=''>Pilih Kamar</option>
               {rooms.length > 0 ? (
-                rooms.map((room: any) => (
+                rooms.map((room: Room) => (
                   <option key={room.id} value={room.id}>
                     {room.name}
                   </option>
@@ -170,16 +156,6 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
                 </option>
               )}
             </select>
-          </div>
-          <div className='mb-4'>
-            <label className='block text-gray-700'>Tanggal</label>
-            <input
-              type='date'
-              name='tanggal'
-              value={formData.tanggal}
-              onChange={handleChange}
-              className='w-full border rounded px-3 py-2'
-            />
           </div>
           <div className='mb-4'>
             <label className='block text-gray-700'>Perihal</label>
@@ -205,10 +181,14 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
               placeholder='Masukkan keluhanmu'
             />
           </div>
+          {/* <div className="mb-4">
+            <label className="block text-gray-700">Upload Foto (Opsional)</label>
+            <input type="file" name="images" multiple onChange={handleFileChange} className="w-full border rounded px-3 py-2" />
+          </div> */}
           <div className='flex justify-end'>
             <button
               type='button'
-              className='mr-2 bg-gray-200 px-4 py-2 rounded'
+              className='mr-2 bg-gray-500  hover:bg-gray-400 text-white px-4 py-2 rounded'
               onClick={onClose}
               disabled={loading}
             >
@@ -216,7 +196,7 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
             </button>
             <button
               type='submit'
-              className='bg-blue-600 text-white px-4 py-2 rounded'
+              className='bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded'
               disabled={loading}
             >
               {loading ? 'Mengirim...' : 'Kirim'}

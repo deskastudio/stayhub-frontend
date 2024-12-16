@@ -1,10 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface ButtonProps {
   custom: string;
   children: React.ReactNode;
-  type?: "button" | "submit" | "reset";
+  type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
   to?: string;
 }
@@ -12,14 +12,19 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({
   custom,
   children,
-  type = "button",
+  type = 'button',
   onClick,
-  to
+  to,
 }) => {
   if (to) {
     return (
-      <Link to={to} className={`px-7 font-semibold font-main rounded-lg ${custom}`}>{children}</Link>
-    )
+      <Link
+        to={to}
+        className={`px-7 font-semibold font-main rounded-lg ${custom}`}
+      >
+        {children}
+      </Link>
+    );
   }
 
   return (

@@ -1,38 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { getUserId } from '../utils/auth.utils';
-
-// Interface
-interface User {
-  id: string;
-  name: string;
-}
-
-interface Room {
-  id: string;
-  name: string;
-}
-
-interface Images {
-  id: string;
-  url: string;
-}
-
-interface Complaint {
-  id: string;
-  user: User[];
-  room: Room[];
-  title: string;
-  description: string;
-  status: string;
-  images: Images[];
-  createdAt: string;
-}
+import { IUser } from '../interfaces/models/UserInterface';
+import { IRoomComplaint } from '../interfaces/models/RoomComplaintInterfaces';
 
 export const useFetchComplaint = () => {
-  const [complaint, setComplaint] = useState<Complaint[] | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [images, setImage] = useState<string[]>([]);
+  const [complaint, setComplaint] = useState<IRoomComplaint[] | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
   const id = getUserId();
 
@@ -54,11 +28,8 @@ export const useFetchComplaint = () => {
 
         const data = response.data.data;
         if (data.length > 0) {
-          setComplaint(data.map((complaint: Complaint) => complaint));
+          setComplaint(data.map((complaint: IRoomComplaint) => complaint));
           setUser(data.user);
-          setImage(
-            data.map((complaint: Complaint) => complaint?.images[0]?.url)
-          );
         } else {
           setComplaint(null);
           setUser(null);
@@ -73,5 +44,5 @@ export const useFetchComplaint = () => {
     fetchComplaint();
   }, [id]);
 
-  return { complaint, user, images, loading };
+  return { complaint, user, loading };
 };

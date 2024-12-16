@@ -1,4 +1,3 @@
-// import { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import AjuanTable from '../components/Fragments/AjuanTable';
 import Profile from '../components/Fragments/Profile';

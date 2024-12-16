@@ -1,4 +1,3 @@
-// src/components/elements/BarChartElement.tsx
 import React, { useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -10,9 +9,18 @@ import {
   Tooltip,
   Legend,
   ChartData,
+  ChartOptions,
+  ChartArea,
 } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface BarChartElementProps {
   title: string;
@@ -20,12 +28,20 @@ interface BarChartElementProps {
   labels: string[];
 }
 
-const BarChartElement: React.FC<BarChartElementProps> = ({ title, data, labels }) => {
+const BarChartElement: React.FC<BarChartElementProps> = ({
+  title,
+  data,
+  labels,
+}) => {
   const chartRef = useRef(null);
 
-  // Setup gradien warna untuk batang chart
-  const getGradient = (ctx: CanvasRenderingContext2D, chartArea: any) => {
-    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+  const getGradient = (ctx: CanvasRenderingContext2D, chartArea: ChartArea) => {
+    const gradient = ctx.createLinearGradient(
+      0,
+      chartArea.bottom,
+      0,
+      chartArea.top
+    );
     gradient.addColorStop(0, 'rgba(54, 162, 235, 0.2)');
     gradient.addColorStop(1, 'rgba(54, 162, 235, 0.8)');
     return gradient;
@@ -42,9 +58,9 @@ const BarChartElement: React.FC<BarChartElementProps> = ({ title, data, labels }
           const { ctx, chartArea } = chart;
 
           if (!chartArea) {
-            return null; // Return default color if chartArea is not ready
+            return 'rgba(54, 162, 235, 0.2)'; // Fallback color
           }
-          return getGradient(ctx, chartArea);
+          return getGradient(ctx, chartArea) as CanvasGradient;
         },
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
@@ -52,7 +68,7 @@ const BarChartElement: React.FC<BarChartElementProps> = ({ title, data, labels }
     ],
   };
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -65,7 +81,7 @@ const BarChartElement: React.FC<BarChartElementProps> = ({ title, data, labels }
         align: 'start' as const,
         font: {
           size: 16,
-          weight: 'bold',
+          weight: 'bold' as const,
         },
         color: '#374151',
       },
@@ -76,24 +92,19 @@ const BarChartElement: React.FC<BarChartElementProps> = ({ title, data, labels }
           display: false,
         },
         ticks: {
-          color: '#9CA3AF', // Abu-abu terang
-          font: {
-            size: 12,
-          },
+          color: '#9CA3AF',
+          font: { size: 12 },
         },
       },
       y: {
         grid: {
-          color: '#E5E7EB', // Abu-abu terang untuk grid
+          color: '#E5E7EB',
           drawBorder: false,
         },
         beginAtZero: true,
-        max: 3000000,
         ticks: {
           color: '#9CA3AF',
-          font: {
-            size: 12,
-          },
+          font: { size: 12 },
           callback: (value: number) => `${value / 1000000}M`,
         },
       },
@@ -101,7 +112,7 @@ const BarChartElement: React.FC<BarChartElementProps> = ({ title, data, labels }
   };
 
   return (
-    <div className="relative h-64">
+    <div className='relative h-64'>
       <Bar ref={chartRef} data={chartData} options={options} />
     </div>
   );

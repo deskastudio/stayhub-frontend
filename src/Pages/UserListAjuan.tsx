@@ -5,17 +5,28 @@ import Profile from '../components/Fragments/Profile';
 import Placeholder from '../components/Fragments/Placeholder';
 import EditAjuanModal from '../components/Fragments/EditStatusModal';
 import { getUserId } from '../utils/auth.utils';
-import SectionHeader from '../components/Elements/SectionHeader';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
 
 // Menyesuaikan tipe data Ajuan
+interface User {
+  id: string;
+}
+
+// interface Room {
+//   id: string;
+// }
 export interface Ajuan {
+  id: string;
+  user: User;
+  room: string;
+  title: string;
+  description: string;
   perihal: string;
   status: string;
   tanggal: string;
   isiAjuan: string;
   balasan: string;
+  createdAt: string;
+  response: string;
 }
 
 const UserListAjuan: React.FC = () => {
@@ -48,7 +59,7 @@ const UserListAjuan: React.FC = () => {
         );
 
         if (response.data.data) {
-          const ajuanData = response.data.data.map((ajuan: any) => ({
+          const ajuanData = response.data.data.map((ajuan: Ajuan) => ({
             perihal: ajuan.title,
             status: ajuan.status,
             tanggal: ajuan.createdAt.split('T')[0],

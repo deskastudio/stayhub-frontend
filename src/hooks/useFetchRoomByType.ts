@@ -1,37 +1,20 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { IRoom } from '../interfaces/models/RoomInterface';
+import { IRoomType } from '../interfaces/models/RoomTypeInterface';
 
-interface Room {
-  id: string;
-  name: string;
-  images: { url: string }[];
-  type: RoomType[];
-}
-
-interface RoomType {
-  id: string;
-  name: string;
-  description: string;
-  cost: number;
-  facility: Facility[];
-}
-
-interface Facility {
-  id: string;
-  name: string;
-}
-
+// Interface
 interface UseFetchRoomResult {
-  room: Room | null;
-  currentType: RoomType | null;
+  room: IRoom | null;
+  currentType: IRoomType | null;
   availableRooms: { id: string; name: string }[];
   currentImage: string[];
   loading: boolean;
 }
 
 export const useFetchRoomByType = (id: string): UseFetchRoomResult => {
-  const [room, setRoom] = useState<Room | null>(null);
-  const [currentType, setCurrentType] = useState<RoomType | null>(null);
+  const [room, setRoom] = useState<IRoom | null>(null);
+  const [currentType, setCurrentType] = useState<IRoomType | null>(null);
   const [availableRooms, setAvailableRooms] = useState<
     { id: string; name: string }[]
   >([]);
@@ -52,9 +35,9 @@ export const useFetchRoomByType = (id: string): UseFetchRoomResult => {
           setRoom(data[0]);
           setCurrentType(data[0].type[0]);
           setAvailableRooms(
-            data.map((room: Room) => ({ id: room.id, name: room.name }))
+            data.map((room: IRoom) => ({ id: room.id, name: room.name }))
           );
-          setCurrentImage(data.map((room: Room) => room.images[0]?.url));
+          setCurrentImage(data.map((room: IRoom) => room.images[0]?.url));
         } else {
           setRoom(null);
           setCurrentType(null);

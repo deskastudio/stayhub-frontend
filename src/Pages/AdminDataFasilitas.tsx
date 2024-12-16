@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahFasilitas from '../components/Fragments/PopupTambahFasilitas';
 import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';
 import Button from '../components/Elements/Button';
-
-// Tipe data fasilitas
-interface Fasilitas {
-  id: string;
-  fasilitas: string;
-}
+import { IRoomFacility } from '../interfaces/models/RoomFacilityInterface';
 
 const AdminDataFasilitas: React.FC = () => {
-  const [fasilitasData, setFasilitasData] = useState<Fasilitas[]>([]);
+  const [fasilitasData, setFasilitasData] = useState<IRoomFacility[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -21,9 +16,8 @@ const AdminDataFasilitas: React.FC = () => {
   const token = sessionStorage.getItem('token');
 
   // Fetch data fasilitas dari backend
-  const fetchFasilitas = async () => {
+  const fetchFasilitas = useCallback(async () => {
     setLoading(true);
-    console.log('Token:', token);
     try {
       const response = await axios.get('http://localhost:8000/facility', {
         headers: {
@@ -37,16 +31,18 @@ const AdminDataFasilitas: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   // Tambah fasilitas
   const handleAddFasilitas = (fasilitas: string) => {
-    // Tambahkan fasilitas baru ke dalam state
-    setFasilitasData((prevData) => [
-      ...prevData,
-      { id: Date.now().toString(), fasilitas }, // Menambahkan fasilitas ke data yang ada
-    ]);
-    fetchFasilitas(); // Pastikan data yang baru ditambahkan muncul setelah reload
+    const newFasilitas: IRoomFacility = {
+      id: Date.now().toString(),
+      name: fasilitas,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setFasilitasData((prevData) => [...prevData, newFasilitas]);
+    fetchFasilitas();
   };
 
   // Delete fasilitas
@@ -66,15 +62,15 @@ const AdminDataFasilitas: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchFasilitas(); // Memanggil fetchFasilitas saat komponen dimuat
-  }, []);
+    fetchFasilitas();
+  }, [fetchFasilitas]);
 
   const columns = ['Nama Fasilitas', 'Aksi'];
 
   // Format data untuk tabel
-  const formatTableData = (data: Fasilitas[]) =>
+  const formatTableData = (data: IRoomFacility[]) =>
     data.map((item) => ({
-      'Nama Fasilitas': item.fasilitas || item.name, // Gunakan `name` jika `fasilitas` tidak ada
+      'Nama Fasilitas': item.name,
       Aksi: (
         <div className='flex items-center justify-center space-x-2'>
           <Button variant='deleted' onClick={() => handleDelete(item.id)}>

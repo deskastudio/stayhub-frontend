@@ -1,14 +1,13 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import React, { useEffect, useState } from 'react';
 import Input from '../Elements/Input';
 import Button from '../Elements/Button';
 import Rating from '../Elements/Rating';
+import React, { useEffect, useState } from 'react';
 import { TestimonialData } from '../Elements/TestimonialData';
-import { getRoomId } from '../../utils/auth.utils';
 
 interface TestimoniEditFormProps {
-  onSubmit: (data: any) => void;
+  onSubmit: (data: TestimonialData) => void;
   onCancel: () => void;
   editingTestimonial: TestimonialData | null;
 }
@@ -22,7 +21,6 @@ const TestimoniEditForm: React.FC<TestimoniEditFormProps> = ({
   const [rating, setRating] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const token = sessionStorage.getItem('token');
-  const roomId = getRoomId();
 
   useEffect(() => {
     if (editingTestimonial) {
