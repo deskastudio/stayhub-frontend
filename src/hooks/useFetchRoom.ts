@@ -26,7 +26,7 @@ export const useFetchRoom = (): UseFetchRoomResult => {
       setLoading(true);
 
       try {
-        const response = await axios.get('http://localhost:8000/room');
+        const response = await axios.get('https://stayhub-api.vercel.app/room');
 
         const data = response.data.data;
         if (data.length > 0) {

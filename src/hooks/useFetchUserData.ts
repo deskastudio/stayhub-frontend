@@ -17,12 +17,15 @@ export const useFetchUsers = (): UseResult => {
     setLoading(true);
 
     try {
-      const response = await axios.get('http://localhost:8000/list/user', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        'https://stayhub-api.vercel.app/list/user',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
 
       setUser(response.data.data);
     } catch (error) {
