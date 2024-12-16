@@ -85,7 +85,7 @@ const LoginForm: React.FC = () => {
           // Redirect based on role
           const { role } = getUserRole();
           if (role === 'admin') {
-            navigate('/beranda'); // Admin dashboard
+            navigate('/admin-dashboard'); // Admin dashboard
           } else {
             navigate('/user-dashboard'); // User dashboard
           }
