@@ -11,10 +11,14 @@ interface User {
   fullName: string;
 }
 
+interface Room{
+  name: string;
+}
+
 export interface Ajuan {
   id: string;
   user: User;
-  room: { name: string };
+  room: Room;
   title: string;
   description: string;
   perihal: string;

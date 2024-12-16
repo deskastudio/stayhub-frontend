@@ -38,8 +38,6 @@ const AdminDataFasilitas: React.FC = () => {
     const newFasilitas: IRoomFacility = {
       id: Date.now().toString(),
       name: fasilitas,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
     setFasilitasData((prevData) => [...prevData, newFasilitas]);
     fetchFasilitas();
