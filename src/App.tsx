@@ -4,7 +4,7 @@ import { UserProvider } from './contexts/UserContext';
 import Sidebar from './components/Fragments/Sidebar';
 
 // Landing Page
-import LandingPage from './Pages/LandingPage';
+import LandingPage from './Pages/LandingPages';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
 import ProtectedRoute from './components/Elements/ProtectRouted';
@@ -13,7 +13,6 @@ import Room from './Pages/Room';
 // Admin Pages
 import AdminDashboard from './Pages/AdminDashboard';
 import DataUser from './Pages/AdminDataUser';
-import DataPembayaran from './Pages/AdminDataPembayaran';
 import DataFasilitas from './Pages/AdminDataFasilitas';
 import DataKamar from './Pages/AdminDataKamar';
 import DataAjuan from './Pages/AdminDataAjuan';
@@ -31,7 +30,7 @@ const AppContent: React.FC = () => {
   const location = useLocation();
 
   const routesWithSidebar = [
-    '/beranda',
+    '/admin-dashboard',
     '/data-user',
     '/data-pembayaran',
     '/data-fasilitas',
@@ -54,15 +53,13 @@ const AppContent: React.FC = () => {
     <div className='flex bg-primary-bgprimary'>
       {showSidebar && <Sidebar />}
       <div className='flex-1 p-4'>
-        {/* <ScrollToTop /> Uncomment this if you want to scroll to top on route change */}
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route path='/room/type/:id' element={<Room />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
-
           <Route
-            path='/beranda'
+            path='/admin-dashboard'
             element={
               <ProtectedRoute role='admin'>
                 <AdminDashboard />
@@ -74,14 +71,6 @@ const AppContent: React.FC = () => {
             element={
               <ProtectedRoute role='admin'>
                 <DataUser />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/data-pembayaran'
-            element={
-              <ProtectedRoute role='admin'>
-                <DataPembayaran />
               </ProtectedRoute>
             }
           />
@@ -117,7 +106,6 @@ const AppContent: React.FC = () => {
               </ProtectedRoute>
             }
           />
-
           <Route
             path='/user-dashboard'
             element={

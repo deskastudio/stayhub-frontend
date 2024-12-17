@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Button from '../Elements/Button';
@@ -14,16 +14,23 @@ const LoginForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.history.replaceState({}, document.title, '/login');
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
       // Post data login
-      const response = await axios.post('http://localhost:8000/auth/signin', {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        'https://stayhub-api.vercel.app/auth/signin',
+        {
+          email,
+          password,
+        }
+      );
 
       if (response.status === 200) {
         const { token } = response.data;
@@ -44,12 +51,12 @@ const LoginForm: React.FC = () => {
         // Check if there's a pending booking
         const pendingBooking = localStorage.getItem('_pendingBooking');
         if (pendingBooking) {
-          const roomId = JSON.parse(pendingBooking).roomId;
+          const roomId = JSON.parse(pendingBooking).id;
           const userId = getUserId();
 
           // Post transaction
           const response = await axios.post(
-            `http://localhost:8000/transaction/callback/${roomId}`,
+            `https://stayhub-api.vercel.app/transaction/callback/${roomId}`,
             { userId },
             {
               headers: {
@@ -78,7 +85,7 @@ const LoginForm: React.FC = () => {
           // Redirect based on role
           const { role } = getUserRole();
           if (role === 'admin') {
-            navigate('/beranda'); // Admin dashboard
+            navigate('/admin-dashboard'); // Admin dashboard
           } else {
             navigate('/user-dashboard'); // User dashboard
           }

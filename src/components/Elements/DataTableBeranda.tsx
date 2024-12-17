@@ -1,18 +1,7 @@
-
 import { useFetchRoom } from '../../hooks/useFetchRoom';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-
-type Room = {
-  name: string;
-  updatedAt: string;
-  type: {
-    cost: number;
-  }[];
-  transaction: {
-    status: string;
-  }[];
-};
+import { IRoom } from '../../interfaces/models/RoomInterface';
 
 const DataTable: React.FC = () => {
   const { room } = useFetchRoom();
@@ -30,11 +19,11 @@ const DataTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {room?.map((room: Room, index: number) => (
+          {room?.map((room: IRoom, index: number) => (
             <tr className='text-gray-700'>
               <td className='py-2'>{index + 1}</td>
               <td className='py-2'>
-                {room?.updatedAt &&
+                {room.updatedAt &&
                   format(new Date(room.updatedAt), 'dd MMMM yyyy', {
                     locale: id,
                   })}
@@ -46,15 +35,15 @@ const DataTable: React.FC = () => {
               <td className='py-2'>
                 <span
                   className={`px-2 py-1 rounded-full text-sm ${
-                    room?.transaction[0]?.status
-                      ? room?.transaction[0]?.status === 'settlement'
+                    room.transaction[0]?.status
+                      ? room.transaction[0]?.status === 'settlement'
                         ? 'bg-green-100 text-green-700'
                         : 'bg-yellow-100 text-yellow-700'
                       : 'bg-red-100 text-red-700'
                   }`}
                 >
-                  {room?.transaction[0]?.status
-                    ? room?.transaction[0]?.status === 'settlement'
+                  {room.transaction[0]?.status
+                    ? room.transaction[0]?.status === 'settlement'
                       ? 'Lunas'
                       : 'Belum Bayar'
                     : 'Ga Laku'}

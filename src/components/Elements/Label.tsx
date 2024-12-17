@@ -1,5 +1,3 @@
-
-
 interface LabelProps {
   htmlFor: string;
   children: React.ReactNode;
@@ -7,7 +5,10 @@ interface LabelProps {
 
 const Label: React.FC<LabelProps> = ({ htmlFor, children }) => {
   return (
-    <label htmlFor={htmlFor} className="block mb-2 text-lg text-gray-600 font-bold">
+    <label
+      htmlFor={htmlFor}
+      className='block mb-2 text-lg text-gray-600 font-bold'
+    >
       {children}
     </label>
   );

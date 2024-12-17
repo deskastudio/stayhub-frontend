@@ -1,38 +1,20 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { IRoom } from '../interfaces/models/RoomInterface';
+import { IRoomType } from '../interfaces/models/RoomTypeInterface';
 
-interface Room {
-  id: string;
-  name: string;
-  images: { url: string }[];
-  type: RoomType[];
-  updatedAt: string;
-}
-
-interface RoomType {
-  id: string;
-  name: string;
-  description: string;
-  cost: number;
-  facility: Facility[];
-}
-
-interface Facility {
-  id: string;
-  name: string;
-}
-
+// Interface
 interface UseFetchRoomResult {
-  room: Room | null;
-  currentType: RoomType | null;
+  room: IRoom[] | null;
+  currentType: IRoomType | null;
   availableRooms: { id: string; name: string }[];
   currentImage: string[];
   loading: boolean;
 }
 
 export const useFetchRoom = (): UseFetchRoomResult => {
-  const [room, setRoom] = useState<Room | null>(null);
-  const [currentType, setCurrentType] = useState<RoomType | null>(null);
+  const [room, setRoom] = useState<IRoom[] | null>([]);
+  const [currentType, setCurrentType] = useState<IRoomType | null>(null);
   const [availableRooms, setAvailableRooms] = useState<
     { id: string; name: string }[]
   >([]);
@@ -44,16 +26,16 @@ export const useFetchRoom = (): UseFetchRoomResult => {
       setLoading(true);
 
       try {
-        const response = await axios.get(`http://localhost:8000/room/`);
-        const roomList = response.data.data;
+        const response = await axios.get('https://stayhub-api.vercel.app/room');
 
-        if (roomList.length > 0) {
-          setRoom(roomList.map((room: Room) => room));
-          setCurrentType(roomList.type);
+        const data = response.data.data;
+        if (data.length > 0) {
+          setRoom(data.map((room: IRoom) => room));
+          setCurrentType(data.type);
           setAvailableRooms(
-            roomList.map((room: Room) => ({ id: room.id, name: room.name }))
+            data.map((room: IRoom) => ({ id: room.id, name: room.name }))
           );
-          setCurrentImage(roomList.map((room: Room) => room.images[0]?.url));
+          setCurrentImage(data.map((room: IRoom) => room.images[0]?.url));
         } else {
           setRoom(null);
           setCurrentType(null);

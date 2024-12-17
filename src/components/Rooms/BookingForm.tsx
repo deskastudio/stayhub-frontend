@@ -1,9 +1,7 @@
-import React from 'react';
-
 interface BookingFormProps {
   cost: number | undefined;
   availableRooms: { id: string; name: string }[];
-  selectedRoomNumber: string;
+  selectedRoom: string;
   onRoomSelect: (roomId: string) => void;
   onBooking: () => void;
 }
@@ -11,7 +9,7 @@ interface BookingFormProps {
 const BookingForm: React.FC<BookingFormProps> = ({
   cost,
   availableRooms,
-  selectedRoomNumber,
+  selectedRoom,
   onRoomSelect,
   onBooking,
 }) => {
@@ -30,7 +28,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
           </label>
           <select
             className='w-full p-3 border rounded-lg'
-            value={selectedRoomNumber}
+            value={selectedRoom}
             onChange={(e) => onRoomSelect(e.target.value)}
           >
             <option value='' disabled hidden>

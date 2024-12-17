@@ -5,17 +5,8 @@ import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';
 import PopupEditUser from '../components/Fragments/PopupEditUser';
 import Button from '../components/Elements/Button';
+import { IUser } from '../interfaces/models/UserInterface';
 import { useFetchUsers } from '../hooks/useFetchUserData';
-
-interface User {
-  id: string;
-  fullName: string;
-  phone: number;
-  email: string;
-  verified: boolean;
-  status: string;
-  role: string;
-}
 
 const AdminDataUser: React.FC = () => {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
@@ -29,7 +20,7 @@ const AdminDataUser: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus user ini?')) {
       try {
-        await axios.delete(`http://localhost:8000/delete/user/${id}`, {
+        await axios.delete(`https://stayhub-api.vercel.app/delete/user/${id}`, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
@@ -48,7 +39,7 @@ const AdminDataUser: React.FC = () => {
         // fetch data user
         fetchUsers();
       } catch (error) {
-        console.error('Error deleting user:', error);
+        console.error(error);
       }
     }
   };
@@ -71,7 +62,7 @@ const AdminDataUser: React.FC = () => {
             </tr>
           </thead>
           <tbody className='text-center'>
-            {user?.map((user: User) => (
+            {user?.map((user: IUser) => (
               <tr className='text-gray-700'>
                 <td className='py-2'>{user.fullName}</td>
                 <td className='py-2'>{user.phone}</td>
@@ -100,7 +91,6 @@ const AdminDataUser: React.FC = () => {
                   <Button
                     variant='add'
                     onClick={() => {
-                      // setCurrentUser(user);
                       setIsEditPopupOpen(true);
                     }}
                   >

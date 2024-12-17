@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
-import Button from "../Elements/ButtonLanding";
+import { useState } from 'react';
+import { FaBars, FaTimes } from 'react-icons/fa';
+import Button from '../Elements/ButtonLanding';
 
 const NavbarMenu = [
   {
     id: 1,
-    title: "Beranda",
-    link: "/",
+    title: 'Beranda',
+    link: '/',
   },
   {
     id: 2,
-    title: "Tentang Kami",
-    link: "#about",
+    title: 'Tentang Kami',
+    link: '#about',
   },
   {
     id: 3,
-    title: "Booking",
-    link: "#booking",
+    title: 'Booking',
+    link: '#booking',
   },
   {
     id: 4,
-    title: "Kontak",
-    link: "#contact",
+    title: 'Kontak',
+    link: '#contact',
   },
 ];
 
@@ -37,34 +37,38 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="shadow-md rounded-b-xl sticky top-0 w-full z-10 bg-default">
-      <div className="container flex justify-between items-center py-4">
-        <img src="/stayhub-logo2.png" alt="StayHub Logo" />
+    <div className='shadow-md rounded-b-xl sticky top-0 w-full z-10 bg-default'>
+      <div className='container flex justify-between items-center py-4'>
+        <img src='/stayhub-logo2.png' alt='StayHub Logo' />
 
         {/* Menu toggle for small screens */}
-        <div className="lg:hidden">
+        <div className='lg:hidden'>
           <button
             onClick={toggleMenu}
-            aria-label="Toggle menu"
-            className="text-gray-600 text-2xl focus:outline-none"
+            aria-label='Toggle menu'
+            className='text-gray-600 text-2xl focus:outline-none'
           >
-            {isMenuOpen ? <FaTimes size="30" color="#113F67" /> : <FaBars size="30" color="#113F67" />}
+            {isMenuOpen ? (
+              <FaTimes size='30' color='#113F67' />
+            ) : (
+              <FaBars size='30' color='#113F67' />
+            )}
           </button>
         </div>
 
         {/* Navbar menu */}
         <nav
           className={`${
-            isMenuOpen ? "block" : "hidden"
+            isMenuOpen ? 'block' : 'hidden'
           } lg:block absolute lg:static top-full left-0 w-full rounded-xl lg:w-auto bg-default lg:bg-transparent shadow-md lg:shadow-none`}
         >
-          <ul className="flex flex-col lg:flex-row items-center gap-6 p-4 lg:p-0">
+          <ul className='flex flex-col lg:flex-row items-center gap-6 p-4 lg:p-0'>
             {NavbarMenu.map((item) => (
               <li key={item.id}>
                 <a
                   href={item.link}
                   onClick={closeMenu} // Close menu on click
-                  className="block font-main text-gray-400 text-base xl:text-base py-2 lg:py-1 px-2 xl:px-3 hover:text-primary transition-all duration-300 font-medium"
+                  className='block font-main text-gray-400 text-base xl:text-base py-2 lg:py-1 px-2 xl:px-3 hover:text-primary transition-all duration-300 font-medium'
                 >
                   {item.title}
                 </a>
@@ -73,22 +77,30 @@ const Navbar: React.FC = () => {
           </ul>
 
           {/* Buttons */}
-          <div className="flex flex-col items-center gap-4 mt-4 pb-6 lg:hidden">
-            <Button custom="border border-primary py-3 text-primary" to="/login" onClick={closeMenu}>
+          <div className='flex flex-col items-center gap-4 mt-4 pb-6 lg:hidden'>
+            <Button
+              custom='border border-primary py-3 text-primary'
+              to='/login'
+              onClick={closeMenu}
+            >
               Masuk
             </Button>
-            <Button custom="bg-primary py-3 text-white" to="/register" onClick={closeMenu}>
+            <Button
+              custom='bg-primary py-3 text-white'
+              to='/register'
+              onClick={closeMenu}
+            >
               Daftar
             </Button>
           </div>
         </nav>
 
         {/* Buttons for large screens */}
-        <div className="hidden lg:flex gap-2">
-          <Button custom="border border-primary py-3 text-primary" to="/login">
+        <div className='hidden lg:flex gap-2'>
+          <Button custom='border border-primary py-3 text-primary' to='/login'>
             Masuk
           </Button>
-          <Button custom="bg-primary py-3 text-white" to="/register">
+          <Button custom='bg-primary py-3 text-white' to='/register'>
             Daftar
           </Button>
         </div>

@@ -1,5 +1,3 @@
-
-
 interface FAQItemProps {
   question: string;
   answer: React.ReactNode;

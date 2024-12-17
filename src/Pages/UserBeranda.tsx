@@ -3,29 +3,18 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import Button from '../components/Elements/Button';
 import ProfileUser from '../components/Fragments/Profile';
-import BookingModal from '../components/Fragments/BookingModal';
 import { format, add } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { getUserName, getRoomId } from '../utils/auth.utils';
-
-// Interfaces
-interface Room {
-  name: string;
-  updatedAt: string;
-}
-
-interface RoomType {
-  name: string;
-  cost: number;
-}
+import { IRoom } from '../interfaces/models/RoomInterface';
+import { IRoomType } from '../interfaces/models/RoomTypeInterface';
 
 const UserBeranda: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [room, setRoom] = useState<Room | null>(null);
-  const [type, setType] = useState<RoomType | null>(null);
+  // const [setIsModalOpen] = useState(false);
+  const [room, setRoom] = useState<Partial<IRoom>>();
+  const [type, setType] = useState<Partial<IRoomType>>();
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  // const openModal = () => setIsModalOpen(true);
 
   // NEW get token and idUser
   const userName = getUserName();
@@ -37,7 +26,7 @@ const UserBeranda: React.FC = () => {
       try {
         // Fetch data room
         const response = await axios.get(
-          `http://localhost:8000/room/${roomId}`,
+          `https://stayhub-api.vercel.app/room/${roomId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -90,11 +79,8 @@ const UserBeranda: React.FC = () => {
         <ProfileUser />
       </div>
       <div className='mb-10'>
-        <Button variant='primary' onClick={openModal}>
-          Lakukan pembayaran
-        </Button>
+        <Button variant='primary'>Lakukan pembayaran</Button>
       </div>
-      <BookingModal isOpen={isModalOpen} onClose={closeModal} />
       <div className='overflow-x-auto w-full'>
         <div className='flex space-x-4'>
           <div className='bg-white p-4 rounded-lg flex-1 space-y-5'>

@@ -68,12 +68,15 @@ const RegisterForm: React.FC = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/signup', {
-        fullName,
-        email,
-        phone,
-        password,
-      });
+      const response = await axios.post(
+        'https://stayhub-api.vercel.app/auth/signup',
+        {
+          fullName,
+          email,
+          phone,
+          password,
+        }
+      );
       Swal.fire({
         icon: 'success',
         title: 'Registration Success!',

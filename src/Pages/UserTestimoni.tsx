@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { IReview } from '../interfaces/models/ReviewInterface';
 import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';
 import Placeholder from '../components/Fragments/Placeholder';
 import TestimoniForm from '../components/Fragments/TestimoniForm';
-import TestimoniEditForm from '../components/Fragments/TestimoniEditForm'; // Import the edit form
+import TestimoniEditForm from '../components/Fragments/TestimoniEditForm';
 import TestimonialItem from '../components/Fragments/TestimonialItem';
 import { TestimonialData } from '../components/Elements/TestimonialData';
 import { getUserId, getRoomId } from '../utils/auth.utils';
@@ -25,15 +26,15 @@ const UserTestimoni: React.FC = () => {
       try {
         // Fetch testimonials
         const testimonialsResponse = await axios.get(
-          `http://localhost:8000/review/${id}`,
+          `https://stayhub-api.vercel.app/review/${id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
         const testimonialsData = testimonialsResponse.data.data.map(
-          (testimonial: any) => ({
+          (testimonial: IReview) => ({
             id: testimonial.id,
-            roomType: testimonial.room?.type[0]?.name,
-            roomNumber: testimonial.room?.name,
+            roomType: testimonial.room.type[0].name,
+            roomNumber: testimonial.room.name,
             comment: testimonial.comment,
             rating: testimonial.rating,
           })
@@ -75,7 +76,7 @@ const UserTestimoni: React.FC = () => {
 
   const handleDeleteTestimonial = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:8000/review/${id}`, {
+      await axios.delete(`https://stayhub-api.vercel.app/review/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTestimonials((prev) => prev.filter((item) => item.id !== id));
@@ -106,6 +107,7 @@ const UserTestimoni: React.FC = () => {
             roomId={roomId}
             onSubmit={handleFormSubmit}
             onCancel={() => setStep(testimonials.length ? 'list' : 'empty')}
+            editingTestimonial={null}
           />
         )}
         {step === 'edit' && editingTestimonial && (

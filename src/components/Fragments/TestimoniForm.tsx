@@ -8,7 +8,9 @@ import { TestimonialData } from '../Elements/TestimonialData';
 import { getRoomId } from '../../utils/auth.utils';
 
 interface TestimonialFormProps {
-  onSubmit: (data: any) => void;
+  userId: string;
+  roomId: string;
+  onSubmit: (data: TestimonialData) => void;
   onCancel: () => void;
   editingTestimonial: TestimonialData | null;
 }
@@ -19,14 +21,14 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
 }) => {
   const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<string>('');
   const token = sessionStorage.getItem('token');
   const roomId = getRoomId();
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
 
     // Cek apakah form telah terisi dengan baik
     if (!comment || rating === 0) {
@@ -84,7 +86,7 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
     } catch (error) {
       console.error(error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -107,37 +109,14 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
         <Rating rating={rating} onRate={setRating} />
       </div>
 
-      {/* <div className='flex justify-between items-center mt-6'>
-        <div className='text-lg'>
-          Rating: <span className='font-bold'>{rating || 'Belum dipilih'}</span>
-        </div>
-        <Button
-          variant='add'
-          type='button'
-          onClick={() => setRatingModalOpen(true)}
-        >
-          Beri Rating
-        </Button>
-      </div> */}
-
       <div className='flex justify-end space-x-2 mt-6'>
         <Button variant='deleted' onClick={onCancel}>
           Batal
         </Button>
-        <Button variant='add' type='submit'>
-          Kirim
+        <Button variant='add' type='submit' disabled={loading}>
+          {loading ? 'Mengirim...' : 'Kirim'}
         </Button>
       </div>
-
-      {/* {isRatingModalOpen && (
-        <RatingFormModal
-          onClose={() => setRatingModalOpen(false)}
-          onSubmit={(selectedRating) => {
-            setRating(selectedRating); // Update state rating
-            setRatingModalOpen(false); // Tutup modal
-          }}
-        />
-      )} */}
     </form>
   );
 };

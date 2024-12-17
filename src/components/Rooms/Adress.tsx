@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Adress: React.FC = () => {
   return (
     <div className='py-16'>

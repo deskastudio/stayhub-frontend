@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getUserRole } from '../../utils/auth.utils';
@@ -14,7 +13,7 @@ const Sidebar: React.FC = () => {
       ? [
           {
             label: 'Beranda',
-            href: '/beranda',
+            href: '/admin-dashboard',
             iconSrc: '/icon/beranda-icon.svg',
           },
           {

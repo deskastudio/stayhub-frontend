@@ -1,25 +1,14 @@
-import { useState, useEffect, FormEvent } from "react";
-import Button from "../Elements/Button";
-
-interface Fasilitas {
-  id: string;
-  nama: string;
-}
-
-interface TypeKamar {
-  id?: string;
-  namaTipe: string;
-  fasilitas: Fasilitas[];
-  deskripsi: string;
-  harga: number;
-}
+import { useState, useEffect, FormEvent } from 'react';
+import Button from '../Elements/Button';
+import { IRoomType } from '../../interfaces/models/RoomTypeInterface';
+import { IRoomFacility } from '../../interfaces/models/RoomFacilityInterface';
 
 interface PopupEditTypeKamarProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: TypeKamar) => void;
-  currentData: TypeKamar | null;
-  fasilitasData: Fasilitas[];
+  onSubmit: (data: IRoomType) => void;
+  currentData: IRoomType | null;
+  fasilitasData: IRoomFacility[];
 }
 
 const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
@@ -29,21 +18,21 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
   currentData,
   fasilitasData,
 }) => {
-  const [namaTipe, setNamaTipe] = useState("");
+  const [namaTipe, setNamaTipe] = useState('');
   const [fasilitas, setFasilitas] = useState<string[]>([]);
-  const [deskripsi, setDeskripsi] = useState("");
+  const [deskripsi, setDeskripsi] = useState('');
   const [harga, setHarga] = useState(0);
 
   useEffect(() => {
     if (currentData) {
-      setNamaTipe(currentData.namaTipe);
-      setFasilitas(currentData.fasilitas.map((item) => item.nama));
-      setDeskripsi(currentData.deskripsi);
-      setHarga(currentData.harga);
+      setNamaTipe(currentData.name);
+      setFasilitas(currentData.facility.map((item) => item.name));
+      setDeskripsi(currentData.description);
+      setHarga(currentData.cost);
     } else {
-      setNamaTipe("");
+      setNamaTipe('');
       setFasilitas([]);
-      setDeskripsi("");
+      setDeskripsi('');
       setHarga(0);
     }
   }, [currentData]);
@@ -59,17 +48,19 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!currentData) {
-      alert("Data tidak tersedia untuk diupdate.");
+      alert('Data tidak tersedia untuk diupdate.');
       return;
     }
 
     // Update only the fields that have changed
-    const updatedData: TypeKamar = {
+    const updatedData: IRoomType = {
       id: currentData.id,
-      namaTipe: currentData.namaTipe, // Keep the old 'namaTipe' if it was not changed
-      fasilitas: fasilitasData.filter((f) => fasilitas.includes(f.nama)),
-      deskripsi: deskripsi || currentData.deskripsi, // Update deskripsi only if it's changed
-      harga: harga || currentData.harga, // Update harga only if it's changed
+      name: namaTipe,
+      facility: fasilitasData.filter((f) => fasilitas.includes(f.name)),
+      description: deskripsi || currentData.description,
+      cost: harga || currentData.cost,
+      createdAt: '',
+      updatedAt: '',
     };
 
     onSubmit(updatedData);
@@ -78,63 +69,67 @@ const PopupEditTypeKamar: React.FC<PopupEditTypeKamarProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">Edit Tipe Kamar</h2>
-          <Button variant="plain" onClick={onClose}>
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+      <div className='bg-white p-6 rounded-lg shadow-lg w-1/3'>
+        <div className='flex justify-between items-center mb-4'>
+          <h2 className='text-2xl font-bold'>Edit Tipe Kamar</h2>
+          <Button variant='plain' onClick={onClose}>
             ×
           </Button>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block font-bold mb-2">Nama Tipe Kamar</label>
+          <div className='mb-4'>
+            <label className='block font-bold mb-2'>Nama Tipe Kamar</label>
             <input
-              type="text"
+              type='text'
               value={namaTipe}
               onChange={(e) => setNamaTipe(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
+              className='w-full px-3 py-2 border rounded-lg'
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block font-bold mb-2">Fasilitas</label>
-            <div className="flex flex-wrap gap-2">
+          <div className='mb-4'>
+            <label className='block font-bold mb-2'>Fasilitas</label>
+            <div className='flex flex-wrap gap-2'>
               {fasilitasData.map((fasilitasItem) => (
                 <Button
                   key={fasilitasItem.id}
-                  variant={fasilitas.includes(fasilitasItem.nama) ? "primary" : "secondary"}
-                  onClick={() => toggleFasilitas(fasilitasItem.nama)}
+                  variant={
+                    fasilitas.includes(fasilitasItem.name)
+                      ? 'primary'
+                      : 'secondary'
+                  }
+                  onClick={() => toggleFasilitas(fasilitasItem.name)}
                 >
-                  {fasilitasItem.nama}
+                  {fasilitasItem.name}
                 </Button>
               ))}
             </div>
           </div>
 
-          <div className="mb-4">
-            <label className="block font-bold mb-2">Deskripsi</label>
+          <div className='mb-4'>
+            <label className='block font-bold mb-2'>Deskripsi</label>
             <textarea
               value={deskripsi}
               onChange={(e) => setDeskripsi(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg"
+              className='w-full px-3 py-2 border rounded-lg'
             />
           </div>
-          <div className="mb-4">
-            <label className="block font-bold mb-2">Harga</label>
+          <div className='mb-4'>
+            <label className='block font-bold mb-2'>Harga</label>
             <input
-              type="number"
+              type='number'
               value={harga}
               onChange={(e) => setHarga(Number(e.target.value))}
-              className="w-full px-3 py-2 border rounded-lg"
-              min="0"
+              className='w-full px-3 py-2 border rounded-lg'
+              min='0'
             />
           </div>
-          <div className="flex justify-end space-x-2">
-            <Button variant="secondary" onClick={onClose} type="button">
+          <div className='flex justify-end space-x-2'>
+            <Button variant='secondary' onClick={onClose} type='button'>
               Cancel
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type='submit' variant='primary'>
               Update Tipe Kamar
             </Button>
           </div>

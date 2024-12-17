@@ -1,24 +1,15 @@
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-interface User {
-  id: string;
-  fullName: string;
-  phone: number;
-  email: string;
-  verified: boolean;
-  status: string;
-  role: string;
-}
+import { useEffect, useState } from 'react';
+import { IUser } from '../interfaces/models/UserInterface';
 
 interface UseResult {
-  user: User[] | null;
+  user: IUser[] | null;
   loading: boolean;
   fetchUsers: () => void;
 }
 
 export const useFetchUsers = (): UseResult => {
-  const [user, setUser] = useState<User[] | null>(null);
+  const [user, setUser] = useState<IUser[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUsers = async () => {
@@ -26,12 +17,15 @@ export const useFetchUsers = (): UseResult => {
     setLoading(true);
 
     try {
-      const response = await axios.get('http://localhost:8000/list/user', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        'https://stayhub-api.vercel.app/list/user',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
 
       setUser(response.data.data);
     } catch (error) {

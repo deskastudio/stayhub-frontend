@@ -72,7 +72,7 @@ const RoomType: React.FC = () => {
       try {
         setLoading(true);
 
-        const response = await axios.get('http://localhost:8000/type');
+        const response = await axios.get('https://stayhub-api.vercel.app/type');
 
         // Map data from API
         const data = response.data.data.map((type: RoomType) => ({

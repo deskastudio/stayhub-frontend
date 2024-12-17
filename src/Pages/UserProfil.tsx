@@ -30,12 +30,15 @@ const UserProfil: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/user/profile', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          'https://stayhub-api.vercel.app/user/profile',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
         const data = response.data.data;
         setUser(data);
         setFullName(data.fullName);
@@ -75,7 +78,7 @@ const UserProfil: React.FC = () => {
 
     try {
       const response = await axios.put(
-        'http://localhost:8000/user/profile/update',
+        'https://stayhub-api.vercel.app/user/profile/update',
         formData,
         {
           headers: {
