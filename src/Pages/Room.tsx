@@ -46,7 +46,6 @@ const Room: React.FC = () => {
         }
       );
 
-      alert('Pemesanan berhasil!');
       console.log('Response:', response.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -103,9 +102,6 @@ const Room: React.FC = () => {
       setSelectedRoomName(selectedRoom.name);
     }
   };
-
-  // Handle jika kamar yang dipilih tidak ada
-  // const images = selectedRoom ? selectedRoom.images : [];
 
   if (loading) {
     return (

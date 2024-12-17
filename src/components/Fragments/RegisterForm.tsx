@@ -10,6 +10,7 @@ const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex untuk validasi email
@@ -74,6 +75,7 @@ const RegisterForm: React.FC = () => {
           fullName,
           email,
           phone,
+          address,
           password,
         }
       );
@@ -102,8 +104,6 @@ const RegisterForm: React.FC = () => {
         });
       }
     }
-
-    console.log({ fullName, email, phone, password });
   };
 
   return (
@@ -147,6 +147,17 @@ const RegisterForm: React.FC = () => {
           placeholder='Masukkan Phone'
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
+      <div>
+        <Input
+          label='Alamat'
+          name='alamat'
+          type='text'
+          id='alamat'
+          placeholder='Masukkan Alamat'
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
         />
       </div>
       <div>
