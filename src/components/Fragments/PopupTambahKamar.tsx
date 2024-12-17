@@ -125,7 +125,6 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
               multiple
               onChange={(e) => setGambarKamar(e.target.files)}
               className='w-full px-3 py-2 border rounded-lg'
-              required
             />
           </div>
 

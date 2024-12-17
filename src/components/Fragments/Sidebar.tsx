@@ -84,7 +84,7 @@ const Sidebar: React.FC = () => {
     sessionStorage.removeItem('role');
 
     axios.post(
-      'http://localhost:8000/auth/logout',
+      'https://stayhub-api.vercel.app/auth/logout',
       {},
       { withCredentials: true }
     );
