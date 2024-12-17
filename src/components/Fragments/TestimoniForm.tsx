@@ -44,7 +44,7 @@ const TestimonialForm: React.FC<TestimonialFormProps> = ({
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/review/${roomId}`,
+        `https://stayhub-api.vercel.app/review/${roomId}`,
         { comment, rating },
         {
           headers: {
