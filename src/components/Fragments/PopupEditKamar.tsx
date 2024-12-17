@@ -68,7 +68,7 @@ const PopupEditKamar: React.FC<PopupEditKamarProps> = ({
 
     try {
       const response = await axios.put(
-        `http://localhost:8000/room/update/${currentData?.id}`,
+        `https://stayhub-api.vercel.app/room/update/${currentData?.id}`,
         formData,
         {
           headers: {

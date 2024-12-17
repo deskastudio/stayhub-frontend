@@ -28,7 +28,7 @@ const PopupTambahFasilitas: React.FC<PopupTambahFasilitasProps> = ({
     try {
       // Kirim nama fasilitas ke backend menggunakan API POST
       const response = await axios.post(
-        'http://localhost:8000/facility/add',
+        'https://stayhub-api.vercel.app/facility/add',
         { name: fasilitas.trim() }, // Data yang dikirim ke backend
         {
           headers: {

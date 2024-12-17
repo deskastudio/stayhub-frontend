@@ -23,7 +23,7 @@ const PopupTambahUser: React.FC<PopupTambahUserProps> = ({
 
     try {
       // Kirim data user ke backend
-      const response = await fetch('http://localhost:8000/user', {
+      const response = await fetch('https://stayhub-api.vercel.app/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

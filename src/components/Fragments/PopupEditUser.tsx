@@ -37,7 +37,7 @@ const PopupEditUser: React.FC<PopupEditUserProps> = ({
       const updatedData = { role }; // Data untuk diperbarui
 
       const response = await fetch(
-        `http://localhost:8000/update/user/${user?.id}`,
+        `https://stayhub-api.vercel.app/update/user/${user?.id}`,
         {
           method: 'PUT',
           headers: {

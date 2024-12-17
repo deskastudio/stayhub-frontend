@@ -44,7 +44,7 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
     try {
       // Send data to API to add room
       const response = await axios.post(
-        'http://localhost:8000/room/add',
+        'https://stayhub-api.vercel.app/room/add',
         formData,
         {
           headers: {
