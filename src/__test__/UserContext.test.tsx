@@ -41,4 +41,18 @@ describe('UserContext', () => {
     const userTypeElement = screen.getByTestId('user-type');
     expect(userTypeElement).toHaveTextContent('admin');
   });
+
+  // Test 3: Memastikan useUser melempar error jika digunakan di luar UserProvider
+  it('should throw an error when useUser is used outside of UserProvider', () => {
+    let error: Error | undefined;
+
+    try {
+      render(<TestComponent />);
+    } catch (e) {
+      error = e as Error;
+    }
+
+    expect(error).toBeDefined();
+    expect(error?.message).toBe('useUser must be used within a UserProvider');
+  });
 });

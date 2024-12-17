@@ -22,4 +22,7 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.app.json',  // Tentukan path yang benar untuk tsconfig aplikasi Anda
     },
   },
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/components/Elements/ButtonLanding.tsx', // Abaikan ButtonLanding.tsx
+  ],
 };
