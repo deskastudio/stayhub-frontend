@@ -151,7 +151,10 @@ const AdminDataKamar: React.FC = () => {
         <Profile />
       </SectionHeader>
 
-      <TabPilihan addButtonLabel='Tambah Kamar' />
+      <TabPilihan
+        onAddButtonClick={() => setIsPopupOpen(true)}
+        addButtonLabel='Tambah Kamar'
+      />
 
       {loading ? (
         <p>Loading data kamar...</p>
