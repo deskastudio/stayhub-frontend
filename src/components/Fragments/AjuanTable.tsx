@@ -27,11 +27,14 @@ const AjuanTable: React.FC = () => {
     const fetchAjuanList = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8000/complaint', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          'https://stayhub-api.vercel.app/complaint',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (Array.isArray(response.data.data)) {
           setAjuanList(response.data.data);
         } else {

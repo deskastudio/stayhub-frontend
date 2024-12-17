@@ -1,6 +1,5 @@
 import SectionHeader from '../components/Elements/SectionHeader';
 import Profile from '../components/Fragments/Profile';
-import TabPilihan from '../components/Fragments/TabPilihan';
 import CustomTable from '../components/Elements/CustomTable';
 import PopupTambahKamar from '../components/Fragments/PopupTambahKamar';
 import PopupEditKamar from '../components/Fragments/PopupEditKamar';
@@ -150,21 +149,6 @@ const AdminDataKamar: React.FC = () => {
       <SectionHeader title='Data Kamar'>
         <Profile />
       </SectionHeader>
-
-      <TabPilihan
-        buttons={[
-          { label: 'All', value: 'all', variant: 'secondary' },
-          ...typeKamarData.map((type) => ({
-            label: type.name,
-            value: type.id,
-            variant: 'secondary' as const,
-          })),
-        ]}
-        activeTab={activeTab}
-        onTabClick={setActiveTab}
-        onAddButtonClick={() => setIsPopupOpen(true)}
-        addButtonLabel='Tambah Kamar'
-      />
 
       {loading ? (
         <p>Loading data kamar...</p>
