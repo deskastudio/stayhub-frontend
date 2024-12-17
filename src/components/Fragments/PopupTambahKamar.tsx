@@ -29,20 +29,19 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!noKamar || !typeKamar || !roomImages || roomImages.length === 0) {
-      alert('Pastikan semua data terisi!');
+    if (!noKamar || !typeKamar) {
+      alert('Anda belum mengisi Nama Kamar dan Tipe Kamar.');
       return;
     }
 
     const formData = new FormData();
     formData.append('name', noKamar);
     formData.append('type', typeKamar);
-    Array.from(roomImages).forEach((image) =>
+    Array.from(roomImages || []).forEach((image) =>
       formData.append('roomImages', image)
     );
 
     try {
-      // Send data to API to add room
       const response = await axios.post(
         'https://stayhub-api.vercel.app/room/add',
         formData,
@@ -54,11 +53,11 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
         }
       );
 
-      // Check response status
       if (response.status === 201) {
         alert('Kamar berhasil ditambahkan!');
-        onKamarAdded(); // Refresh data
-        onClose(); // Close popup
+        onKamarAdded();
+        onClose();
+        setGambarKamar(null); // Reset input file
       } else {
         alert('Gagal menambahkan kamar.');
       }
@@ -72,7 +71,6 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
     }
   };
 
-  // If popup is not open, don't render anything
   if (!isOpen) return null;
 
   return (
@@ -97,7 +95,6 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
             />
           </div>
 
-          {/* Tipe Kamar */}
           <div className='mb-4'>
             <label className='block font-bold mb-2'>Tipe Kamar</label>
             <select
@@ -117,7 +114,6 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
             </select>
           </div>
 
-          {/* Input Gambar Kamar */}
           <div className='mb-4'>
             <label className='block font-bold mb-2'>Gambar Kamar</label>
             <input
@@ -126,6 +122,11 @@ const PopupTambahKamar: React.FC<PopupTambahKamarProps> = ({
               onChange={(e) => setGambarKamar(e.target.files)}
               className='w-full px-3 py-2 border rounded-lg'
             />
+            {roomImages && roomImages.length === 0 && (
+              <p className='text-sm text-gray-500'>
+                Tidak ada gambar yang dipilih.
+              </p>
+            )}
           </div>
 
           <div className='flex justify-end space-x-2'>
