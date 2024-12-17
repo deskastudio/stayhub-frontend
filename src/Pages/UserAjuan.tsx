@@ -59,7 +59,7 @@ const UserAjuan: React.FC = () => {
             <div className='flex flex-col items-center text-center'>
               <div className='bg-[#226597] text-white rounded-full w-24 h-24 flex items-center justify-center mb-2'>
                 <img
-                  src='./public/icon/masukkanKeluhan.svg'
+                  src='/icon/masukkanKeluhan.svg'
                   alt='Tuliskan Ajuan'
                   className='w-18 h-18'
                 />
@@ -70,7 +70,7 @@ const UserAjuan: React.FC = () => {
             <div className='flex flex-col items-center text-center'>
               <div className='bg-[#226597] text-white rounded-full w-24 h-24 flex items-center justify-center mb-2'>
                 <img
-                  src='./public/icon/tindahLanjutKeluhan.svg'
+                  src='/icon/tindahLanjutKeluhan.svg'
                   alt='Tuliskan Ajuan'
                   className='w-18 h-18'
                 />
@@ -81,7 +81,7 @@ const UserAjuan: React.FC = () => {
             <div className='flex flex-col items-center text-center'>
               <div className='bg-[#226597] text-white rounded-full w-24 h-24 flex items-center justify-center mb-2'>
                 <img
-                  src='./public/icon/KeluhanDikirim.svg'
+                  src='/icon/KeluhanDikirim.svg'
                   alt='Tuliskan Ajuan'
                   className='w-18 h-18'
                 />

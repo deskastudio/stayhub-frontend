@@ -37,9 +37,12 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/room', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          'https://stayhub-api.vercel.app/room',
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setRooms(response.data.data);
       } catch (error) {
         console.error('Error fetching rooms:', error);
@@ -86,7 +89,7 @@ const AjuanModal: React.FC<AjuanModalProps> = ({
     try {
       setLoading(true);
       const response = await axios.post(
-        `http://localhost:8000/complaint/${roomId}`,
+        `https://stayhub-api.vercel.app/complaint/${roomId}`,
         formDataToSubmit,
         {
           headers: {
