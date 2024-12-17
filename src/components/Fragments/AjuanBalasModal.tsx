@@ -26,7 +26,7 @@ const AjuanBalasModal: React.FC<AjuanBalasModalProps> = ({
     try {
       // Mengirim permintaan PATCH ke server
       await axios.put(
-        `http://localhost:8000/complaint/response/${ajuan.id}`,
+        `https://stayhub-api.vercel.app/complaint/response/${ajuan.id}`,
         { response },
         {
           headers: {

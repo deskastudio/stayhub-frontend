@@ -29,7 +29,7 @@ const EditStatusModal: React.FC<EditStatusModalProps> = ({
     try {
       // Mengirim permintaan PATCH ke server
       await axios.put(
-        `http://localhost:8000/complaint/status/${ajuan.id}`,
+        `https://stayhub-api.vercel.app/complaint/status/${ajuan.id}`,
         { status }, // Body request
         {
           headers: {
