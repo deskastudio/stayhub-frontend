@@ -53,7 +53,7 @@ const CustomTable = <T,>({
               {columns.map((col, colIndex) => (
                 <td key={colIndex} className='px-4 py-2 text-center border'>
                   {typeof row[col as keyof T] === 'string' &&
-                  (row[col as keyof T] as string).startsWith('http') ? ( // Jika URL gambar
+                  (row[col as keyof T] as string).startsWith('https') ? ( // Jika URL gambar
                     <img
                       src={row[col as keyof T] as string}
                       alt={col}

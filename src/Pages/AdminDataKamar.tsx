@@ -120,7 +120,7 @@ const AdminDataKamar: React.FC = () => {
           {room.images.map((image, index) => (
             <img
               key={index}
-              src={`https://stayhub-api.vercel.app/${image.url}`}
+              src={`http://localhost:8000/${image.url}`}
               alt={`Room ${room.name}`}
               className='w-10 h-10 object-cover rounded'
             />
