@@ -32,7 +32,7 @@ const AppContent: React.FC = () => {
   const routesWithSidebar = [
     '/admin-dashboard',
     '/data-user',
-    '/data-pembayaran',
+    // '/data-pembayaran',
     '/data-fasilitas',
     '/data-kamar',
     '/type-kamar',

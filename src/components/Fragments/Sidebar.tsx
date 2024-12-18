@@ -53,11 +53,11 @@ const Sidebar: React.FC = () => {
             href: '/user-profile',
             iconSrc: '/icon/user2-icon.svg',
           },
-          {
-            label: 'Pembayaran',
-            href: '/user-payment',
-            iconSrc: '/icon/pembayaran-icon.svg',
-          },
+          // {
+          //   label: 'Pembayaran',
+          //   href: '/user-payment',
+          //   iconSrc: '/icon/pembayaran-icon.svg',
+          // },
           {
             label: 'Testimoni',
             href: '/user-testimoni',
