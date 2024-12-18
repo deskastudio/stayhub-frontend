@@ -23,7 +23,7 @@ import UserBeranda from './Pages/UserBeranda';
 import UserAjuan from './Pages/UserAjuan';
 import UserListAjuan from './Pages/UserListAjuan';
 import UserProfil from './Pages/UserProfil';
-import UserPembayaran from './Pages/UserPembayaran';
+// import UserPembayaran from './Pages/UserPembayaran';
 import UserTestimoni from './Pages/UserTestimoni';
 
 const AppContent: React.FC = () => {
@@ -122,14 +122,14 @@ const AppContent: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path='/user-payment'
             element={
               <ProtectedRoute role='user'>
                 <UserPembayaran />
               </ProtectedRoute>
             }
-          />
+          /> */}
           <Route
             path='/user-testimoni'
             element={

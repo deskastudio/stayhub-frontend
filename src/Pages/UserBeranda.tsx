@@ -8,6 +8,7 @@ import { id } from 'date-fns/locale';
 import { getUserName, getRoomId } from '../utils/auth.utils';
 import { IRoom } from '../interfaces/models/RoomInterface';
 import { IRoomType } from '../interfaces/models/RoomTypeInterface';
+import { FaCheck } from 'react-icons/fa';
 
 const UserBeranda: React.FC = () => {
   // const [setIsModalOpen] = useState(false);
@@ -92,13 +93,13 @@ const UserBeranda: React.FC = () => {
                 })}
             </span>
             <div className='flex gap-5 items-center'>
-              <p className='text-xl font-bold'>Belum Lunas</p>
-              <img src='icon/cross-red.svg' alt='' />
+              <p className='text-xl font-bold'>Lunas</p>
+              <FaCheck color='green' size={24} />
             </div>
           </div>
           <div className='bg-white p-4 rounded-lg flex-1 space-y-5'>
             <p className='font-semibold'>
-              Kamu belum membayar tagihan bulan ini
+              Kamu sudah membayar tagihan bulan ini
             </p>
             <div className='flex gap-5 items-center'>
               <p className='text-xl font-bold'>
