@@ -96,7 +96,10 @@ const AdminDataFasilitas: React.FC = () => {
         </Button>
       </div>
       {loading ? (
-        <p>Loading data...</p>
+        <div className='flex justify-center items-center'>
+          <div className='w-16 h-16 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
+          <p className='ml-4 text-lg font-semibold text-primary'>Loading...</p>
+        </div>
       ) : (
         <CustomTable
           columns={columns}

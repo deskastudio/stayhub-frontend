@@ -140,17 +140,17 @@ const CardContainerBeranda: React.FC = () => {
       <Card
         title='Total Pendapatan'
         count={income}
-        icon='/icon/totalKamar_icon.svg'
+        icon='/icon/tdesign_money1.svg'
       />
       <Card
         title='Total Belum Bayar'
         count={totalNotPaid}
-        icon='/icon/totalKamar_icon.svg'
+        icon='/icon/totalPenghuni_icon.svg'
       />
       <Card
         title='Total Sudah Bayar'
         count={totalPaid}
-        icon='/icon/totalKamar_icon.svg'
+        icon='/icon/totalPenghuni_icon.svg'
       />
     </div>
   );

@@ -97,8 +97,11 @@ const UserListAjuan: React.FC = () => {
       <div>
         {loading ? (
           // Menampilkan pesan loading jika data sedang dimuat
-          <div className='text-center py-4 text-xl text-gray-500'>
-            Loading data...
+          <div className='flex justify-center items-center'>
+            <div className='w-16 h-16 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
+            <p className='ml-4 text-lg font-semibold text-primary'>
+              Loading...
+            </p>
           </div>
         ) : ajuanList.length === 0 ? (
           <Placeholder
