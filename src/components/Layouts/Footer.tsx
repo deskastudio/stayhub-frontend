@@ -14,24 +14,24 @@ const ListMenu = [
   {
     id: 2,
     title: 'Tentang Kami',
-    link: '#about',
+    link: '#tentang-kami',
   },
   {
     id: 3,
-    title: 'Booking',
-    link: '#booking',
+    title: 'Tipe Kamar',
+    link: '#tipe-kamar',
   },
   {
     id: 4,
     title: 'Kontak',
-    link: '#contact',
+    link: '#kontak',
   },
 ];
 
 const Footer = () => {
   return (
     <>
-      <div id='contact' className='container py-24'>
+      <div id='kontak' className='container py-24'>
         <div className='flex justify-between gap-12 border-t-2 py-10 flex-wrap'>
           <div className=''>
             <img
