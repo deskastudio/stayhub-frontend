@@ -11,7 +11,7 @@ const NavbarMenu = [
   {
     id: 2,
     title: 'Tentang Kami',
-    link: '#about',
+    link: '#tentang-kami',
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ const NavbarMenu = [
   {
     id: 4,
     title: 'Kontak',
-    link: '#contact',
+    link: '#kontak',
   },
 ];
 
@@ -39,7 +39,9 @@ const Navbar: React.FC = () => {
   return (
     <div className='shadow-md rounded-b-xl sticky top-0 w-full z-10 bg-default'>
       <div className='container flex justify-between items-center py-4'>
-        <img src='/stayhub-logo2.png' alt='StayHub Logo' />
+        <a href='/'>
+          <img src='/stayhub-logo2.png' alt='StayHub Logo' />
+        </a>
 
         {/* Menu toggle for small screens */}
         <div className='lg:hidden'>
