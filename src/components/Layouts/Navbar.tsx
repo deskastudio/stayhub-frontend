@@ -15,8 +15,8 @@ const NavbarMenu = [
   },
   {
     id: 3,
-    title: 'Booking',
-    link: '#booking',
+    title: 'Tipe Kamar',
+    link: '#tipe-kamar',
   },
   {
     id: 4,

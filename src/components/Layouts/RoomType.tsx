@@ -105,7 +105,7 @@ const RoomType: React.FC = () => {
   }
 
   return (
-    <div id='booking' className='container pb-24'>
+    <div id='tipe-kamar' className='container pb-24'>
       <h1 className='text-5xl font-bold font-main text-center text-primary mb-12'>
         Pilih Tipe Kamar
       </h1>
