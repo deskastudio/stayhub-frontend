@@ -46,7 +46,7 @@ const Footer = () => {
               Meningkatkan Kepercayaan!
             </p>
           </div>
-          <div className=''>
+          <div>
             <h3 className='text-secondary font-bold mb-4 font-main text-lg'>
               StayHub
             </h3>
@@ -101,22 +101,29 @@ const Footer = () => {
               penawaran menarik!
             </p>
             <div className='flex space-x-4'>
-              <a href='#' className='text-secondary'>
+              <a
+                href='https://www.facebook.com/mochammadsk'
+                target='_blank'
+                className='text-secondary'
+              >
                 <i className='text-xl'>
                   <FaFacebook />
                 </i>
               </a>
-              <a href='#' className='text-secondary'>
+              <a
+                href='https://www.instagram.com/mochammadsk_/'
+                target='_blank'
+                className='text-secondary'
+              >
                 <i className='text-xl'>
                   <AiFillInstagram />
                 </i>
               </a>
-              <a href='#' className='text-secondary'>
-                <i className='text-xl'>
-                  <MdEmail />
-                </i>
-              </a>
-              <a href='#' className='text-secondary'>
+              <a
+                href='https://www.youtube.com/@mochammadsk'
+                target='_blank'
+                className='text-secondary'
+              >
                 <i className='text-xl'>
                   <FaYoutube />
                 </i>
@@ -126,7 +133,7 @@ const Footer = () => {
         </div>
         <div className='mx-auto px-4 mt-8 text-center'>
           <p className='text-secondary font-main'>
-            Copyright © {new Date().getFullYear()} | Stayhub Team
+            Copyright © {new Date().getFullYear()} | StayHub Team
           </p>
         </div>
       </div>
