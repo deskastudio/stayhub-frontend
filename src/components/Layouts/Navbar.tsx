@@ -1,29 +1,7 @@
 import { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import Button from '../Elements/ButtonLanding';
-
-const NavbarMenu = [
-  {
-    id: 1,
-    title: 'Beranda',
-    link: '/',
-  },
-  {
-    id: 2,
-    title: 'Tentang Kami',
-    link: '#tentang-kami',
-  },
-  {
-    id: 3,
-    title: 'Tipe Kamar',
-    link: '#tipe-kamar',
-  },
-  {
-    id: 4,
-    title: 'Kontak',
-    link: '#kontak',
-  },
-];
+import ListMenu from '../Data/ListMenu';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,7 +43,7 @@ const Navbar: React.FC = () => {
           } lg:block absolute lg:static top-full left-0 w-full rounded-xl lg:w-auto bg-default lg:bg-transparent shadow-md lg:shadow-none`}
         >
           <ul className='flex flex-col lg:flex-row items-center gap-6 p-4 lg:p-0'>
-            {NavbarMenu.map((item) => (
+            {ListMenu.map((item) => (
               <li key={item.id}>
                 <a
                   href={item.link}
