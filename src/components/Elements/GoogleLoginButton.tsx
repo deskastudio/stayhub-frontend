@@ -1,5 +1,4 @@
 import Button from './Button';
-import Image from './Image';
 
 const GoogleLoginButton: React.FC = () => {
   return (
@@ -9,7 +8,7 @@ const GoogleLoginButton: React.FC = () => {
       onClick={() => console.log('Login with Google')}
     >
       <div className='flex items-center gap-3'>
-        <Image src='../public/icon/google_icon.svg' alt='Google icon' />
+        <img src='../public/icon/google_icon.svg' alt='Google icon' />
         Masuk Dengan Google
       </div>
     </Button>

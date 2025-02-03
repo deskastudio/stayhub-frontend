@@ -1,7 +1,6 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Image from '../Elements/Image';
 
 const ImageCarousel: React.FC = () => {
   const settings = {
@@ -11,6 +10,8 @@ const ImageCarousel: React.FC = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
+    autoplay: true,
+    autoplaySpeed: 2500,
     customPaging: () => (
       <div className='w-2.5 h-2.5 bg-gray-300 rounded-full mx-2 cursor-pointer hover:bg-primary transition-all duration-300'></div>
     ),
@@ -21,23 +22,23 @@ const ImageCarousel: React.FC = () => {
     <div className='flex flex-col justify-center items-center h-full bg-[#F3F9FB]'>
       <Slider {...settings} className='w-full max-w-xl'>
         <div className='w-full h-96'>
-          <Image
+          <img
             src='/imageCarousel/image1.svg'
-            alt='Image 1'
+            alt='Image1'
             className='w-full h-full'
           />
         </div>
         <div className='w-full h-96'>
-          <Image
+          <img
             src='/imageCarousel/image2.svg'
-            alt='Image 2'
+            alt='Image2'
             className='w-full h-full'
           />
         </div>
         <div className='w-full h-96'>
-          <Image
+          <img
             src='/imageCarousel/image3.svg'
-            alt='Image 3'
+            alt='Image3'
             className='w-full h-full'
           />
         </div>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Button from '../Elements/Button';
-import Image from '../Elements/Image';
 import Input from '../Elements/Input';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -109,7 +108,7 @@ const RegisterForm: React.FC = () => {
   return (
     <form onSubmit={handleRegister} method='post' className='space-y-4'>
       <div className='text-center mb-4'>
-        <Image
+        <img
           src='/stayhub-logo2.png'
           alt='Login Image'
           className='w-1/2 mx-auto mb-10'
